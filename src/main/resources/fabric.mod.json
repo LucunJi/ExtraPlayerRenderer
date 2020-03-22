@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "explayerenderer",
+  "version": "1.0-SNAPSHOT",
+
+  "name": "ExtraPlayerRenderer",
+  "description": "",
+  "authors": [
+    ""
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "github.io.lucunji.explayerenderer.ExtraPlayerRenderer"
+    ]
+  },
+  "mixins": [
+    "explayerenderer.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.14.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

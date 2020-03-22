@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "github.io.lucunji.explayerenderer.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+
+  ],
+  "client": [
+    "MixinGameRenderer",
+    "MixinChatHud"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
