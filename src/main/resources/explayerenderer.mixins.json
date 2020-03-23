@@ -6,8 +6,7 @@
 
   ],
   "client": [
-    "MixinGameRenderer",
-    "MixinChatHud"
+    "MixinGameRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
