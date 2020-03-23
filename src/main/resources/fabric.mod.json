@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "github.io.lucunji.explayerenderer.ExtraPlayerRenderer"
+      "github.io.lucunji.explayerenderer.Main"
     ]
   },
   "mixins": [
