@@ -62,7 +62,7 @@ public class PlayerHUD extends DrawableHelper {
                 player.lastHandSwingProgress = 0;
             }
 
-            if (Main.HURT_FLASH.get().orElse(true)) {
+            if (!Main.HURT_FLASH.get().orElse(true)) {
                 player.hurtTime = 0;
             }
 
