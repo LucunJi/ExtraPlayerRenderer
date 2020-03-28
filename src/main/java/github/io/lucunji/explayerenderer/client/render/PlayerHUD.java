@@ -8,6 +8,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 
 public class PlayerHUD extends DrawableHelper {
     private static final MinecraftClient client  = MinecraftClient.getInstance();
@@ -20,54 +21,47 @@ public class PlayerHUD extends DrawableHelper {
 
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;
-//        float posY = scaledHeight * 1.5f;
-        float size = scaledHeight / 2f;
+        double size = Configs.SIZE.getDoubleValue() * scaledHeight;
+        boolean mirror = Configs.MIRROR.getBooleanValue();
 
-//        posX += Main.OFFSET_X.get().orElse(0);
-//        posY += Main.OFFSET_Y.get().orElse(0);
-//        size *= Main.SIZE.get().orElse(1d);
-//        boolean mirror = Main.MIRROR.get().orElse(false);
+        if (player.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
+        if (player.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
 
-//        if (player.isInSneakingPose()) posY += Main.SNEAKING_OFFSET_Y.get().orElse(-30d).floatValue();
-//        if (player.isFallFlying()) posY += Main.ELYTRA_OFFSET_Y.get().orElse(-120d).floatValue();
+        double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
 
         GlStateManager.enableColorMaterial();
         {
             GlStateManager.pushMatrix();
             GlStateManager.translated(posX, posY, 50.0F);
-//            GlStateManager.scaled(size * (mirror ? 1 : -1), size, size);
-            GlStateManager.scaled(-size, size, size);
+            GlStateManager.scaled(size * (mirror ? 1 : -1), size, size);
             GlStateManager.rotated(180.0F, 0.0F, 0.0F, 1.0F);
 
-            float field_6283 = player.field_6283;
+            float bodyYaw = player.field_6283;
             float yaw = player.yaw;
             float pitch = player.pitch;
             float prevHeadYaw = player.prevHeadYaw;
             float headYaw = player.headYaw;
             float handSwingProgress = player.handSwingProgress;
-            float lastHandSwingProgress = player.lastHandSwingProgress;
+            float horizontalSpeed = player.horizontalSpeed;
             int hurtTime = player.hurtTime;
 
-            GlStateManager.rotated(0, 0.0F, 1.0F, 0.0F);
-//            GlStateManager.rotated(Main.LIGHT_DEGREE.get().orElse(0d).floatValue(), 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotated(lightDegree, 0.0F, 1.0F, 0.0F);
             DiffuseLighting.enable();
-            GlStateManager.rotated(0, 0.0F, 1.0F, 0.0F);
-//            GlStateManager.rotated(-Main.LIGHT_DEGREE.get().orElse(0d).floatValue(), 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotated(-lightDegree, 0.0F, 1.0F, 0.0F);
 
-//            player.field_6283 = MathHelper.clamp(player.field_6283, Main.BODY_YAW_MIN.get().orElse(0d).floatValue(), Main.BODY_YAW_MAX.get().orElse(0d).floatValue());
-//            player.headYaw = MathHelper.clamp(player.headYaw, Main.HEAD_YAW_MIN.get().orElse(-15d).floatValue(), Main.HEAD_YAW_MAX.get().orElse(-15d).floatValue());
-//            player.pitch = MathHelper.clamp(player.pitch, Main.PITCH_MIN.get().orElse(-20d).floatValue(), Main.PITCH_MAX.get().orElse(20d).floatValue());
-//            if (Main.SWING_HANDS.get().orElse(true)) {
+            player.field_6283 = (float) MathHelper.clamp(player.field_6283, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
+            player.headYaw = (float) MathHelper.clamp(player.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+            player.pitch = (float) MathHelper.clamp(player.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue());
+            player.horizontalSpeed = player.prevHorizontalSpeed + (player.horizontalSpeed - player.prevHorizontalSpeed) * client.getTickDelta();
+            if (Configs.SWING_HANDS.getBooleanValue()) {
                 player.handSwingProgress = player.getHandSwingProgress(client.getTickDelta());
-                player.lastHandSwingProgress = player.getHandSwingProgress(client.getTickDelta());
-//            } else {
-//                player.handSwingProgress = 0;
-//                player.lastHandSwingProgress = 0;
-//            }
+            } else {
+                player.handSwingProgress = 0;
+            }
 
-//            if (!Main.HURT_FLASH.get().orElse(true)) {
-//                player.hurtTime = 0;
-//            }
+            if (!Configs.HURT_FLASH.getBooleanValue()) {
+                player.hurtTime = 0;
+            }
 
             GlStateManager.translated(0.0F, 0.0F, 0.0F);
             EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
@@ -76,14 +70,14 @@ public class PlayerHUD extends DrawableHelper {
             entityRenderDispatcher.render(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f, true);
             entityRenderDispatcher.setRenderShadows(true);
 
-            player.field_6283 = field_6283;
+            player.field_6283 = bodyYaw;
             player.yaw = yaw;
             player.pitch = pitch;
             player.prevHeadYaw = prevHeadYaw;
             player.headYaw = headYaw;
             player.handSwingProgress = handSwingProgress;
-            player.lastHandSwingProgress = lastHandSwingProgress;
             player.hurtTime = hurtTime;
+            player.horizontalSpeed = horizontalSpeed;
         }
 
         GlStateManager.popMatrix();

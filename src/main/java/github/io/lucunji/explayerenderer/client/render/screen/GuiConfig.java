@@ -3,7 +3,6 @@ package github.io.lucunji.explayerenderer.client.render.screen;
 import com.mojang.blaze3d.platform.GlStateManager;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
-import github.io.lucunji.explayerenderer.config.ConfigHandler;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.Main;
 

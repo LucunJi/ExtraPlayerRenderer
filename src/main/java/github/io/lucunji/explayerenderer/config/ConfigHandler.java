@@ -9,13 +9,15 @@ import fi.dy.masa.malilib.util.JsonUtils;
 import java.io.*;
 
 public class ConfigHandler implements IConfigHandler {
-    public static ConfigHandler INSTANCE = new ConfigHandler();
-
     private static final String FILE_PATH = "./config/explayerenderer.json";
     private static final File CONFIG_DIR = new File("./config");
 
     @Override
     public void load() {
+        loadFile();
+    }
+
+    public static void loadFile() {
         File settingFile = new File(FILE_PATH);
         if (settingFile.isFile() && settingFile.exists()) {
             JsonElement jsonElement = JsonUtils.parseJsonFile(settingFile);
@@ -27,6 +29,10 @@ public class ConfigHandler implements IConfigHandler {
 
     @Override
     public void save() {
+        saveFile();
+    }
+
+    private static void saveFile() {
         if ((CONFIG_DIR.exists() && CONFIG_DIR.isDirectory()) || CONFIG_DIR.mkdirs()) {
             JsonObject configRoot = new JsonObject();
 
@@ -35,4 +41,5 @@ public class ConfigHandler implements IConfigHandler {
             JsonUtils.writeJsonToFile(configRoot, new File(FILE_PATH));
         }
     }
+
 }

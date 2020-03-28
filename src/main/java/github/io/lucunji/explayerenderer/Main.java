@@ -22,6 +22,8 @@ public class Main implements ModInitializer{
     @Override
     public void onInitialize(){
         ConfigManager.getInstance().registerConfigHandler(MOD_ID, new ConfigHandler());
+        new Configs();
+        ConfigHandler.loadFile();
         KeyBindingRegistryImpl.INSTANCE.register(MASTER_CONTROL);
         ClientTickCallback.EVENT.register(new KeyBindHandler());
     }

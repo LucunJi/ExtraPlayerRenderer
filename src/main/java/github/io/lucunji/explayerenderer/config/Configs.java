@@ -3,33 +3,57 @@ package github.io.lucunji.explayerenderer.config;
 import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.options.ConfigBase;
+import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigDouble;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Configs {
-    public static final ConfigDouble OFFSET_X = Category.PARAMETERS.add(new ConfigDouble("offsetX", 0.05, -0.5, 1.5, "X offset of rendered player."));
-    public static final ConfigDouble OFFSET_Y = Category.PARAMETERS.add(new ConfigDouble("offsetY", 1.5, -0.5, 2.5, "Y offset of rendered player."));
-//    public static final ConfigDouble SIZE = register("size", new DoubleSetting(1D));
-//    public static final ConfigBoolean MIRROR = register("mirror", new BooleanSetting(false));
-//
-//    public static final BooleanSetting HURT_FLASH = register("hurt_flash", new BooleanSetting(true));
-//    public static final BooleanSetting SWING_HANDS = register("swing_hands", new BooleanSetting(true));
-//    public static final DoubleSetting LIGHT_DEGREE = register("light_degree", new DoubleSetting(0d));
-//
-//    public static final DoubleSetting PITCH_MIN = register("pitch_min", new DoubleSetting(-20d));
-//    public static final DoubleSetting PITCH_MAX = register("pitch_max", new DoubleSetting(20d));
-//    public static final DoubleSetting HEAD_YAW_MIN = register("head_yaw_min", new DoubleSetting(-15d));
-//    public static final DoubleSetting HEAD_YAW_MAX = register("head_yaw_max", new DoubleSetting(-15d));
-//    public static final DoubleSetting BODY_YAW_MIN = register("body_yaw_min", new DoubleSetting(0d));
-//    public static final DoubleSetting BODY_YAW_MAX = register("body_yaw_max", new DoubleSetting(0d));
-//
-//    public static final DoubleSetting SNEAKING_OFFSET_Y = register("sneaking_offset_y", new DoubleSetting(-30d));
-//    public static final DoubleSetting ELYTRA_OFFSET_Y = register("elytra_offset_y", new DoubleSetting(-120d));
+    public static final ConfigDouble OFFSET_X;
+    public static final ConfigDouble OFFSET_Y;
+    public static final ConfigDouble SIZE;
+    public static final ConfigBoolean MIRROR;
+    public static final ConfigDouble PITCH_MIN;
+    public static final ConfigDouble PITCH_MAX;
+    public static final ConfigDouble HEAD_YAW_MIN;
+    public static final ConfigDouble HEAD_YAW_MAX;
+    public static final ConfigDouble BODY_YAW_MIN;
+    public static final ConfigDouble BODY_YAW_MAX;
+    public static final ConfigDouble SNEAKING_OFFSET_Y;
+    public static final ConfigDouble ELYTRA_OFFSET_Y;
+
+    public static final ConfigBoolean HURT_FLASH;
+    public static final ConfigBoolean SWING_HANDS;
+    public static final ConfigDouble LIGHT_DEGREE;
+
+    static {
+        OFFSET_X = Category.PARAMETERS.add(new ConfigDouble("offsetX", 0.05, -0.5, 1.5, "X offset of rendered player."));
+        OFFSET_Y = Category.PARAMETERS.add(new ConfigDouble("offsetY", 1.5, -0.5, 2.5, "Y offset of rendered player."));
+        SIZE = Category.PARAMETERS.add(new ConfigDouble("size", 0.5, 0, 2, "Size rendered player."));
+        MIRROR = Category.PARAMETERS.add(new ConfigBoolean("mirror", false, "If rendered player is flipped respect to y-axis."));
+        PITCH_MIN = Category.PARAMETERS.add(new ConfigDouble("pitchMin", -20, -180, 180, "Lower bound of pitch."));
+        PITCH_MAX = Category.PARAMETERS.add(new ConfigDouble("pitchMax", 20, -180, 180, "Upper bound of pitch."));
+        HEAD_YAW_MIN = Category.PARAMETERS.add(new ConfigDouble("headYawMin", -15, -180, 180, "Lower bound of head yaw."));
+        HEAD_YAW_MAX = Category.PARAMETERS.add(new ConfigDouble("headYawMax", -15, -180, 180, "Upper bound of head yaw."));
+        BODY_YAW_MIN = Category.PARAMETERS.add(new ConfigDouble("bodyYawMin", 0, -180, 180, "Lower bound of body yaw."));
+        BODY_YAW_MAX = Category.PARAMETERS.add(new ConfigDouble("bodyYawMax", 0, -180, 180, "Upper bound of body yaw."));
+        SNEAKING_OFFSET_Y = Category.PARAMETERS.add(new ConfigDouble("sneakingYOffset", -30, -100, 100, "Y offset when player is sneaking."));
+        ELYTRA_OFFSET_Y = Category.PARAMETERS.add(new ConfigDouble("elytraYOffset", -120, -300, 300, "Y offset when player is flying using an elytra."));
+
+        HURT_FLASH = Category.DETAILS.add(new ConfigBoolean("hurtFlash", true, "If the reddish flash will be rendered when player takes damage."));
+        SWING_HANDS = Category.DETAILS.add(new ConfigBoolean("swingHands", true, "If the hands of player will swing when player moves or tries to break block."));
+        LIGHT_DEGREE = Category.DETAILS.add(new ConfigDouble("lightDegree", 0, -180, 180, "The degree of light source which produces shadow effects"));
+    }
 
     public static class Category {
-        public static final Category PARAMETERS = new Category("explayerenderer.gui.setting_screen.parameters");
+        public static final Category PARAMETERS;
+        public static final Category DETAILS;
+
+        static {
+            PARAMETERS = new Category("explayerenderer.gui.setting_screen.parameters");
+            DETAILS = new Category("explayerenderer.gui.setting_screen.details");
+        }
 
         private final String key;
         private final List<IConfigBase> configs;
