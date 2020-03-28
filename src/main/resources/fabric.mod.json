@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "1.0",
+  "version": "1.5",
 
   "name": "ExtraPlayerRenderer",
   "description": "",
   "authors": [
-    ""
+    "Lucun_Ji"
   ],
   "contact": {
     "homepage": "",

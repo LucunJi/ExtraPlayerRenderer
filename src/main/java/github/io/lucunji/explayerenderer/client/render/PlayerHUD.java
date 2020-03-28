@@ -17,7 +17,7 @@ public class PlayerHUD extends DrawableHelper {
         int scaledWidth = client.window.getScaledWidth();
         int scaledHeight = client.window.getScaledHeight();
 
-        PlayerEntity player = client.player;
+        PlayerEntity player = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
 
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;
@@ -51,8 +51,7 @@ public class PlayerHUD extends DrawableHelper {
 
             player.field_6283 = (float) MathHelper.clamp(player.field_6283, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
             player.headYaw = (float) MathHelper.clamp(player.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
-            player.pitch = (float) MathHelper.clamp(player.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue());
-            player.horizontalSpeed = player.prevHorizontalSpeed + (player.horizontalSpeed - player.prevHorizontalSpeed) * client.getTickDelta();
+            player.pitch = (float) (MathHelper.clamp(player.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
             if (Configs.SWING_HANDS.getBooleanValue()) {
                 player.handSwingProgress = player.getHandSwingProgress(client.getTickDelta());
             } else {
