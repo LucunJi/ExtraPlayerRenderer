@@ -1,3 +1,8 @@
 {
-  "key.explayerenderer.master_control": "Extra Player Renderer"
+  "key.explayerenderer.master_control": "Extra Player Renderer",
+  "explayerenderer.gui.setting_screen": "Extra Player Renderer Settings",
+  "explayerenderer.gui.setting_screen.parameters": "Parameters",
+  "explayerenderer.gui.setting_screen.details": "Details",
+  "explayerenderer.gui.setting_screen.offset_x": "Offset X",
+  "explayerenderer.gui.setting_screen.offset_y": "Offset Y"
 }

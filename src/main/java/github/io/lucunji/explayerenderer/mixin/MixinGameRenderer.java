@@ -22,7 +22,7 @@ public class MixinGameRenderer {
     ))
     private void onRenderGameHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
         if (client.skipGameRender || !tick || MinecraftClient.getInstance().world == null) return;
-        if (client.currentScreen != null) return;
+        if (client.currentScreen != null || client.options.hudHidden) return;
         playerHUD.render(ticks);
     }
 }
