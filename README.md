@@ -2,8 +2,6 @@
 
 Render a player entity on the bottom left corner of he screen.
 
-The Chat HUD will be moved upward, so that it won't be blocked.
-
 This mod is not fully developed, so it's released under license CC0-1.0, free free to modify.
 
 This mod **requires malilib and Fabric API** (not Fabric loader, they are separate things), you should also install it.
