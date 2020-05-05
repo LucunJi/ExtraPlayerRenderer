@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -17,7 +18,17 @@ public class PlayerHUD extends DrawableHelper {
         int scaledWidth = client.window.getScaledWidth();
         int scaledHeight = client.window.getScaledHeight();
 
-        PlayerEntity player = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
+        PlayerEntity player;
+        if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue()) {
+            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
+            if (cameraEntity instanceof PlayerEntity && !cameraEntity.isSpectator()) {
+                player = (PlayerEntity)MinecraftClient.getInstance().getCameraEntity();
+            } else {
+                return;
+            }
+        } else {
+            player = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
+        }
 
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;

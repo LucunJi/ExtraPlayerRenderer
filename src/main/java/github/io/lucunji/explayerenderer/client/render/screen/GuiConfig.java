@@ -30,7 +30,7 @@ public class GuiConfig extends GuiConfigsBase {
             ButtonGeneric tabButton = new TabButton(category, x, y, -1, 20, StringUtils.translate(category.getKey()));
             tabButton.setEnabled(true);
             this.addButton(tabButton, (buttonBase, i) -> {
-                this.currentTab = ((TabButton)buttonBase).category;
+                currentTab = ((TabButton)buttonBase).category;
                 this.reCreateListWidget();
                 this.getListWidget().resetScrollbarPosition();
                 this.initGui();
@@ -51,7 +51,7 @@ public class GuiConfig extends GuiConfigsBase {
         return ConfigOptionWrapper.createFor(currentTab.getConfigs());
     }
 
-    public class TabButton extends ButtonGeneric {
+    public static class TabButton extends ButtonGeneric {
         private final Configs.Category category;
         public TabButton(Configs.Category category, int x, int y, int width, int height, String text, String... hoverStrings) {
             super(x, y, width, height, text, hoverStrings);

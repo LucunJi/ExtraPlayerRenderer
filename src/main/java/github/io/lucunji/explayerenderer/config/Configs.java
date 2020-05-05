@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Configs {
+    public static final ConfigBoolean SPECTATOR_AUTO_SWITCH;
     public static final ConfigString PLAYER_NAME;
 
     public static final ConfigDouble OFFSET_X;
@@ -32,6 +33,7 @@ public class Configs {
     public static final ConfigDouble LIGHT_DEGREE;
 
     static {
+        SPECTATOR_AUTO_SWITCH = Category.PARAMETERS.add(new ConfigBoolean("spectatorAutoSwitch", true, "Automatically switch player model in spectator mode. Overrides playerName options if enabled."));
         PLAYER_NAME = Category.PARAMETERS.add(new ConfigString("playerName", "", "The name of player to render. It will be your name in default."));
 
         OFFSET_X = Category.PARAMETERS.add(new ConfigDouble("offsetX", 0.05, -0.5, 1.5, "X offset of rendered player."));
@@ -63,7 +65,7 @@ public class Configs {
         private final String key;
         private final List<IConfigBase> configs;
 
-        private Category(String key) {
+        Category(String key) {
             this.key = key;
             configs = new ArrayList<>();
         }
