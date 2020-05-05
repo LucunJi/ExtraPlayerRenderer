@@ -2,7 +2,7 @@
 
 ![](logo.png)
 
-Render a player entity on the bottom left corner of he screen.
+Render a player entity on the bottom left corner of the screen.
 
 This mod is realeased under GPL-3.0 License.
 
