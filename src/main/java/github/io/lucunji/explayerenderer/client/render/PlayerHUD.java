@@ -62,6 +62,10 @@ public class PlayerHUD extends DrawableHelper {
                 player.hurtTime = 0;
             }
 
+            GlStateManager.rotatef(((float) Configs.ROTATION_X.getDoubleValue()), 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotatef(((float) Configs.ROTATION_Y.getDoubleValue()), 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotatef(((float) Configs.ROTATION_Z.getDoubleValue()), 0.0F, 0.0F, 1.0F);
+
             GlStateManager.translated(0.0F, 0.0F, 0.0F);
             EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
             entityRenderDispatcher.method_3945(180.0F);

@@ -12,6 +12,9 @@ public class Configs {
 
     public static final ConfigDouble OFFSET_X;
     public static final ConfigDouble OFFSET_Y;
+    public static final ConfigDouble ROTATION_X;
+    public static final ConfigDouble ROTATION_Y;
+    public static final ConfigDouble ROTATION_Z;
     public static final ConfigDouble SIZE;
     public static final ConfigBoolean MIRROR;
     public static final ConfigDouble PITCH_MIN;
@@ -33,6 +36,9 @@ public class Configs {
 
         OFFSET_X = Category.PARAMETERS.add(new ConfigDouble("offsetX", 0.05, -0.5, 1.5, "X offset of rendered player."));
         OFFSET_Y = Category.PARAMETERS.add(new ConfigDouble("offsetY", 1.5, -0.5, 2.5, "Y offset of rendered player."));
+        ROTATION_X = Category.PARAMETERS.add(new ConfigDouble("rotationX", 0, -180, 180, "X rotation of rendered player."));
+        ROTATION_Y = Category.PARAMETERS.add(new ConfigDouble("rotationY", 0, -180, 180, "Y rotation of rendered player."));
+        ROTATION_Z = Category.PARAMETERS.add(new ConfigDouble("rotationZ", 0, -180, 180, "Z rotation of rendered player."));
         SIZE = Category.PARAMETERS.add(new ConfigDouble("size", 0.5, 0, 2, "Size rendered player."));
         MIRROR = Category.PARAMETERS.add(new ConfigBoolean("mirror", false, "If rendered player is flipped respect to y-axis."));
         PITCH_MIN = Category.PARAMETERS.add(new ConfigDouble("pitchMin", -20, -180, 180, "Lower bound of pitch."));
