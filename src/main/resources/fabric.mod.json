@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "1.5",
+  "version": "1.6",
 
   "name": "ExtraPlayerRenderer",
-  "description": "",
+  "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
   "authors": [
     "Lucun_Ji"
   ],
