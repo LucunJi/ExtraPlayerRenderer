@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "1.7",
+  "version": "0.9",
 
   "name": "ExtraPlayerRenderer",
   "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
@@ -13,8 +13,8 @@
     "sources": ""
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "GPL3.0",
+  "icon": "assets/explayerender/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -29,8 +29,8 @@
   "depends": {
     "fabric": "*",
     "malilib": "*",
-    "fabricloader": ">=0.7.2",
-    "minecraft": "1.14.x"
+    "fabricloader": ">=0.8.2",
+    "minecraft": "1.15.x"
   },
   "suggests": {
     "flamingo": "*"

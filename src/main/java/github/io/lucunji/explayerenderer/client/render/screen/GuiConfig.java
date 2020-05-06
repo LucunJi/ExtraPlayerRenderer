@@ -41,9 +41,7 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        GlStateManager.translated(0, 0, -1000);
         playerHUD.render(++this.ticks);
-        GlStateManager.translated(0, 0, 1000);
         super.render(mouseX, mouseY, partialTicks);
     }
 
