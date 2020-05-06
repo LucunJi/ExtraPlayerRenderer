@@ -23,6 +23,7 @@ public class PlayerHUD extends DrawableHelper {
 
     static {
         flagsField = Arrays.asList(Entity.class.getDeclaredFields()).stream().filter(f -> f.getType() == TrackedData.class && f.getGenericType().getTypeName().contains("<java.lang.Byte>")).findFirst().orElse(null);
+        flagsField.setAccessible(true);
     }
 
     // TODO: lightDegree
