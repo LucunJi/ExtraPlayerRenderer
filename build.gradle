@@ -5,7 +5,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version "1.14.4-1.6"
+version "1.14.4-1.7"
 group "github.io.lucunji.explayerenderer"
 
 minecraft { }

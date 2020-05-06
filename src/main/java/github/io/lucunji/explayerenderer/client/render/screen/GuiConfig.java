@@ -16,7 +16,7 @@ public class GuiConfig extends GuiConfigsBase {
     int ticks;
 
     public GuiConfig() {
-        super(10, 50, Main.MOD_ID, null, "explayerenderer.gui.setting_screen");
+        super(10, 50, Main.MOD_ID, null, "explayerenderer.gui.settings");
         this.playerHUD = new PlayerHUD();
         this.ticks = 0;
     }
@@ -41,6 +41,7 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        GlStateManager.translated(0, 0, -1000);
         playerHUD.render(++this.ticks);
         GlStateManager.translated(0, 0, 1000);
         super.render(mouseX, mouseY, partialTicks);

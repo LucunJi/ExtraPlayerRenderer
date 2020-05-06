@@ -1,6 +1,28 @@
 {
   "key.explayerenderer.master_control": "Extra Player Renderer",
-  "explayerenderer.gui.setting_screen": "Extra Player Renderer Settings",
-  "explayerenderer.gui.setting_screen.parameters": "Parameters",
-  "explayerenderer.gui.setting_screen.details": "Details"
+  "explayerenderer.gui.settings": "Extra Player Renderer Settings",
+  "explayerenderer.gui.settings.parameters": "Parameters",
+  "explayerenderer.gui.settings.spectator_auto_switch.desc": "Automatically switch player model in spectator mode.\nOverrides playerName option if enabled.",
+  "explayerenderer.gui.settings.player_name.desc": "The name of player to render. It will be your name in default.",
+  "explayerenderer.gui.settings.offset_x.desc": "X offset of rendered model.",
+  "explayerenderer.gui.settings.offset_y.desc": "Y offset of rendered model.",
+  "explayerenderer.gui.settings.rotation_x.desc": "X rotation of rendered model.",
+  "explayerenderer.gui.settings.rotation_y.desc": "Y rotation of rendered model.",
+  "explayerenderer.gui.settings.rotation_z.desc": "Z rotation of rendered model.",
+  "explayerenderer.gui.settings.size.desc": "Rendering size.",
+  "explayerenderer.gui.settings.mirror.desc": "Flip rendered model horizontally.",
+  "explayerenderer.gui.settings.pitch_min.desc": "Lower bound of pitch.",
+  "explayerenderer.gui.settings.pitch_max.desc": "Upper bound of pitch.",
+  "explayerenderer.gui.settings.pitch_offset.desc": "Offset of pitch.",
+  "explayerenderer.gui.settings.head_yaw_min.desc": "Lower bound of head yaw.",
+  "explayerenderer.gui.settings.head_yaw_max.desc": "Upper bound of head yaw.",
+  "explayerenderer.gui.settings.body_yaw_min.desc": "Lower bound of body yaw.",
+  "explayerenderer.gui.settings.body_yaw_max.desc": "Upper bound of body yaw.",
+  "explayerenderer.gui.settings.sneaking_y_offset.desc": "Y offset when player is sneaking.",
+  "explayerenderer.gui.settings.elytra_y_offset.desc": "Y offset when player is flying using an elytra.",
+  
+  "explayerenderer.gui.settings.details": "Details",
+  "explayerenderer.gui.settings.hurt_flash.desc": "If rendered model turns red when player takes damage.",
+  "explayerenderer.gui.settings.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
+  "explayerenderer.gui.settings.light_degree.desc": "The degree of light source producing shadow effects."
 }
