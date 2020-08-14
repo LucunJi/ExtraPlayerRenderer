@@ -55,7 +55,7 @@ public class PlayerHUD extends DrawableHelper {
             RenderSystem.translatef((float) posX, (float) posY, 1050.0F);
             RenderSystem.scalef(1.0F, 1.0F, -1.0F);
             MatrixStack matrixStack = new MatrixStack();
-            matrixStack.translate(0.0D, 0.0D, 1000.0D);
+            matrixStack.translate(0.0D, 0.0D, 2000.0D);
             matrixStack.scale((float) size * (mirror ? 1 : -1), (float) size, (float) size);
             Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
             Quaternion quaternion2 = Vector3f.POSITIVE_X.getDegreesQuaternion(0);
@@ -80,6 +80,8 @@ public class PlayerHUD extends DrawableHelper {
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
+            EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
+            boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
 
             player.bodyYaw = 180 - (float) MathHelper.clamp(player.bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
             player.headYaw = 180 - (float) MathHelper.clamp(player.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
@@ -102,7 +104,6 @@ public class PlayerHUD extends DrawableHelper {
                 e.printStackTrace();
             }
 
-            EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
             quaternion2.conjugate();
             entityRenderDispatcher.setRenderHitboxes(false);
             entityRenderDispatcher.setRotation(quaternion2);
@@ -111,6 +112,7 @@ public class PlayerHUD extends DrawableHelper {
             entityRenderDispatcher.render(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
             immediate.draw();
             entityRenderDispatcher.setRenderShadows(true);
+            entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
             player.bodyYaw = bodyYaw;
             player.yaw = yaw;
