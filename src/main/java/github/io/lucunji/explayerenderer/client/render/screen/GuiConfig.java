@@ -8,6 +8,7 @@ import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.Main;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.input.Input;
+import net.minecraft.client.util.math.MatrixStack;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
@@ -42,9 +43,9 @@ public class GuiConfig extends GuiConfigsBase {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         playerHUD.render(++this.ticks);
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
