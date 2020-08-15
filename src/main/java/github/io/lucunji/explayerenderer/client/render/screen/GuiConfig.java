@@ -6,6 +6,9 @@ import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.Main;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.input.Input;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class GuiConfig extends GuiConfigsBase {
             ButtonGeneric tabButton = new TabButton(category, x, y, -1, 20, StringUtils.translate(category.getKey()));
             tabButton.setEnabled(true);
             this.addButton(tabButton, (buttonBase, i) -> {
-                currentTab = ((TabButton)buttonBase).category;
+                currentTab = ((TabButton) buttonBase).category;
                 this.reCreateListWidget();
                 this.getListWidget().resetScrollbarPosition();
                 this.initGui();
@@ -51,9 +54,20 @@ public class GuiConfig extends GuiConfigsBase {
 
     public static class TabButton extends ButtonGeneric {
         private final Configs.Category category;
+
         public TabButton(Configs.Category category, int x, int y, int width, int height, String text, String... hoverStrings) {
             super(x, y, width, height, text, hoverStrings);
             this.category = category;
         }
     }
+
+    @Override
+    public boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
+        if (super.onKeyTyped(keyCode, scanCode, modifiers)) return true;
+        if (Main.MASTER_CONTROL.matchesKey(keyCode, scanCode)) {
+            this.onClose();
+        }
+        return true;
+    }
+
 }
