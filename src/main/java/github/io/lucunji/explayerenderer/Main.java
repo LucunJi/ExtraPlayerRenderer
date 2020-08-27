@@ -15,10 +15,10 @@ public class Main implements ModInitializer{
 
     public static final String MOD_ID = "explayerenderer";
 
-    public static final KeyBinding MASTER_CONTROL = new KeyBinding(MOD_ID + ":master_control",
+    public static final KeyBinding MASTER_CONTROL = new KeyBinding(MOD_ID + ".key.master_control",
             InputUtil.Type.KEYSYM,
             InputUtil.fromTranslationKey("key.keyboard.f8").getCode(),
-            "key.categories.ui");
+            "key.categories.misc");
 
     @Override
     public void onInitialize(){
