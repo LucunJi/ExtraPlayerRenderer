@@ -1,5 +1,5 @@
 {
-  "key.explayerenderer.master_control": "Extra Player Renderer",
+  "explayerenderer.key.master_control": "Extra Player Renderer",
   "explayerenderer.gui.settings": "Extra Player Renderer Settings",
   "explayerenderer.gui.settings.parameters": "Parameters",
   "explayerenderer.gui.settings.spectator_auto_switch.desc": "Automatically switch player model in spectator mode.\nOverrides playerName option if enabled.",
