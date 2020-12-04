@@ -43,7 +43,7 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
-        playerHUD.render(++this.ticks);
+        playerHUD.render(++this.ticks, partialTicks);
         super.render(mouseX, mouseY, partialTicks);
     }
 
