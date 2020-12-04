@@ -24,7 +24,7 @@ public class Main implements ModInitializer{
         ConfigManager.getInstance().registerConfigHandler(MOD_ID, new ConfigHandler());
         new Configs();
         ConfigHandler.loadFile();
-        KeyBindingRegistryImpl.INSTANCE.register(MASTER_CONTROL);
+        KeyBindingRegistryImpl.registerKeyBinding(MASTER_CONTROL);
         ClientTickCallback.EVENT.register(new KeyBindHandler());
     }
 }
