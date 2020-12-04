@@ -2,50 +2,45 @@ package github.io.lucunji.explayerenderer.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import github.io.lucunji.explayerenderer.config.Configs;
+import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-
 public class PlayerHUD extends DrawableHelper {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final Field flagsField;
-
-    static {
-        flagsField = Arrays.asList(Entity.class.getDeclaredFields()).stream().filter(f -> f.getType() == TrackedData.class && f.getGenericType().getTypeName().contains("<java.lang.Byte>")).findFirst().orElse(null);
-        flagsField.setAccessible(true);
-    }
 
     // TODO: lightDegree
-    public void render(int ticks) {
-        PlayerEntity player;
-        if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue()) {
+    public void render(int ticks, float tickDelta) {
+        if (client.world == null || client.player == null)  {
+            return;
+        }
+        LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
+        if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
-            if (cameraEntity instanceof PlayerEntity && !cameraEntity.isSpectator()) {
-                player = (PlayerEntity)MinecraftClient.getInstance().getCameraEntity();
-            } else {
+            if (cameraEntity instanceof LivingEntity) {
+                targetEntity = (LivingEntity)cameraEntity;
+            }
+            else if (cameraEntity != null) {
                 return;
             }
-        } else {
-            player = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
         }
 
         int scaledWidth = client.getWindow().getScaledWidth();
         int scaledHeight = client.getWindow().getScaledHeight();
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;
-        if (player.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
-        if (player.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
+        if (targetEntity.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
+        if (targetEntity.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
         double size = Configs.SIZE.getDoubleValue() * scaledHeight;
         boolean mirror = Configs.MIRROR.getBooleanValue();
 //        double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
@@ -66,68 +61,72 @@ public class PlayerHUD extends DrawableHelper {
             matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((float)Configs.ROTATION_Y.getDoubleValue()));
             matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float)Configs.ROTATION_Z.getDoubleValue()));
 
-            float bodyYaw = player.bodyYaw;
-            float yaw = player.yaw;
-            float pitch = player.pitch;
-            float prevHeadYaw = player.prevHeadYaw;
-            float headYaw = player.headYaw;
-            float handSwingProgress = player.handSwingProgress;
-            int hurtTime = player.hurtTime;
-            int fireTicks = player.getFireTicks();
-            byte flags = 0;
-            try {
-                 flags = player.getDataTracker().get((TrackedData<Byte>) flagsField.get(player));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            // data storing
+            float bodyYaw = targetEntity.bodyYaw;
+            float yaw = targetEntity.yaw;
+            float pitch = targetEntity.pitch;
+            float prevBodyYaw = targetEntity.prevBodyYaw;
+            float prevHeadYaw = targetEntity.prevHeadYaw;
+            float prevPitch = targetEntity.prevPitch;
+            float headYaw = targetEntity.headYaw;
+            float handSwingProgress = targetEntity.handSwingProgress;
+            int hurtTime = targetEntity.hurtTime;
+            int fireTicks = targetEntity.getFireTicks();
+            boolean flag0 = ((EntityInvoker)targetEntity).callGetFlag(0);
+            ((EntityInvoker)targetEntity).callSetFlag(0, false);
+
             EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
             boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
 
-            player.bodyYaw = 180 - (float) MathHelper.clamp(player.bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
-            player.headYaw = 180 - (float) MathHelper.clamp(player.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
-            player.pitch = (float) (MathHelper.clamp(player.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
+            targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(targetEntity.bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
+            targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(targetEntity.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+            targetEntity.prevPitch = targetEntity.pitch = (float) (MathHelper.clamp(targetEntity.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
 
             if (Configs.SWING_HANDS.getBooleanValue()) {
-                player.handSwingProgress = player.getHandSwingProgress(client.getTickDelta());
+                targetEntity.handSwingProgress = targetEntity.getHandSwingProgress(client.getTickDelta());
             } else {
-                player.handSwingProgress = 0;
+                targetEntity.handSwingProgress = 0;
             }
 
             if (!Configs.HURT_FLASH.getBooleanValue()) {
-                player.hurtTime = 0;
+                targetEntity.hurtTime = 0;
             }
 
-            player.setFireTicks(0);
-            try {
-                player.getDataTracker().set((TrackedData<Byte>) flagsField.get(player), (byte) (flags & -2)); // -2 = 0b1111...11110
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            targetEntity.setFireTicks(0);
 
             quaternion2.conjugate();
             entityRenderDispatcher.setRenderHitboxes(false);
             entityRenderDispatcher.setRotation(quaternion2);
             entityRenderDispatcher.setRenderShadows(false);
             VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-            entityRenderDispatcher.render(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixStack, immediate, 15728880);
+            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, getLight(targetEntity, tickDelta));
             immediate.draw();
             entityRenderDispatcher.setRenderShadows(true);
             entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
-            player.bodyYaw = bodyYaw;
-            player.yaw = yaw;
-            player.pitch = pitch;
-            player.prevHeadYaw = prevHeadYaw;
-            player.headYaw = headYaw;
-            player.handSwingProgress = handSwingProgress;
-            player.hurtTime = hurtTime;
-            player.setFireTicks(fireTicks);
-            try {
-                player.getDataTracker().set((TrackedData<Byte>) flagsField.get(player), flags);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            // data restoring
+            targetEntity.bodyYaw = bodyYaw;
+            targetEntity.yaw = yaw;
+            targetEntity.pitch = pitch;
+            targetEntity.prevBodyYaw = prevBodyYaw;
+            targetEntity.prevHeadYaw = prevHeadYaw;
+            targetEntity.prevPitch = prevPitch;
+            targetEntity.headYaw = headYaw;
+            targetEntity.handSwingProgress = handSwingProgress;
+            targetEntity.hurtTime = hurtTime;
+            targetEntity.setFireTicks(fireTicks);
+            ((EntityInvoker)targetEntity).callSetFlag(0, flag0);
         }
         RenderSystem.popMatrix();
+    }
+
+    private static int getLight(LivingEntity entity, float tickDelta)
+    {
+        int mixedLight = 15;
+        if (Configs.USE_WORLD_LIGHT.getBooleanValue())
+        {
+            mixedLight = entity.world.getLightLevel(new BlockPos(entity.getCameraPosVec(tickDelta)));
+        }
+        return LightmapTextureManager.pack(mixedLight, mixedLight);
     }
 }

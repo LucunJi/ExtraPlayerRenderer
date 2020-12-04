@@ -24,5 +24,6 @@
   "explayerenderer.gui.settings.details": "Details",
   "explayerenderer.gui.settings.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "explayerenderer.gui.settings.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
-  "explayerenderer.gui.settings.light_degree.desc": "The degree of light source producing shadow effects."
+  "explayerenderer.gui.settings.light_degree.desc": "The degree of light source producing shadow effects.",
+  "explayerenderer.gui.settings.use_world_light.desc": "If use the light level in the world to render."
 }

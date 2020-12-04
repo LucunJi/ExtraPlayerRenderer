@@ -1,15 +1,13 @@
 package github.io.lucunji.explayerenderer;
 
 import fi.dy.masa.malilib.config.ConfigManager;
-import github.io.lucunji.explayerenderer.config.*;
+import github.io.lucunji.explayerenderer.config.ConfigHandler;
+import github.io.lucunji.explayerenderer.config.Configs;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
-import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.impl.client.keybinding.KeyBindingRegistryImpl;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
 
 public class Main implements ModInitializer{
 
