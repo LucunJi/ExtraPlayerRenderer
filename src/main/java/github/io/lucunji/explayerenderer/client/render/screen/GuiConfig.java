@@ -3,12 +3,9 @@ package github.io.lucunji.explayerenderer.client.render.screen;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
+import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
 import github.io.lucunji.explayerenderer.config.Configs;
-import github.io.lucunji.explayerenderer.Main;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.input.Input;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
 

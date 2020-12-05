@@ -5,21 +5,19 @@ import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 
 public class PlayerHUD extends DrawableHelper {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    // TODO: lightDegree
+    // TODO: fix lightDegree
     public void render(int ticks, float tickDelta) {
         if (client.world == null || client.player == null)  {
             return;
@@ -51,7 +49,7 @@ public class PlayerHUD extends DrawableHelper {
             RenderSystem.scalef(1.0F, 1.0F, -1.0F);
             MatrixStack matrixStack = new MatrixStack();
             matrixStack.translate(0.0D, 0.0D, 2000.0D);
-            matrixStack.scale((float) size * (mirror ? 1 : -1), (float) size, (float) size);
+            matrixStack.scale((float) size * (mirror ? -1 : 1), (float) size, (float) size);
             Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
             Quaternion quaternion2 = Vector3f.POSITIVE_X.getDegreesQuaternion(0);
             quaternion.hamiltonProduct(quaternion2);
@@ -61,7 +59,7 @@ public class PlayerHUD extends DrawableHelper {
             matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((float)Configs.ROTATION_Y.getDoubleValue()));
             matrixStack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float)Configs.ROTATION_Z.getDoubleValue()));
 
-            // data storing
+            /* *************** data storing *************** */
             float bodyYaw = targetEntity.bodyYaw;
             float yaw = targetEntity.yaw;
             float pitch = targetEntity.pitch;
@@ -99,12 +97,12 @@ public class PlayerHUD extends DrawableHelper {
             entityRenderDispatcher.setRotation(quaternion2);
             entityRenderDispatcher.setRenderShadows(false);
             VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, getLight(targetEntity, tickDelta));
+            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, 0xF000F0 /*packed light value*/);
             immediate.draw();
             entityRenderDispatcher.setRenderShadows(true);
             entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
-            // data restoring
+            /* *************** data restoring *************** */
             targetEntity.bodyYaw = bodyYaw;
             targetEntity.yaw = yaw;
             targetEntity.pitch = pitch;
@@ -118,15 +116,5 @@ public class PlayerHUD extends DrawableHelper {
             ((EntityInvoker)targetEntity).callSetFlag(0, flag0);
         }
         RenderSystem.popMatrix();
-    }
-
-    private static int getLight(LivingEntity entity, float tickDelta)
-    {
-        int mixedLight = 15;
-        if (Configs.USE_WORLD_LIGHT.getBooleanValue())
-        {
-            mixedLight = entity.world.getLightLevel(new BlockPos(entity.getCameraPosVec(tickDelta)));
-        }
-        return LightmapTextureManager.pack(mixedLight, mixedLight);
     }
 }

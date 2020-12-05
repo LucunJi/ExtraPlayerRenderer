@@ -13,7 +13,7 @@ public class Main implements ModInitializer{
 
     public static final String MOD_ID = "explayerenderer";
 
-    public static final KeyBinding MASTER_CONTROL = new KeyBinding(MOD_ID + ":master_control",
+    public static final KeyBinding MASTER_CONTROL = new KeyBinding("key." + MOD_ID + ".master_control",
             InputUtil.Type.KEYSYM,
             InputUtil.fromName("key.keyboard.f8").getKeyCode(),
             "key.categories.ui");

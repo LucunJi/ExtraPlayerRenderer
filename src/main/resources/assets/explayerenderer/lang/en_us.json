@@ -10,7 +10,7 @@
   "explayerenderer.gui.settings.rotation_y.desc": "Y rotation of rendered model.",
   "explayerenderer.gui.settings.rotation_z.desc": "Z rotation of rendered model.",
   "explayerenderer.gui.settings.size.desc": "Rendering size.",
-  "explayerenderer.gui.settings.mirror.desc": "Flip rendered model horizontally.",
+  "explayerenderer.gui.settings.mirror.desc": "Flip rendered model horizontally. §eGlitches when set to true.§r",
   "explayerenderer.gui.settings.pitch_min.desc": "Lower bound of pitch.",
   "explayerenderer.gui.settings.pitch_max.desc": "Upper bound of pitch.",
   "explayerenderer.gui.settings.pitch_offset.desc": "Offset of pitch.",
@@ -24,6 +24,5 @@
   "explayerenderer.gui.settings.details": "Details",
   "explayerenderer.gui.settings.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "explayerenderer.gui.settings.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
-  "explayerenderer.gui.settings.light_degree.desc": "The degree of light source producing shadow effects.",
-  "explayerenderer.gui.settings.use_world_light.desc": "If use the light level in the world to render."
+  "explayerenderer.gui.settings.light_degree.desc": "The degree of light source producing shadow effects."
 }
