@@ -1,5 +1,6 @@
 package github.io.lucunji.explayerenderer.client.render.screen;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -40,7 +41,9 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
+        GlStateManager.translated(0, 0, -1000);
         playerHUD.render(++this.ticks, partialTicks);
+        GlStateManager.translated(0, 0, 1000);
         super.render(mouseX, mouseY, partialTicks);
     }
 
