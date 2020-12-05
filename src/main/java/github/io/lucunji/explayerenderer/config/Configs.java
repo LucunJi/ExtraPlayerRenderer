@@ -33,6 +33,7 @@ public class Configs {
     public static final ConfigBoolean HURT_FLASH;
     public static final ConfigBoolean SWING_HANDS;
 //    public static final ConfigDouble LIGHT_DEGREE;
+    public static final ConfigBoolean USE_WORLD_LIGHT;
 
     static {
         SPECTATOR_AUTO_SWITCH = Category.PARAMETERS.add(new ConfigBoolean("spectatorAutoSwitch", true, "explayerenderer.gui.settings.spectator_auto_switch.desc"));
@@ -58,6 +59,7 @@ public class Configs {
         HURT_FLASH = Category.DETAILS.add(new ConfigBoolean("hurtFlash", true, "explayerenderer.gui.settings.hurt_flash.desc"));
         SWING_HANDS = Category.DETAILS.add(new ConfigBoolean("swingHands", true, "explayerenderer.gui.settings.swing_hands.desc"));
 //        LIGHT_DEGREE = Category.DETAILS.add(new ConfigDouble("lightDegree", 0, -180, 180, "explayerenderer.gui.settings.light_degree.desc"));
+        USE_WORLD_LIGHT = Category.DETAILS.add(new ConfigBoolean("useWorldLight", true, "explayerenderer.gui.settings.use_world_light.desc"));
     }
 
     public enum Category {

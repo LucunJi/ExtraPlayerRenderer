@@ -5,12 +5,14 @@ import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 
@@ -97,7 +99,7 @@ public class PlayerHUD extends DrawableHelper {
             entityRenderDispatcher.setRotation(quaternion2);
             entityRenderDispatcher.setRenderShadows(false);
             VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, 0xF000F0 /*packed light value*/);
+            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, getLight(targetEntity, tickDelta));
             immediate.draw();
             entityRenderDispatcher.setRenderShadows(true);
             entityRenderDispatcher.setRenderHitboxes(renderHitbox);
@@ -116,5 +118,15 @@ public class PlayerHUD extends DrawableHelper {
             ((EntityInvoker)targetEntity).callSetFlag(0, flag0);
         }
         RenderSystem.popMatrix();
+    }
+
+    private static int getLight(LivingEntity entity, float tickDelta)
+    {
+        int mixedLight = 15;
+        if (Configs.USE_WORLD_LIGHT.getBooleanValue())
+        {
+            mixedLight = entity.world.getLightLevel(new BlockPos(entity.getCameraPosVec(tickDelta)));
+        }
+        return LightmapTextureManager.pack(mixedLight, mixedLight);
     }
 }
