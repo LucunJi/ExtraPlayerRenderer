@@ -10,7 +10,7 @@
   "explayerenderer.gui.settings.rotation_y.desc": "Y轴旋转",
   "explayerenderer.gui.settings.rotation_z.desc": "Z轴旋转",
   "explayerenderer.gui.settings.size.desc": "渲染大小",
-  "explayerenderer.gui.settings.mirror.desc": "将渲染模型水平镜像。§e当设置为 true 时有轻微渲染错误§r",
+  "explayerenderer.gui.settings.mirror.desc": "将渲染模型水平镜像",
   "explayerenderer.gui.settings.pitch_min.desc": "俯角下界",
   "explayerenderer.gui.settings.pitch_max.desc": "俯角上界",
   "explayerenderer.gui.settings.pitch_offset.desc": "俯角修正值",
