@@ -61,9 +61,6 @@ public class GuiConfig extends GuiConfigsBase {
     @Override
     public boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
         if (super.onKeyTyped(keyCode, scanCode, modifiers)) return true;
-        if (Main.MASTER_CONTROL.matchesKey(keyCode, scanCode)) {
-            this.onClose();
-        }
         return true;
     }
 
