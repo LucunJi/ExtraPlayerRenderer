@@ -3,7 +3,7 @@
   "package": "github.io.lucunji.explayerenderer.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-
+    "EntityInvoker"
   ],
   "client": [
     "MixinGameRenderer"

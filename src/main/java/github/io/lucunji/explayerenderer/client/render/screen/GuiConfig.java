@@ -1,12 +1,12 @@
 package github.io.lucunji.explayerenderer.client.render.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
+import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
 import github.io.lucunji.explayerenderer.config.Configs;
-import github.io.lucunji.explayerenderer.Main;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class GuiConfig extends GuiConfigsBase {
             ButtonGeneric tabButton = new TabButton(category, x, y, -1, 20, StringUtils.translate(category.getKey()));
             tabButton.setEnabled(true);
             this.addButton(tabButton, (buttonBase, i) -> {
-                currentTab = ((TabButton)buttonBase).category;
+                currentTab = ((TabButton) buttonBase).category;
                 this.reCreateListWidget();
                 this.getListWidget().resetScrollbarPosition();
                 this.initGui();
@@ -42,7 +42,7 @@ public class GuiConfig extends GuiConfigsBase {
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         GlStateManager.translated(0, 0, -1000);
-        playerHUD.render(++this.ticks);
+        playerHUD.render(++this.ticks, partialTicks);
         GlStateManager.translated(0, 0, 1000);
         super.render(mouseX, mouseY, partialTicks);
     }
@@ -54,9 +54,17 @@ public class GuiConfig extends GuiConfigsBase {
 
     public static class TabButton extends ButtonGeneric {
         private final Configs.Category category;
+
         public TabButton(Configs.Category category, int x, int y, int width, int height, String text, String... hoverStrings) {
             super(x, y, width, height, text, hoverStrings);
             this.category = category;
         }
     }
+
+    @Override
+    public boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
+        super.onKeyTyped(keyCode, scanCode, modifiers);
+        return true;
+    }
+
 }

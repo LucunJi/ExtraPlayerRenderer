@@ -1,49 +1,20 @@
 package github.io.lucunji.explayerenderer;
 
+import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
+import fi.dy.masa.malilib.hotkeys.IKeybind;
+import fi.dy.masa.malilib.hotkeys.KeyAction;
 import github.io.lucunji.explayerenderer.client.render.screen.GuiConfig;
-import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.minecraft.client.MinecraftClient;
 
-public class KeyBindHandler implements ClientTickCallback {
-
-    private boolean lastMasterControlState = false;
-    private boolean lastKeyStateM = false;
+public class KeyBindHandler implements IHotkeyCallback {
 
     @Override
-    public void tick(MinecraftClient client) {
-        if (client.skipGameRender || MinecraftClient.getInstance().world == null) return;
-        if (client.currentScreen != null) return;
-
-        if (Main.MASTER_CONTROL.isPressed()) {
+    public boolean onKeyAction(KeyAction action, IKeybind key) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.currentScreen instanceof GuiConfig)
+            client.currentScreen.onClose(); // actually has no effect
+        else
             client.openScreen(new GuiConfig());
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.up").getKeyCode())) {
-//                Main.OFFSET_Y.set(Main.OFFSET_Y.get().orElse(0) - 1);
-//            }
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.down").getKeyCode())) {
-//                Main.OFFSET_Y.set(Main.OFFSET_Y.get().orElse(0) + 1);
-//            }
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.left").getKeyCode())) {
-//                Main.OFFSET_X.set(Main.OFFSET_X.get().orElse(0) - 1);
-//            }
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.right").getKeyCode())) {
-//                Main.OFFSET_X.set(Main.OFFSET_X.get().orElse(0) + 1);
-//            }
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.minus").getKeyCode())) {
-//                Main.SIZE.set(Main.SIZE.get().orElse(1d) - 0.005);
-//            }
-//            if (InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.equal").getKeyCode())) {
-//                Main.SIZE.set(Main.SIZE.get().orElse(1d) + 0.005);
-//            }
-//            if (!lastKeyStateM && InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.m").getKeyCode())) {
-//                Main.MIRROR.set(!Main.MIRROR.get().orElse(false));
-//            }
-        }
-
-//        if (lastMasterControlState && !Main.MASTER_CONTROL.isPressed()) {
-//            ConfigHandler.INSTANCE.save();
-//        }
-//
-//        lastKeyStateM = InputUtil.isKeyPressed(client.window.getHandle(), InputUtil.fromName("key.keyboard.m").getKeyCode());
-//        lastMasterControlState = Main.MASTER_CONTROL.isPressed();
+        return true;
     }
 }

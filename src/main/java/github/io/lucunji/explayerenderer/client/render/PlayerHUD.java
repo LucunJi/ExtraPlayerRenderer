@@ -8,36 +8,35 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class PlayerHUD extends DrawableHelper {
-    private static final MinecraftClient client  = MinecraftClient.getInstance();
+    private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public void render(int ticks) {
-        int scaledWidth = client.window.getScaledWidth();
-        int scaledHeight = client.window.getScaledHeight();
-
-        PlayerEntity player;
-        if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue()) {
+    public void render(int ticks, float tickDelta) {
+        if (client.world == null || client.player == null)  {
+            return;
+        }
+        LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
+        if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
-            if (cameraEntity instanceof PlayerEntity && !cameraEntity.isSpectator()) {
-                player = (PlayerEntity)MinecraftClient.getInstance().getCameraEntity();
-            } else {
+            if (cameraEntity instanceof LivingEntity) {
+                targetEntity = (LivingEntity)cameraEntity;
+            }
+            else if (cameraEntity != null) {
                 return;
             }
-        } else {
-            player = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
         }
 
+        int scaledWidth = client.window.getScaledWidth();
+        int scaledHeight = client.window.getScaledHeight();
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;
+        if (targetEntity.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
+        if (targetEntity.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
         double size = Configs.SIZE.getDoubleValue() * scaledHeight;
         boolean mirror = Configs.MIRROR.getBooleanValue();
-
-        if (player.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
-        if (player.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
-
         double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
 
         GlStateManager.enableColorMaterial();
@@ -47,30 +46,29 @@ public class PlayerHUD extends DrawableHelper {
             GlStateManager.scaled(size * (mirror ? 1 : -1), size, size);
             GlStateManager.rotated(180.0F, 0.0F, 0.0F, 1.0F);
 
-            float bodyYaw = player.field_6283;
-            float yaw = player.yaw;
-            float pitch = player.pitch;
-            float prevHeadYaw = player.prevHeadYaw;
-            float headYaw = player.headYaw;
-            float handSwingProgress = player.handSwingProgress;
-            float horizontalSpeed = player.horizontalSpeed;
-            int hurtTime = player.hurtTime;
+            /* *************** data storing *************** */
+            float bodyYaw = targetEntity.field_6283;
+            float pitch = targetEntity.pitch;
+            float prevBodyYaw = targetEntity.field_6220;
+            float prevHeadYaw = targetEntity.prevHeadYaw;
+            float prevPitch = targetEntity.prevPitch;
+            float headYaw = targetEntity.headYaw;
+            float handSwingProgress = targetEntity.handSwingProgress;
+            int hurtTime = targetEntity.hurtTime;
 
             GlStateManager.rotated(lightDegree, 0.0F, 1.0F, 0.0F);
             DiffuseLighting.enable();
             GlStateManager.rotated(-lightDegree, 0.0F, 1.0F, 0.0F);
 
-            player.field_6283 = (float) MathHelper.clamp(player.field_6283, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
-            player.headYaw = (float) MathHelper.clamp(player.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
-            player.pitch = (float) (MathHelper.clamp(player.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
-            if (Configs.SWING_HANDS.getBooleanValue()) {
-                player.handSwingProgress = player.getHandSwingProgress(client.getTickDelta());
-            } else {
-                player.handSwingProgress = 0;
-            }
+            targetEntity.field_6220 = targetEntity.field_6283 = (float) MathHelper.clamp(targetEntity.field_6283, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
+            targetEntity.prevHeadYaw = targetEntity.headYaw = (float) MathHelper.clamp(targetEntity.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+            targetEntity.prevPitch = targetEntity.pitch = (float) (MathHelper.clamp(targetEntity.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
+
+            if (!Configs.SWING_HANDS.getBooleanValue())
+                targetEntity.handSwingProgress = 0;
 
             if (!Configs.HURT_FLASH.getBooleanValue()) {
-                player.hurtTime = 0;
+                targetEntity.hurtTime = 0;
             }
 
             GlStateManager.rotatef(((float) Configs.ROTATION_X.getDoubleValue()), 1.0F, 0.0F, 0.0F);
@@ -81,17 +79,18 @@ public class PlayerHUD extends DrawableHelper {
             EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
             entityRenderDispatcher.method_3945(180.0F);
             entityRenderDispatcher.setRenderShadows(false);
-            entityRenderDispatcher.render(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f, true);
+            entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, true);
             entityRenderDispatcher.setRenderShadows(true);
 
-            player.field_6283 = bodyYaw;
-            player.yaw = yaw;
-            player.pitch = pitch;
-            player.prevHeadYaw = prevHeadYaw;
-            player.headYaw = headYaw;
-            player.handSwingProgress = handSwingProgress;
-            player.hurtTime = hurtTime;
-            player.horizontalSpeed = horizontalSpeed;
+            /* *************** data restoring *************** */
+            targetEntity.field_6283 = bodyYaw;
+            targetEntity.pitch = pitch;
+            targetEntity.field_6220 = prevBodyYaw;
+            targetEntity.prevHeadYaw = prevHeadYaw;
+            targetEntity.prevPitch = prevPitch;
+            targetEntity.headYaw = headYaw;
+            targetEntity.handSwingProgress = handSwingProgress;
+            targetEntity.hurtTime = hurtTime;
         }
 
         GlStateManager.popMatrix();

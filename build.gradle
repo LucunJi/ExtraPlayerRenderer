@@ -1,11 +1,12 @@
 plugins {
-    id('fabric-loom').version('0.5-SNAPSHOT')
+    id('fabric-loom').version('0.6-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version "1.14.4-1.7"
+// follow semantic versioning! https://semver.org/
+version "1.14.4-1.8.0"
 group "github.io.lucunji.explayerenderer"
 
 minecraft { }
@@ -13,10 +14,11 @@ minecraft { }
 dependencies {
     minecraft "com.mojang:minecraft:1.14.4"
     mappings "net.fabricmc:yarn:1.14.4+build.18:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.10.2+build.210"
+    modImplementation "net.fabricmc:fabric-loader:0.11.3"
 
     //Fabric api
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.23.0+build.264-1.14"
+    //modImplementation "net.fabricmc.fabric-api:fabric-api:0.28.5+1.14"
+
     modCompile "fi.dy.masa.malilib:malilib-fabric-1.14.4:0.10.0-dev.20"
 }
 

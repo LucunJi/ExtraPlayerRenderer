@@ -2,12 +2,16 @@ package github.io.lucunji.explayerenderer.config;
 
 import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigBase;
-import fi.dy.masa.malilib.config.options.*;
+import fi.dy.masa.malilib.config.options.ConfigBoolean;
+import fi.dy.masa.malilib.config.options.ConfigDouble;
+import fi.dy.masa.malilib.config.options.ConfigHotkey;
+import fi.dy.masa.malilib.config.options.ConfigString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Configs {
+    public static final ConfigHotkey MENU_OPEN_KEY;
     public static final ConfigBoolean SPECTATOR_AUTO_SWITCH;
     public static final ConfigString PLAYER_NAME;
 
@@ -33,6 +37,7 @@ public class Configs {
     public static final ConfigDouble LIGHT_DEGREE;
 
     static {
+        MENU_OPEN_KEY = Category.PARAMETERS.add(new ConfigHotkey("openMenuKey", "F8", "explayerenderer.gui.settings.open_key"));
         SPECTATOR_AUTO_SWITCH = Category.PARAMETERS.add(new ConfigBoolean("spectatorAutoSwitch", true, "explayerenderer.gui.settings.spectator_auto_switch.desc"));
         PLAYER_NAME = Category.PARAMETERS.add(new ConfigString("playerName", "", "explayerenderer.gui.settings.player_name.desc"));
 

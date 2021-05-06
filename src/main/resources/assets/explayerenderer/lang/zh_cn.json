@@ -1,7 +1,7 @@
 {
-  "key.explayerenderer.master_control": "额外玩家渲染",
   "explayerenderer.gui.settings": "额外玩家渲染设置",
   "explayerenderer.gui.settings.parameters": "参数",
+  "explayerenderer.gui.settings.open_key": "打开设置菜单的按键",
   "explayerenderer.gui.settings.spectator_auto_switch.desc": "旁观者模式下自动切换玩家模型；打开后会覆盖 playerName 的功能",
   "explayerenderer.gui.settings.player_name.desc": "渲染的玩家 ID，默认是你自己的 ID",
   "explayerenderer.gui.settings.offset_x.desc": "X轴偏移",
