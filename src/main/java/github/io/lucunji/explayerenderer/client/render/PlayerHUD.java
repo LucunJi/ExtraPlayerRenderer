@@ -75,7 +75,7 @@ public class PlayerHUD extends DrawableHelper {
             boolean flag0 = ((EntityInvoker)targetEntity).callGetFlag(0);
             ((EntityInvoker)targetEntity).callSetFlag(0, false);
 
-            EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
+            EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
             boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
 
             targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(targetEntity.bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());

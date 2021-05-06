@@ -13,7 +13,7 @@ public class Main implements ModInitializer{
     @Override
     public void onInitialize(){
         ConfigManager.getInstance().registerConfigHandler(MOD_ID, new ConfigHandler());
-        new Configs();
+        new Configs();  // just load the class and run static code block
         ConfigHandler.loadFile();
         InputEventHandler.getKeybindManager().registerKeybindProvider(new KeybindProvider());
         Configs.MENU_OPEN_KEY.getKeybind().setCallback(new KeyBindHandler());

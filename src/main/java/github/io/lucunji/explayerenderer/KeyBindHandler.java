@@ -12,7 +12,7 @@ public class KeyBindHandler implements IHotkeyCallback {
     public boolean onKeyAction(KeyAction action, IKeybind key) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.currentScreen instanceof GuiConfig)
-            client.currentScreen.onClose();
+            client.currentScreen.onClose(); // actually has no effect
         else
             client.openScreen(new GuiConfig());
         return true;

@@ -6,6 +6,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
 import github.io.lucunji.explayerenderer.config.Configs;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.List;
 
@@ -39,9 +40,9 @@ public class GuiConfig extends GuiConfigsBase {
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         playerHUD.render(++this.ticks, partialTicks);
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
