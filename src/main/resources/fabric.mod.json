@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "1.2",
+  "version": "1.3.0",
 
   "name": "ExtraPlayerRenderer",
   "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
@@ -10,7 +10,8 @@
   ],
   "contributors": [
     "Fallen_Breath",
-    "X-Green"
+    "X-Green",
+    "altrisi"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer",
