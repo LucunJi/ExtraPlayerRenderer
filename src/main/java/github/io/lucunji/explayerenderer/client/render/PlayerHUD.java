@@ -63,7 +63,6 @@ public class PlayerHUD extends DrawableHelper {
 
             /* *************** data storing *************** */
             float bodyYaw = targetEntity.bodyYaw;
-            float yaw = targetEntity.yaw;
             float pitch = targetEntity.pitch;
             float prevBodyYaw = targetEntity.prevBodyYaw;
             float prevHeadYaw = targetEntity.prevHeadYaw;
@@ -82,11 +81,8 @@ public class PlayerHUD extends DrawableHelper {
             targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(targetEntity.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
             targetEntity.prevPitch = targetEntity.pitch = (float) (MathHelper.clamp(targetEntity.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
 
-            if (Configs.SWING_HANDS.getBooleanValue()) {
-                targetEntity.handSwingProgress = targetEntity.getHandSwingProgress(client.getTickDelta());
-            } else {
+            if (!Configs.SWING_HANDS.getBooleanValue())
                 targetEntity.handSwingProgress = 0;
-            }
 
             if (!Configs.HURT_FLASH.getBooleanValue()) {
                 targetEntity.hurtTime = 0;
@@ -106,7 +102,6 @@ public class PlayerHUD extends DrawableHelper {
 
             /* *************** data restoring *************** */
             targetEntity.bodyYaw = bodyYaw;
-            targetEntity.yaw = yaw;
             targetEntity.pitch = pitch;
             targetEntity.prevBodyYaw = prevBodyYaw;
             targetEntity.prevHeadYaw = prevHeadYaw;

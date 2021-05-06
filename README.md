@@ -20,7 +20,7 @@ It is recommended **download this mod here**: https://www.curseforge.com/minecra
 ~~这个模组**需要 malilib 和 Fabric API**（不是 Fabric Loader，它们是两个不同的东西）~~
 （这行字在 1.3.0 版本后失效）
 
-Since v1.3.0 (inclusive) this mod **only requires malilib** .
+Since v1.3.0 (inclusive) this mod **only requires malilib**.
 
 在 1.3.0 版本之后（包括 1.3.0）这个模组**只需要 malilib**。
 
