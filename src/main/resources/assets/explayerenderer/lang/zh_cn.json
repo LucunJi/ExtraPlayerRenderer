@@ -25,5 +25,6 @@
   "explayerenderer.gui.settings.hurt_flash.desc": "玩家受伤时是否有红色闪烁",
   "explayerenderer.gui.settings.swing_hands.desc": "玩家破坏方块时是否会有手臂挥动效果",
   "explayerenderer.gui.settings.light_degree.desc": "产生阴影效果的光照角度",
-  "explayerenderer.gui.settings.use_world_light.desc": "是否使用世界中的光照等级来渲染"
+  "explayerenderer.gui.settings.use_world_light.desc": "是否使用世界中的光照等级来渲染",
+  "explayerenderer.gui.settings.world_light_min.desc": "使用 useWorldLight 时的亮度下限"
 }

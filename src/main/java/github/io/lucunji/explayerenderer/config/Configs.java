@@ -2,10 +2,7 @@ package github.io.lucunji.explayerenderer.config;
 
 import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigBase;
-import fi.dy.masa.malilib.config.options.ConfigBoolean;
-import fi.dy.masa.malilib.config.options.ConfigDouble;
-import fi.dy.masa.malilib.config.options.ConfigHotkey;
-import fi.dy.masa.malilib.config.options.ConfigString;
+import fi.dy.masa.malilib.config.options.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +33,7 @@ public class Configs {
     public static final ConfigBoolean SWING_HANDS;
 //    public static final ConfigDouble LIGHT_DEGREE;
     public static final ConfigBoolean USE_WORLD_LIGHT;
+    public static final ConfigInteger WORLD_LIGHT_MIN;
 
     static {
         MENU_OPEN_KEY = Category.PARAMETERS.add(new ConfigHotkey("openMenuKey", "F8", "explayerenderer.gui.settings.open_key"));
@@ -63,6 +61,7 @@ public class Configs {
         SWING_HANDS = Category.DETAILS.add(new ConfigBoolean("swingHands", true, "explayerenderer.gui.settings.swing_hands.desc"));
 //        LIGHT_DEGREE = Category.DETAILS.add(new ConfigDouble("lightDegree", 0, -180, 180, "explayerenderer.gui.settings.light_degree.desc"));
         USE_WORLD_LIGHT = Category.DETAILS.add(new ConfigBoolean("useWorldLight", true, "explayerenderer.gui.settings.use_world_light.desc"));
+        WORLD_LIGHT_MIN = Category.DETAILS.add(new ConfigInteger("worldLightMin", 2, 0, 15, "explayerenderer.gui.settings.world_light_min.desc"));
     }
 
     public enum Category {
