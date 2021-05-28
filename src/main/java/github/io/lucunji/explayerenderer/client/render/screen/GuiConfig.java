@@ -4,7 +4,7 @@ import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.Main;
-import github.io.lucunji.explayerenderer.client.render.PlayerHUD;
+import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
 import github.io.lucunji.explayerenderer.config.Configs;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -12,12 +12,10 @@ import java.util.List;
 
 public class GuiConfig extends GuiConfigsBase {
     private static Configs.Category currentTab = Configs.Category.PARAMETERS;
-    PlayerHUD playerHUD;
     int ticks;
 
     public GuiConfig() {
         super(10, 50, Main.MOD_ID, null, "explayerenderer.gui.settings");
-        this.playerHUD = new PlayerHUD();
         this.ticks = 0;
     }
 
@@ -32,6 +30,7 @@ public class GuiConfig extends GuiConfigsBase {
             this.addButton(tabButton, (buttonBase, i) -> {
                 currentTab = ((TabButton) buttonBase).category;
                 this.reCreateListWidget();
+                //noinspection ConstantConditions
                 this.getListWidget().resetScrollbarPosition();
                 this.initGui();
             });
@@ -41,7 +40,7 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        playerHUD.render(++this.ticks, partialTicks);
+        Main.PLAYER_HUD_RENDERER.doRender(partialTicks, new MatrixStack());
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 

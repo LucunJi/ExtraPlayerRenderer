@@ -1,9 +1,9 @@
 package github.io.lucunji.explayerenderer.client.render;
 
+import fi.dy.masa.malilib.interfaces.IRenderer;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -17,21 +17,35 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
-public class PlayerHUD extends DrawableHelper {
+public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    // TODO: fix lightDegree
-    public void render(int ticks, float tickDelta) {
-        if (client.world == null || client.player == null)  {
-            return;
-        }
+    private boolean needFixMirrorItem;
+
+    public PlayerHUDRenderer() {
+        needFixMirrorItem = false;
+    }
+
+    /**
+     * This method is invoked by malilib before {@code render()} method in {@link net.minecraft.client.gui.hud.InGameHud}
+     * returns.
+     * <p>
+     * TODO: fix lightDegree
+     */
+    @Override
+    public void onRenderGameOverlayPost(float partialTicks, MatrixStack matrixStack) {
+        if (client.skipGameRender || client.currentScreen != null) return;
+        doRender(partialTicks, matrixStack);
+    }
+
+    public void doRender(float partialTicks, MatrixStack matrixStack) {
+        if (client.world == null || client.player == null) return;
         LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
         if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity instanceof LivingEntity) {
-                targetEntity = (LivingEntity)cameraEntity;
-            }
-            else if (cameraEntity != null) {
+                targetEntity = (LivingEntity) cameraEntity;
+            } else if (cameraEntity != null) {
                 return;
             }
         }
@@ -56,8 +70,8 @@ public class PlayerHUD extends DrawableHelper {
         float handSwingProgress = targetEntity.handSwingProgress;
         int hurtTime = targetEntity.hurtTime;
         int fireTicks = targetEntity.getFireTicks();
-        boolean flag0 = ((EntityInvoker)targetEntity).callGetFlag(0);
-        ((EntityInvoker)targetEntity).callSetFlag(0, false);
+        boolean flag0 = ((EntityInvoker) targetEntity).callGetFlag(0);
+        ((EntityInvoker) targetEntity).callSetFlag(0, false);
 
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
@@ -76,23 +90,29 @@ public class PlayerHUD extends DrawableHelper {
         targetEntity.setFireTicks(0);
 
         /* *************** rendering code *************** */
-        MatrixStack matrixStack = new MatrixStack();
+        matrixStack.push();
+
         matrixStack.translate(posX, posY, -500.0D);
         Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_X.getDegreesQuaternion((float)Configs.ROTATION_X.getDoubleValue()));
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_Y.getDegreesQuaternion((float)Configs.ROTATION_Y.getDoubleValue()));
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_Z.getDegreesQuaternion((float)Configs.ROTATION_Z.getDoubleValue()));
+        quaternion.hamiltonProduct(Vector3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue()));
+        quaternion.hamiltonProduct(Vector3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
+        quaternion.hamiltonProduct(Vector3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
         matrixStack.multiply(quaternion);
-        // TODO: fix mirror glitches
         matrixStack.scale((float) size * (mirror ? -1 : 1), (float) size, (float) -size);
 
         entityRenderDispatcher.setRenderHitboxes(false);
         entityRenderDispatcher.setRenderShadows(false);
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, matrixStack, immediate, getLight(targetEntity, tickDelta));
+
+        this.needFixMirrorItem = mirror; // set flag to true to tell HeldItemFeatureRenderer to fix bug
+        entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack, immediate, getLight(targetEntity, partialTicks));
+        this.needFixMirrorItem = false;
+
         immediate.draw();
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
+
+        matrixStack.pop();
 
         /* *************** data restoring *************** */
         targetEntity.bodyYaw = bodyYaw;
@@ -104,7 +124,11 @@ public class PlayerHUD extends DrawableHelper {
         targetEntity.handSwingProgress = handSwingProgress;
         targetEntity.hurtTime = hurtTime;
         targetEntity.setFireTicks(fireTicks);
-        ((EntityInvoker)targetEntity).callSetFlag(0, flag0);
+        ((EntityInvoker) targetEntity).callSetFlag(0, flag0);
+    }
+
+    public boolean needFixMirrorItem() {
+        return needFixMirrorItem;
     }
 
     private static int getLight(LivingEntity entity, float tickDelta) {

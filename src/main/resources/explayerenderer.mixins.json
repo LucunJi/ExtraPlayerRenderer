@@ -3,10 +3,10 @@
   "package": "github.io.lucunji.explayerenderer.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityInvoker"
+    "EntityInvoker",
+    "HeldItemFeatureRendererMixin"
   ],
   "client": [
-    "MixinGameRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

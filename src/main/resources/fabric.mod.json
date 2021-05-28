@@ -22,7 +22,7 @@
   "license": "GPL3.0",
   "icon": "assets/explayerenderer/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "github.io.lucunji.explayerenderer.Main"
