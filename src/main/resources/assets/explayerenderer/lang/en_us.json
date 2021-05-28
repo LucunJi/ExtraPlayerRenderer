@@ -1,6 +1,7 @@
 {
   "explayerenderer.gui.settings": "Extra Player Renderer Settings",
-  "explayerenderer.gui.settings.parameters": "Parameters",
+  "explayerenderer.gui.settings.enabled.desc": "If this mod is enabled.",
+  "explayerenderer.gui.settings.general": "General",
   "explayerenderer.gui.settings.open_key": "Key to open config menu",
   "explayerenderer.gui.settings.spectator_auto_switch.desc": "Automatically switch player model in spectator mode.\nOverrides playerName option if enabled.",
   "explayerenderer.gui.settings.player_name.desc": "The name of player to render. It will be your name in default.",
@@ -10,7 +11,7 @@
   "explayerenderer.gui.settings.rotation_y.desc": "Y rotation of rendered model.",
   "explayerenderer.gui.settings.rotation_z.desc": "Z rotation of rendered model.",
   "explayerenderer.gui.settings.size.desc": "Rendering size.",
-  "explayerenderer.gui.settings.mirror.desc": "Flip rendered model horizontally. §eGlitches when set to true.§r",
+  "explayerenderer.gui.settings.mirror.desc": "Flip rendered model horizontally.",
   "explayerenderer.gui.settings.pitch_min.desc": "Lower bound of pitch.",
   "explayerenderer.gui.settings.pitch_max.desc": "Upper bound of pitch.",
   "explayerenderer.gui.settings.pitch_offset.desc": "Offset of pitch.",

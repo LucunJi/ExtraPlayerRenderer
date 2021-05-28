@@ -1,6 +1,7 @@
 {
   "explayerenderer.gui.settings": "额外玩家渲染设置",
-  "explayerenderer.gui.settings.parameters": "参数",
+  "explayerenderer.gui.settings.enabled.desc": "本模组是否启用",
+  "explayerenderer.gui.settings.general": "总体",
   "explayerenderer.gui.settings.open_key": "打开设置菜单的按键",
   "explayerenderer.gui.settings.spectator_auto_switch.desc": "旁观者模式下自动切换玩家模型；打开后会覆盖 playerName 的功能",
   "explayerenderer.gui.settings.player_name.desc": "渲染的玩家 ID，默认是你自己的 ID",
@@ -10,7 +11,7 @@
   "explayerenderer.gui.settings.rotation_y.desc": "Y轴旋转",
   "explayerenderer.gui.settings.rotation_z.desc": "Z轴旋转",
   "explayerenderer.gui.settings.size.desc": "渲染大小",
-  "explayerenderer.gui.settings.mirror.desc": "将渲染模型水平镜像。§e当设置为 true 时有轻微渲染错误§r",
+  "explayerenderer.gui.settings.mirror.desc": "将渲染模型水平镜像",
   "explayerenderer.gui.settings.pitch_min.desc": "俯角下界",
   "explayerenderer.gui.settings.pitch_max.desc": "俯角上界",
   "explayerenderer.gui.settings.pitch_offset.desc": "俯角修正值",

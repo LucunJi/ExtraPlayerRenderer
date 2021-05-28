@@ -6,16 +6,16 @@ import fi.dy.masa.malilib.event.RenderEventHandler;
 import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
 import github.io.lucunji.explayerenderer.config.ConfigHandler;
 import github.io.lucunji.explayerenderer.config.Configs;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class Main implements ModInitializer{
+public class Main implements ClientModInitializer {
 
     public static final String MOD_ID = "explayerenderer";
 
     public static final PlayerHUDRenderer PLAYER_HUD_RENDERER = new PlayerHUDRenderer();
 
     @Override
-    public void onInitialize(){
+    public void onInitializeClient(){
         ConfigManager.getInstance().registerConfigHandler(MOD_ID, new ConfigHandler());
         //noinspection InstantiationOfUtilityClass
         new Configs();  // just load the class and run static code block

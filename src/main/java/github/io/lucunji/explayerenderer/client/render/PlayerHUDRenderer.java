@@ -39,7 +39,7 @@ public class PlayerHUDRenderer implements IRenderer {
     }
 
     public void doRender(float partialTicks, MatrixStack matrixStack) {
-        if (client.world == null || client.player == null) return;
+        if (client.world == null || client.player == null || !Configs.ENABLED.getBooleanValue()) return;
         LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
         if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();

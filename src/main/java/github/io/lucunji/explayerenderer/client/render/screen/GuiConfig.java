@@ -4,19 +4,16 @@ import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.Main;
-import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
-import github.io.lucunji.explayerenderer.config.Configs;
+import github.io.lucunji.explayerenderer.config.Category;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.List;
 
 public class GuiConfig extends GuiConfigsBase {
-    private static Configs.Category currentTab = Configs.Category.PARAMETERS;
-    int ticks;
+    private static Category currentTab = Category.GENERAL;
 
     public GuiConfig() {
         super(10, 50, Main.MOD_ID, null, "explayerenderer.gui.settings");
-        this.ticks = 0;
     }
 
     @Override
@@ -24,10 +21,13 @@ public class GuiConfig extends GuiConfigsBase {
         super.initGui();
         this.clearOptions();
         int x = 10, y = 26;
-        for (Configs.Category category : Configs.Category.values()) {
+        // tab buttons are set
+        for (Category category : Category.values()) {
             ButtonGeneric tabButton = new TabButton(category, x, y, -1, 20, StringUtils.translate(category.getKey()));
             tabButton.setEnabled(true);
             this.addButton(tabButton, (buttonBase, i) -> {
+                this.onSettingsChanged();
+                // reload the GUI when tab button is clicked
                 currentTab = ((TabButton) buttonBase).category;
                 this.reCreateListWidget();
                 //noinspection ConstantConditions
@@ -46,22 +46,16 @@ public class GuiConfig extends GuiConfigsBase {
 
     @Override
     public List<ConfigOptionWrapper> getConfigs() {
+        // option buttons are set
         return ConfigOptionWrapper.createFor(currentTab.getConfigs());
     }
 
     public static class TabButton extends ButtonGeneric {
-        private final Configs.Category category;
+        private final Category category;
 
-        public TabButton(Configs.Category category, int x, int y, int width, int height, String text, String... hoverStrings) {
+        public TabButton(Category category, int x, int y, int width, int height, String text, String... hoverStrings) {
             super(x, y, width, height, text, hoverStrings);
             this.category = category;
         }
     }
-
-    @Override
-    public boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
-        super.onKeyTyped(keyCode, scanCode, modifiers);
-        return true;
-    }
-
 }
