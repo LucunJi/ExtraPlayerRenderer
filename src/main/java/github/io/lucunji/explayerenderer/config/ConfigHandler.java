@@ -22,7 +22,9 @@ public class ConfigHandler implements IConfigHandler {
         if (settingFile.isFile() && settingFile.exists()) {
             JsonElement jsonElement = JsonUtils.parseJsonFile(settingFile);
             if (jsonElement instanceof JsonObject) {
-                ConfigUtils.readConfigBase((JsonObject)jsonElement, "Parameters", Configs.Category.PARAMETERS.getConfigs());
+
+                for (Category category : Category.values())
+                    ConfigUtils.readConfigBase((JsonObject)jsonElement, category.name(), category.getConfigs());
             }
         }
     }
@@ -36,7 +38,8 @@ public class ConfigHandler implements IConfigHandler {
         if ((CONFIG_DIR.exists() && CONFIG_DIR.isDirectory()) || CONFIG_DIR.mkdirs()) {
             JsonObject configRoot = new JsonObject();
 
-            ConfigUtils.writeConfigBase(configRoot, "Parameters", Configs.Category.PARAMETERS.getConfigs());
+            for (Category category : Category.values())
+                    ConfigUtils.writeConfigBase(configRoot, category.name(), category.getConfigs());
 
             JsonUtils.writeJsonToFile(configRoot, new File(FILE_PATH));
         }

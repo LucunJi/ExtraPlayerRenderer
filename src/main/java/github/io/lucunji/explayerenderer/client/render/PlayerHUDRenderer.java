@@ -2,6 +2,7 @@ package github.io.lucunji.explayerenderer.client.render;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import fi.dy.masa.malilib.interfaces.IRenderer;
 import github.io.lucunji.explayerenderer.config.Configs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -11,20 +12,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class PlayerHUD extends DrawableHelper {
+public class PlayerHUDRenderer extends DrawableHelper implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public void render(int ticks, float tickDelta) {
-        if (client.world == null || client.player == null)  {
-            return;
-        }
+    @Override
+    public void onRenderGameOverlayPost(float partialTicks) {
+        if (client.skipGameRender || client.currentScreen != null) return;
+        this.doRender(partialTicks);
+    }
+
+    public void doRender(float tickDelta) {
+        if (client.world == null || client.player == null || !Configs.ENABLED.getBooleanValue()) return;
         LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(Configs.PLAYER_NAME.getStringValue())).findFirst().orElse(client.player);
         if (Configs.SPECTATOR_AUTO_SWITCH.getBooleanValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity instanceof LivingEntity) {
-                targetEntity = (LivingEntity)cameraEntity;
-            }
-            else if (cameraEntity != null) {
+                targetEntity = (LivingEntity) cameraEntity;
+            } else if (cameraEntity != null) {
                 return;
             }
         }
@@ -42,7 +46,7 @@ public class PlayerHUD extends DrawableHelper {
         GlStateManager.enableColorMaterial();
         {
             GlStateManager.pushMatrix();
-            GlStateManager.translated(posX, posY, 50.0F);
+            GlStateManager.translated(posX, posY, -500.0F);
             GlStateManager.scaled(size * (mirror ? 1 : -1), size, size);
             GlStateManager.rotated(180.0F, 0.0F, 0.0F, 1.0F);
 
@@ -78,9 +82,11 @@ public class PlayerHUD extends DrawableHelper {
             GlStateManager.translated(0.0F, 0.0F, 0.0F);
             EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderManager();
             entityRenderDispatcher.method_3945(180.0F);
-            entityRenderDispatcher.setRenderShadows(false);
+
+            boolean renderShadow = entityRenderDispatcher.shouldRenderShadows();
+            entityRenderDispatcher.setRenderShadows(renderShadow);
             entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, tickDelta, true);
-            entityRenderDispatcher.setRenderShadows(true);
+            entityRenderDispatcher.setRenderShadows(renderShadow);
 
             /* *************** data restoring *************** */
             targetEntity.field_6283 = bodyYaw;
