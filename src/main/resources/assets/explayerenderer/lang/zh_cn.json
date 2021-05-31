@@ -12,6 +12,8 @@
   "explayerenderer.gui.settings.rotation_z.desc": "Z轴旋转",
   "explayerenderer.gui.settings.size.desc": "渲染大小",
   "explayerenderer.gui.settings.mirror.desc": "将渲染模型水平镜像",
+
+  "explayerenderer.gui.settings.details": "细节",
   "explayerenderer.gui.settings.pitch_min.desc": "俯角下界",
   "explayerenderer.gui.settings.pitch_max.desc": "俯角上界",
   "explayerenderer.gui.settings.pitch_offset.desc": "俯角修正值",
@@ -19,10 +21,8 @@
   "explayerenderer.gui.settings.head_yaw_max.desc": "头部偏航角上界",
   "explayerenderer.gui.settings.body_yaw_min.desc": "身体偏航角下界",
   "explayerenderer.gui.settings.body_yaw_max.desc": "身体偏航角上界",
-  "explayerenderer.gui.settings.sneaking_y_offset.desc": "玩家潜心时Y轴距离修正",
+  "explayerenderer.gui.settings.sneaking_y_offset.desc": "玩家潜行时Y轴距离修正",
   "explayerenderer.gui.settings.elytra_y_offset.desc": "玩家使用鞘翅飞行时的Y轴距离修正",
-  
-  "explayerenderer.gui.settings.details": "细节",
   "explayerenderer.gui.settings.hurt_flash.desc": "玩家受伤时是否有红色闪烁",
   "explayerenderer.gui.settings.swing_hands.desc": "玩家破坏方块时是否会有手臂挥动效果",
   "explayerenderer.gui.settings.light_degree.desc": "产生阴影效果的光照角度",
