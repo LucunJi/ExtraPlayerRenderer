@@ -6,7 +6,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 // follow semantic versioning! https://semver.org/
-version "1.14.4-2.0.0"
+version "1.14.4-2.0.1"
 group "github.io.lucunji.explayerenderer"
 
 minecraft { }
