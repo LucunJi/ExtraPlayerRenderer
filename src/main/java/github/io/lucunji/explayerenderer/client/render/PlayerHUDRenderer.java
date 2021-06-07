@@ -37,8 +37,12 @@ public class PlayerHUDRenderer extends DrawableHelper implements IRenderer {
         int scaledHeight = client.window.getScaledHeight();
         double posX = Configs.OFFSET_X.getDoubleValue() * scaledWidth;
         double posY = Configs.OFFSET_Y.getDoubleValue() * scaledHeight;
-        if (targetEntity.isInSneakingPose()) posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
-        if (targetEntity.isFallFlying()) posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
+        if (targetEntity.isFallFlying())
+            posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
+        else if (targetEntity.isInSneakingPose())
+            posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
+        else if (targetEntity.isSwimming())
+            posY += Configs.SWIM_OFFSET_Y.getDoubleValue();
         double size = Configs.SIZE.getDoubleValue() * scaledHeight;
         boolean mirror = Configs.MIRROR.getBooleanValue();
         double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
