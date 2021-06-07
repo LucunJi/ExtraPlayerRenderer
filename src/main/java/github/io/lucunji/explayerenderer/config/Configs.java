@@ -24,6 +24,7 @@ public class Configs {
     public static final ConfigDouble BODY_YAW_MIN;
     public static final ConfigDouble BODY_YAW_MAX;
     public static final ConfigDouble SNEAKING_OFFSET_Y;
+    public static final ConfigDouble SWIM_OFFSET_Y;
     public static final ConfigDouble ELYTRA_OFFSET_Y;
 
     public static final ConfigBoolean HURT_FLASH;
@@ -54,6 +55,7 @@ public class Configs {
         BODY_YAW_MIN = Category.DETAILS.add(new ConfigDouble("bodyYawMin", 0, -180, 180, "explayerenderer.gui.settings.body_yaw_min.desc"));
         BODY_YAW_MAX = Category.DETAILS.add(new ConfigDouble("bodyYawMax", 0, -180, 180, "explayerenderer.gui.settings.body_yaw_max.desc"));
         SNEAKING_OFFSET_Y = Category.DETAILS.add(new ConfigDouble("sneakingYOffset", -30, -100, 100, "explayerenderer.gui.settings.sneaking_y_offset.desc"));
+        SWIM_OFFSET_Y = Category.DETAILS.add(new ConfigDouble("swimYOffset", -120, -300, 300, "explayerenderer.gui.settings.swim_y_offset.desc"));
         ELYTRA_OFFSET_Y = Category.DETAILS.add(new ConfigDouble("elytraYOffset", -120, -300, 300, "explayerenderer.gui.settings.elytra_y_offset.desc"));
 
         HURT_FLASH = Category.DETAILS.add(new ConfigBoolean("hurtFlash", true, "explayerenderer.gui.settings.hurt_flash.desc"));

@@ -22,6 +22,7 @@
   "explayerenderer.gui.settings.body_yaw_min.desc": "Lower bound of body yaw.",
   "explayerenderer.gui.settings.body_yaw_max.desc": "Upper bound of body yaw.",
   "explayerenderer.gui.settings.sneaking_y_offset.desc": "Y offset when player is sneaking.",
+  "explayerenderer.gui.settings.swim_y_offset.desc": "Y offset when player is swimming.",
   "explayerenderer.gui.settings.elytra_y_offset.desc": "Y offset when player is flying using an elytra.",
   "explayerenderer.gui.settings.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "explayerenderer.gui.settings.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
