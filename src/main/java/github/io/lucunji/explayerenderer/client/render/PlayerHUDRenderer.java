@@ -8,7 +8,7 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
@@ -33,9 +33,9 @@ public class PlayerHUDRenderer implements IRenderer {
      * TODO: fix lightDegree
      */
     @Override
-    public void onRenderGameOverlayPost(float partialTicks, MatrixStack matrixStack) {
+    public void onRenderGameOverlayPost(MatrixStack matrixStack) {
         if (client.skipGameRender || client.currentScreen != null) return;
-        doRender(partialTicks, matrixStack);
+        doRender(client.getTickDelta(), matrixStack);
     }
 
     public void doRender(float partialTicks, MatrixStack matrixStack) {
@@ -66,12 +66,13 @@ public class PlayerHUDRenderer implements IRenderer {
 
         /* *************** data storing *************** */
         float bodyYaw = targetEntity.bodyYaw;
-        float pitch = targetEntity.pitch;
+        float pitch = targetEntity.getPitch();
         float prevBodyYaw = targetEntity.prevBodyYaw;
         float prevHeadYaw = targetEntity.prevHeadYaw;
         float prevPitch = targetEntity.prevPitch;
-        float headYaw = targetEntity.headYaw;
+        float headYaw = targetEntity.getHeadYaw();
         float handSwingProgress = targetEntity.handSwingProgress;
+        float lastHandSwingProgress = targetEntity.lastHandSwingProgress;
         int hurtTime = targetEntity.hurtTime;
         int fireTicks = targetEntity.getFireTicks();
         boolean flag0 = ((EntityInvoker) targetEntity).callGetFlag(0);
@@ -80,12 +81,15 @@ public class PlayerHUDRenderer implements IRenderer {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
 
-        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(targetEntity.bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
-        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(targetEntity.headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
-        targetEntity.prevPitch = targetEntity.pitch = (float) (MathHelper.clamp(targetEntity.pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
+        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
+        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+        targetEntity.prevPitch = (float) (MathHelper.clamp(pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
+        targetEntity.setPitch(targetEntity.prevPitch);
 
-        if (!Configs.SWING_HANDS.getBooleanValue())
+        if (!Configs.SWING_HANDS.getBooleanValue()) {
             targetEntity.handSwingProgress = 0;
+            targetEntity.lastHandSwingProgress = 0;
+        }
 
         if (!Configs.HURT_FLASH.getBooleanValue()) {
             targetEntity.hurtTime = 0;
@@ -97,10 +101,10 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack.push();
 
         matrixStack.translate(posX, posY, -500.0D);
-        Quaternion quaternion = Vector3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue()));
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
-        quaternion.hamiltonProduct(Vector3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
+        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        quaternion.hamiltonProduct(Vec3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue()));
+        quaternion.hamiltonProduct(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
+        quaternion.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
         matrixStack.multiply(quaternion);
         matrixStack.scale((float) size * (mirror ? -1 : 1), (float) size, (float) -size);
 
@@ -119,13 +123,14 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack.pop();
 
         /* *************** data restoring *************** */
-        targetEntity.bodyYaw = bodyYaw;
-        targetEntity.pitch = pitch;
+        targetEntity.setBodyYaw(bodyYaw);
+        targetEntity.setPitch(pitch);
         targetEntity.prevBodyYaw = prevBodyYaw;
         targetEntity.prevHeadYaw = prevHeadYaw;
         targetEntity.prevPitch = prevPitch;
-        targetEntity.headYaw = headYaw;
+        targetEntity.setHeadYaw(headYaw);
         targetEntity.handSwingProgress = handSwingProgress;
+        targetEntity.lastHandSwingProgress = lastHandSwingProgress;
         targetEntity.hurtTime = hurtTime;
         targetEntity.setFireTicks(fireTicks);
         ((EntityInvoker) targetEntity).callSetFlag(0, flag0);
