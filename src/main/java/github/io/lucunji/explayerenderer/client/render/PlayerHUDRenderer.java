@@ -1,19 +1,21 @@
 package github.io.lucunji.explayerenderer.client.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 
@@ -98,29 +100,46 @@ public class PlayerHUDRenderer implements IRenderer {
         targetEntity.setFireTicks(0);
 
         /* *************** rendering code *************** */
-        matrixStack.push();
+        MatrixStack matrixStack1 = RenderSystem.getModelViewStack();
+        matrixStack1.push();
+        matrixStack1.translate(0, 0, 550.0D);
+        matrixStack1.scale(mirror ? -1 : 1, 1, -1);
 
-        matrixStack.translate(posX, posY, -500.0D);
+        RenderSystem.applyModelViewMatrix();
+
+        MatrixStack matrixStack2 = new MatrixStack();
+        matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
+        matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-        quaternion.hamiltonProduct(Vec3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue()));
-        quaternion.hamiltonProduct(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
-        quaternion.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
-        matrixStack.multiply(quaternion);
-        matrixStack.scale((float) size * (mirror ? -1 : 1), (float) size, (float) -size);
+        Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue());
+        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
+        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
+        quaternion.hamiltonProduct(quaternion2);
+        matrixStack2.multiply(quaternion);
 
+        DiffuseLighting.method_34742();
+        quaternion2.conjugate();
+
+        entityRenderDispatcher.setRotation(quaternion2);
         entityRenderDispatcher.setRenderHitboxes(false);
         entityRenderDispatcher.setRenderShadows(false);
-        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 
+        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+        LivingEntity finalEntity = targetEntity;
         this.needFixMirrorItem = mirror; // set flag to true to tell HeldItemFeatureRenderer to fix bug
-        entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack, immediate, getLight(targetEntity, partialTicks));
+        //noinspection deprecation
+        RenderSystem.runAsFancy(() ->
+                entityRenderDispatcher.render(finalEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack2, immediate, getLight(finalEntity, partialTicks))
+        );
         this.needFixMirrorItem = false;
 
         immediate.draw();
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
-        matrixStack.pop();
+        matrixStack1.pop();
+        RenderSystem.applyModelViewMatrix();
+        DiffuseLighting.enableGuiDepthLighting();
 
         /* *************** data restoring *************** */
         targetEntity.setBodyYaw(bodyYaw);
