@@ -5,8 +5,7 @@
   "mixins": [
   ],
   "client": [
-    "EntityInvoker",
-    "HeldItemFeatureRendererMixin"
+    "EntityInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

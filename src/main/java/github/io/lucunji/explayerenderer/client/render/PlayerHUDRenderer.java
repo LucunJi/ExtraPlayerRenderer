@@ -22,10 +22,7 @@ import net.minecraft.world.World;
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    private boolean needFixMirrorItem;
-
     public PlayerHUDRenderer() {
-        needFixMirrorItem = false;
     }
 
     /**
@@ -66,7 +63,7 @@ public class PlayerHUDRenderer implements IRenderer {
         boolean mirror = Configs.MIRROR.getBooleanValue();
 //        double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
 
-        /* *************** data storing *************** */
+        /* *************** store entity data *************** */
         float bodyYaw = targetEntity.bodyYaw;
         float pitch = targetEntity.getPitch();
         float prevBodyYaw = targetEntity.prevBodyYaw;
@@ -83,6 +80,7 @@ public class PlayerHUDRenderer implements IRenderer {
         EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
         boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
 
+        /* *************** modify entity data *************** */
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(bodyYaw, Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(headYaw, Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
         targetEntity.prevPitch = (float) (MathHelper.clamp(pitch, Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
@@ -99,7 +97,7 @@ public class PlayerHUDRenderer implements IRenderer {
 
         targetEntity.setFireTicks(0);
 
-        /* *************** rendering code *************** */
+        /* *************** do rendering *************** */
         MatrixStack matrixStack1 = RenderSystem.getModelViewStack();
         matrixStack1.push();
         matrixStack1.translate(0, 0, 550.0D);
@@ -126,14 +124,16 @@ public class PlayerHUDRenderer implements IRenderer {
 
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         LivingEntity finalEntity = targetEntity;
-        this.needFixMirrorItem = mirror; // set flag to true to tell HeldItemFeatureRenderer to fix bug
         //noinspection deprecation
         RenderSystem.runAsFancy(() ->
                 entityRenderDispatcher.render(finalEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack2, immediate, getLight(finalEntity, partialTicks))
         );
-        this.needFixMirrorItem = false;
 
+        // disable cull to fix item rendering glitches when mirror option is on
+        RenderSystem.disableCull();
         immediate.draw();
+        RenderSystem.enableCull();
+
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
@@ -141,7 +141,7 @@ public class PlayerHUDRenderer implements IRenderer {
         RenderSystem.applyModelViewMatrix();
         DiffuseLighting.enableGuiDepthLighting();
 
-        /* *************** data restoring *************** */
+        /* *************** restore data *************** */
         targetEntity.setBodyYaw(bodyYaw);
         targetEntity.setPitch(pitch);
         targetEntity.prevBodyYaw = prevBodyYaw;
@@ -153,10 +153,6 @@ public class PlayerHUDRenderer implements IRenderer {
         targetEntity.hurtTime = hurtTime;
         targetEntity.setFireTicks(fireTicks);
         ((EntityInvoker) targetEntity).callSetFlag(0, flag0);
-    }
-
-    public boolean needFixMirrorItem() {
-        return needFixMirrorItem;
     }
 
     private static int getLight(LivingEntity entity, float tickDelta) {
