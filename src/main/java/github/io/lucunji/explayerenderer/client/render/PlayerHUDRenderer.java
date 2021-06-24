@@ -61,7 +61,7 @@ public class PlayerHUDRenderer implements IRenderer {
             posY += Configs.SWIM_OFFSET_Y.getDoubleValue();
         double size = Configs.SIZE.getDoubleValue() * scaledHeight;
         boolean mirror = Configs.MIRROR.getBooleanValue();
-//        double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
+        double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
 
         /* *************** store entity data *************** */
         float bodyYaw = targetEntity.bodyYaw;
@@ -102,10 +102,12 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack1.push();
         matrixStack1.translate(0, 0, 550.0D);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
+        matrixStack1.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((float)lightDegree));
 
         RenderSystem.applyModelViewMatrix();
 
         MatrixStack matrixStack2 = new MatrixStack();
+        matrixStack2.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-(float)lightDegree));
         matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
         matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
