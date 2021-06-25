@@ -13,7 +13,7 @@ public class GuiConfig extends GuiConfigsBase {
     private static Category currentTab = Category.GENERAL;
 
     public GuiConfig() {
-        super(10, 50, Main.MOD_ID, null, "explayerenderer.gui.settings");
+        super(10, 50, Main.MOD_ID, null, "config.explayerenderer.title");
     }
 
     @Override

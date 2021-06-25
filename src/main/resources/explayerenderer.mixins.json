@@ -1,11 +1,12 @@
 {
-  "required": true,
+  "required": false,
   "package": "github.io.lucunji.explayerenderer.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-    "EntityInvoker"
+    "EntityInvoker",
+    "ImmediateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

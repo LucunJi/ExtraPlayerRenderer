@@ -22,7 +22,10 @@ import net.minecraft.world.World;
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
+    private boolean needFixMirroredItem;
+
     public PlayerHUDRenderer() {
+        needFixMirroredItem = false;
     }
 
     /**
@@ -56,11 +59,11 @@ public class PlayerHUDRenderer implements IRenderer {
         if (targetEntity.isFallFlying())
             posY += Configs.ELYTRA_OFFSET_Y.getDoubleValue();
         else if (targetEntity.isInSneakingPose())
-            posY += Configs.SNEAKING_OFFSET_Y.getDoubleValue();
+            posY += Configs.SNEAK_OFFSET_Y.getDoubleValue();
         else if (targetEntity.isSwimming())
             posY += Configs.SWIM_OFFSET_Y.getDoubleValue();
         double size = Configs.SIZE.getDoubleValue() * scaledHeight;
-        boolean mirror = Configs.MIRROR.getBooleanValue();
+        boolean mirror = Configs.MIRRORED.getBooleanValue();
         double lightDegree = Configs.LIGHT_DEGREE.getDoubleValue();
 
         /* *************** store entity data *************** */
@@ -130,11 +133,10 @@ public class PlayerHUDRenderer implements IRenderer {
         RenderSystem.runAsFancy(() ->
                 entityRenderDispatcher.render(finalEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack2, immediate, getLight(finalEntity, partialTicks))
         );
-
         // disable cull to fix item rendering glitches when mirror option is on
-        RenderSystem.disableCull();
+        needFixMirroredItem = mirror;
         immediate.draw();
-        RenderSystem.enableCull();
+        needFixMirroredItem = false;
 
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
@@ -155,6 +157,10 @@ public class PlayerHUDRenderer implements IRenderer {
         targetEntity.hurtTime = hurtTime;
         targetEntity.setFireTicks(fireTicks);
         ((EntityInvoker) targetEntity).callSetFlag(0, flag0);
+    }
+
+    public boolean needFixMirrorItem() {
+        return needFixMirroredItem;
     }
 
     private static int getLight(LivingEntity entity, float tickDelta) {
