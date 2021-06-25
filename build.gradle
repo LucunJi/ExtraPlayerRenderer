@@ -1,31 +1,30 @@
 plugins {
-    id('fabric-loom').version('0.6-SNAPSHOT')
+    id('fabric-loom').version('0.7-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 // follow semantic versioning! https://semver.org/
-version "1.16.5-2.0.1"
-group "github.io.lucunji.explayerenderer"
-
-minecraft { }
-
-dependencies {
-    minecraft "com.mojang:minecraft:1.16.5"
-    mappings "net.fabricmc:yarn:1.16.5+build.8:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.11.3"
-
-    //Fabric api
-    //modImplementation "net.fabricmc.fabric-api:fabric-api:0.34.1+1.16"
-
-    modCompile "fi.dy.masa.malilib:malilib-fabric-1.16.4:0.10.0-dev.21+arne.6"
-}
+archivesBaseName = project.mod_filename
+version = project.mod_version
+group = project.maven_group + "." + project.mod_id
 
 repositories {
     maven {
         url 'https://masa.dy.fi/maven'
     }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    //Fabric api
+//    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modCompile "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_full}:${project.malilib_version}"
 }
 
 processResources {
@@ -34,10 +33,6 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include "fabric.mod.json.ft"
         expand "version": project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json.ft"
     }
 }
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "2.0.1",
+  "version": "2.1.0",
 
   "name": "ExtraPlayerRenderer",
   "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
@@ -34,7 +34,7 @@
 
   "depends": {
     "malilib": "*",
-    "fabricloader": ">=0.9.0",
+    "fabricloader": ">=0.11.0",
     "minecraft": ">=1.16.2"
   },
   "suggests": {
