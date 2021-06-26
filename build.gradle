@@ -5,6 +5,8 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+ext.configFile = file "build.properties"
+
 // follow semantic versioning! https://semver.org/
 archivesBaseName = project.mod_filename
 version = project.mod_version
@@ -24,14 +26,13 @@ dependencies {
     //Fabric api
 //    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modCompile "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_full}:${project.malilib_version}"
+    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_full}:${project.malilib_version}"
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json.ft"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
 }
@@ -40,11 +41,12 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
 jar {
-    from "LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
 }
