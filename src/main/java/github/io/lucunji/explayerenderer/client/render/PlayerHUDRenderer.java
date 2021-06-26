@@ -136,6 +136,7 @@ public class PlayerHUDRenderer implements IRenderer {
         immediate.draw();
         needFixMirroredItem = false;
 
+        // do not need to restore this value
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 

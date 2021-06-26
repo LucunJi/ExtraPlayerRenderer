@@ -7,6 +7,8 @@ targetCompatibility = JavaVersion.VERSION_16
 
 ext.configFile = file "build.properties"
 
+ext.configFile = file "build.properties"
+
 // follow semantic versioning! https://semver.org/
 archivesBaseName = project.mod_filename
 version = project.mod_version
