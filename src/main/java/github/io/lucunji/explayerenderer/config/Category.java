@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Category {
-    GENERAL("explayerenderer.gui.settings.general"),
-    DETAILS("explayerenderer.gui.settings.details");
+    GENERAL("config.explayerenderer.general"),
+    DETAILS("config.explayerenderer.details");
 
     private final String key;
     private final List<IConfigBase> configs;
