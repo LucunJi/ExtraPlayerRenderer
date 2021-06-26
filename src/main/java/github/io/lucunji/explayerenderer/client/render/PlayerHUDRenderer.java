@@ -31,8 +31,6 @@ public class PlayerHUDRenderer implements IRenderer {
     /**
      * This method is invoked by malilib before {@code render()} method in {@link net.minecraft.client.gui.hud.InGameHud}
      * returns.
-     * <p>
-     * TODO: fix lightDegree
      */
     @Override
     public void onRenderGameOverlayPost(MatrixStack matrixStack) {
