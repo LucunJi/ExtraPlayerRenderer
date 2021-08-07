@@ -32,7 +32,7 @@ then report the bug in CurseForge or GitHub Issues.
 
 This mod is compatible with Gamepiaynmo's [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel) mod, but the compatibility is not ensured if you use models smaller or larger than a normal player model.
 
-这个模组与 Gamepiaynmo 的 [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel）（自定义玩家模型）模组兼容，
+这个模组与 Gamepiaynmo 的 [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel)（自定义玩家模型）模组兼容，
 但不保证可以兼容使用不同于寻常玩家尺寸的模型。
 
 ## Configurations / 配置
