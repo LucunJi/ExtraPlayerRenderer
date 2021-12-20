@@ -26,6 +26,9 @@
   "entrypoints": {
     "client": [
       "github.io.lucunji.explayerenderer.Main"
+    ],
+    "modmenu": [
+      "github.io.lucunji.explayerenderer.compat.modmenu.ModMenuApiImpl"
     ]
   },
   "mixins": [

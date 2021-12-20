@@ -1,5 +1,5 @@
 plugins {
-    id('fabric-loom').version('0.8-SNAPSHOT')
+    id('fabric-loom').version('0.10-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -18,6 +18,9 @@ repositories {
     maven {
         url 'https://masa.dy.fi/maven'
     }
+    maven {
+        url 'https://api.modrinth.com/maven'
+    }
 }
 
 dependencies {
@@ -27,8 +30,8 @@ dependencies {
 
     //Fabric api
 //    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
     modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_full}:${project.malilib_version}"
+    modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
 }
 
 processResources {
