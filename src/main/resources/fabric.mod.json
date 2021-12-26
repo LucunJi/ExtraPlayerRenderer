@@ -39,7 +39,7 @@
   "depends": {
     "malilib": "*",
     "fabricloader": ">=0.11.2",
-    "minecraft": "~1.17"
+    "minecraft": "~1.18"
   },
   "suggests": {
     "flamingo": "*"
