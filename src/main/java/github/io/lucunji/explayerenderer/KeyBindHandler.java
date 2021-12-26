@@ -14,7 +14,7 @@ public class KeyBindHandler implements IHotkeyCallback {
         if (client.currentScreen instanceof GuiConfig)
             client.currentScreen.onClose(); // actually has no effect
         else
-            client.openScreen(new GuiConfig());
+            client.setScreen(new GuiConfig());
         return true;
     }
 }
