@@ -5,6 +5,8 @@
   "mixins": [
   ],
   "client": [
+    "ClientPlayerEntityAccessor",
+    "LivingEntityAccessor",
     "EntityInvoker",
     "ImmediateMixin"
   ],
