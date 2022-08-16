@@ -24,7 +24,7 @@ public class ConfigHandler implements IConfigHandler {
             if (jsonElement instanceof JsonObject) {
 
                 for (Category category : Category.values())
-                    ConfigUtils.readConfigBase((JsonObject)jsonElement, category.name(), category.getConfigs());
+                    ConfigUtils.readConfigBase((JsonObject) jsonElement, category.name(), category.getConfigs());
             }
         }
     }
@@ -39,7 +39,7 @@ public class ConfigHandler implements IConfigHandler {
             JsonObject configRoot = new JsonObject();
 
             for (Category category : Category.values())
-                    ConfigUtils.writeConfigBase(configRoot, category.name(), category.getConfigs());
+                ConfigUtils.writeConfigBase(configRoot, category.name(), category.getConfigs());
 
             JsonUtils.writeJsonToFile(configRoot, new File(FILE_PATH));
         }
