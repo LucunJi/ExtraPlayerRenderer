@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Entity.class)
 public interface EntityInvoker {
-	@Invoker
-	boolean callGetFlag(int index);
+    @Invoker
+    boolean callGetFlag(int index);
 
-	@Invoker
-	void callSetFlag(int index, boolean value);
+    @Invoker
+    void callSetFlag(int index, boolean value);
 }

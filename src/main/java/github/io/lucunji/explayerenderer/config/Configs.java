@@ -19,6 +19,12 @@ public class Configs {
     public static final ConfigDouble SIZE;
     public static final ConfigBoolean MIRRORED;
 
+    public static final ConfigOptionList POSE_OFFSET_METHOD;
+    public static final String POSE_OFFSET_METHOD_KEY = "pose_offset_method";
+    public static final ConfigDouble SNEAK_OFFSET_Y;
+    public static final ConfigDouble SWIM_CRAWL_OFFSET_Y;
+    public static final ConfigDouble ELYTRA_OFFSET_Y;
+
     public static final ConfigDouble PITCH_MIN;
     public static final ConfigDouble PITCH_MAX;
     public static final ConfigDouble PITCH_OFFSET;
@@ -26,9 +32,6 @@ public class Configs {
     public static final ConfigDouble HEAD_YAW_MAX;
     public static final ConfigDouble BODY_YAW_MIN;
     public static final ConfigDouble BODY_YAW_MAX;
-    public static final ConfigDouble SNEAK_OFFSET_Y;
-    public static final ConfigDouble SWIM_OFFSET_Y;
-    public static final ConfigDouble ELYTRA_OFFSET_Y;
 
     public static final ConfigBoolean HURT_FLASH;
     public static final ConfigBoolean SWING_HANDS;
@@ -50,16 +53,18 @@ public class Configs {
         SIZE = Category.GENERAL.add(new LocalizedConfigDouble(MOD_ID, "size", 0.5, 0, 2));
         MIRRORED = Category.GENERAL.add(new LocalizedConfigBoolean(MOD_ID, "mirror", false));
 
-        PITCH_MIN = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "pitch_min", -20, -180, 180));
-        PITCH_MAX = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "pitch_max", 20, -180, 180));
-        PITCH_OFFSET = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "pitch_offset", 0, -90, 90));
-        HEAD_YAW_MIN = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "head_yaw_min", -15, -180, 180));
-        HEAD_YAW_MAX = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "head_yaw_max", -15, -180, 180));
-        BODY_YAW_MIN = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "body_yaw_min", 0, -180, 180));
-        BODY_YAW_MAX = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "body_yaw_max", 0, -180, 180));
-        SNEAK_OFFSET_Y = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "sneaking_y_offset", -30, -100, 100));
-        SWIM_OFFSET_Y = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "swim_y_offset", -120, -300, 300));
-        ELYTRA_OFFSET_Y = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "elytra_y_offset", -120, -300, 300));
+        POSE_OFFSET_METHOD = Category.POSTURES.add(new LocalizedConfigOptionList(MOD_ID, POSE_OFFSET_METHOD_KEY, PoseOffsetMethod.AUTO));
+        SNEAK_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "sneaking_y_offset", -30, -100, 100));
+        SWIM_CRAWL_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "swim_crawl_y_offset", -120, -300, 300));
+        ELYTRA_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "elytra_y_offset", -120, -300, 300));
+
+        PITCH_MIN = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "pitch_min", -20, -180, 180));
+        PITCH_MAX = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "pitch_max", 20, -180, 180));
+        PITCH_OFFSET = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "pitch_offset", 0, -90, 90));
+        HEAD_YAW_MIN = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "head_yaw_min", -15, -180, 180));
+        HEAD_YAW_MAX = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "head_yaw_max", -15, -180, 180));
+        BODY_YAW_MIN = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "body_yaw_min", 0, -180, 180));
+        BODY_YAW_MAX = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "body_yaw_max", 0, -180, 180));
 
         HURT_FLASH = Category.DETAILS.add(new LocalizedConfigBoolean(MOD_ID, "hurt_flash", true));
         SWING_HANDS = Category.DETAILS.add(new LocalizedConfigBoolean(MOD_ID, "swing_hands", true));
