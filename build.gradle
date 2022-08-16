@@ -1,11 +1,9 @@
 plugins {
-    id('fabric-loom').version('0.10-SNAPSHOT')
+    id('fabric-loom').version('0.12-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
-
-ext.configFile = file "build.properties"
 
 ext.configFile = file "build.properties"
 
