@@ -32,19 +32,6 @@ import static github.io.lucunji.explayerenderer.client.render.DataBackup.DataBac
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
     private static final List<DataBackupEntry<LivingEntity, ?>> ENTITY_DATA_BACKUP_ENTRIES = ImmutableList.of(
-            new DataBackupEntry<>(LivingEntity::getBodyYaw, LivingEntity::setBodyYaw),
-            new DataBackupEntry<>(LivingEntity::getHeadYaw, LivingEntity::setHeadYaw),
-            new DataBackupEntry<>(LivingEntity::getPitch, LivingEntity::setPitch),
-            new DataBackupEntry<>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
-            new DataBackupEntry<>(e -> e.prevHeadYaw, (e, yaw) -> e.prevHeadYaw = yaw),
-            new DataBackupEntry<>(e -> e.prevPitch, (e, pitch) -> e.prevPitch = pitch),
-
-            new DataBackupEntry<>(e -> e.handSwingProgress, (e, prog) -> e.handSwingProgress = prog),
-            new DataBackupEntry<>(e -> e.lastHandSwingProgress, (e, prog) -> e.lastHandSwingProgress = prog),
-            new DataBackupEntry<>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
-            new DataBackupEntry<>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
-            new DataBackupEntry<>(e -> ((EntityInvoker) e).callGetFlag(0), (e, flag) -> ((EntityInvoker) e).callSetFlag(0, flag)), // on fire
-
             new DataBackupEntry<>(LivingEntity::getPose, LivingEntity::setPose),
             new DataBackupEntry<>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
@@ -52,7 +39,21 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
             new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
             new DataBackupEntry<>(LivingEntity::isFallFlying, (e, flag) -> ((EntityInvoker) e).callSetFlag(7, flag)),
-            new DataBackupEntry<>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll))
+            new DataBackupEntry<>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll)),
+
+            new DataBackupEntry<>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
+            new DataBackupEntry<>(e -> e.bodyYaw, (e, yaw) -> e.bodyYaw = yaw),
+            new DataBackupEntry<>(e -> e.prevHeadYaw, (e, yaw) -> e.prevHeadYaw = yaw),
+            new DataBackupEntry<>(e -> e.headYaw, (e, yaw) -> e.headYaw = yaw),
+            new DataBackupEntry<>(e -> e.prevPitch, (e, pitch) -> e.prevPitch = pitch),
+            new DataBackupEntry<>(LivingEntity::getPitch, LivingEntity::setPitch),
+
+            new DataBackupEntry<>(e -> e.handSwingProgress, (e, prog) -> e.handSwingProgress = prog),
+            new DataBackupEntry<>(e -> e.lastHandSwingProgress, (e, prog) -> e.lastHandSwingProgress = prog),
+            new DataBackupEntry<>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
+            new DataBackupEntry<>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
+            new DataBackupEntry<>(e -> ((EntityInvoker) e).callGetFlag(0), (e, flag) -> ((EntityInvoker) e).callSetFlag(0, flag)) // on fire
+
     );
 
 
@@ -94,7 +95,7 @@ public class PlayerHUDRenderer implements IRenderer {
         DataBackup<LivingEntity> backup = new DataBackup<>(targetEntity, ENTITY_DATA_BACKUP_ENTRIES);
         backup.save();
 
-        transformEntity(targetEntity, poseOffsetMethod == PoseOffsetMethod.FORCE_STANDING);
+        transformEntity(targetEntity, partialTicks, poseOffsetMethod == PoseOffsetMethod.FORCE_STANDING);
         performRendering(targetEntity,
                 Configs.OFFSET_X.getDoubleValue() * scaledWidth,
                 Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
@@ -140,7 +141,7 @@ public class PlayerHUDRenderer implements IRenderer {
         return 0;
     }
 
-    private void transformEntity(LivingEntity targetEntity, boolean forceStanding) {
+    private void transformEntity(LivingEntity targetEntity, float partialTicks, boolean forceStanding) {
         // synchronize values to remove glitch
         if (!targetEntity.isSwimming() && !targetEntity.isFallFlying() && !targetEntity.isCrawling()) {
             targetEntity.setPose(targetEntity.isInSneakingPose() ? EntityPose.CROUCHING : EntityPose.STANDING);
@@ -158,10 +159,17 @@ public class PlayerHUDRenderer implements IRenderer {
             ((LivingEntityAccessor) targetEntity).setRoll(0);
         }
 
-        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(targetEntity.getBodyYaw(), Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
-        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(targetEntity.getHeadYaw(), Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
-        targetEntity.prevPitch = (float) (MathHelper.clamp(targetEntity.getPitch(), Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue()) + Configs.PITCH_OFFSET.getDoubleValue());
-        targetEntity.setPitch(targetEntity.prevPitch);
+        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
+                MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw),
+                Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
+        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(
+                MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw),
+                Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+        targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
+                        MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
+                        Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue())
+                        + Configs.PITCH_OFFSET.getDoubleValue())
+        );
 
         if (!Configs.SWING_HANDS.getBooleanValue()) {
             targetEntity.handSwingProgress = 0;
