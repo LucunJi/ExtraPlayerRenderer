@@ -160,10 +160,10 @@ public class PlayerHUDRenderer implements IRenderer {
         }
 
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.wrapDegrees(targetEntity.prevBodyYaw + (targetEntity.bodyYaw - targetEntity.prevBodyYaw) * partialTicks),
+                MathHelper.wrapDegrees(MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw)),
                 Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.wrapDegrees(targetEntity.prevHeadYaw + (targetEntity.headYaw - targetEntity.prevHeadYaw) * partialTicks),
+                MathHelper.wrapDegrees(MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw)),
                 Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                         MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
