@@ -24,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import org.joml.Quaternionf;
 
 import java.util.List;
 
@@ -115,17 +116,16 @@ public class PlayerHUDRenderer implements IRenderer {
 
     private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, IConfigOptionListEntry poseOffsetMethod) {
         if (poseOffsetMethod == PoseOffsetMethod.AUTO) {
-            final float defaultPlayerEyeHeight = PlayerEntity.field_30651;
             final float defaultPlayerSwimmingBBHeight = PlayerEntity.field_30650;
             final float eyeHeightRatio = 0.85f;
             if (targetEntity.isFallFlying()) {
-                return (defaultPlayerEyeHeight - targetEntity.getStandingEyeHeight()) * getFallFlyingLeaning(targetEntity, partialTicks);
+                return (PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight()) * getFallFlyingLeaning(targetEntity, partialTicks);
             } else if (targetEntity.isInSwimmingPose()) {
-                return targetEntity.getLeaningPitch(partialTicks) <= 0 ? 0 : defaultPlayerEyeHeight - targetEntity.getStandingEyeHeight();
+                return targetEntity.getLeaningPitch(partialTicks) <= 0 ? 0 : PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight();
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
-                return (defaultPlayerEyeHeight - defaultPlayerSwimmingBBHeight * eyeHeightRatio * 0.85) * targetEntity.getLeaningPitch(partialTicks);
+                return (PlayerEntity.DEFAULT_EYE_HEIGHT - defaultPlayerSwimmingBBHeight * eyeHeightRatio * 0.85) * targetEntity.getLeaningPitch(partialTicks);
             } else {
-                return PlayerEntity.field_30651 /* DEFAULT_EYE_HEIGHT */ - targetEntity.getStandingEyeHeight();
+                return PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight();
             }
         } else if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
             if (targetEntity.isFallFlying()) {
@@ -160,10 +160,10 @@ public class PlayerHUDRenderer implements IRenderer {
         }
 
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw),
+                MathHelper.wrapDegrees(targetEntity.prevBodyYaw + (targetEntity.bodyYaw - targetEntity.prevBodyYaw) * partialTicks),
                 Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw),
+                MathHelper.wrapDegrees(targetEntity.prevHeadYaw + (targetEntity.headYaw - targetEntity.prevHeadYaw) * partialTicks),
                 Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                         MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
@@ -197,19 +197,19 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack1.push();
         matrixStack1.translate(0, 0, 550.0D);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
-        matrixStack1.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) lightDegree));
+        matrixStack1.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) lightDegree));
 
         RenderSystem.applyModelViewMatrix();
 
         MatrixStack matrixStack2 = new MatrixStack();
-        matrixStack2.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-(float) lightDegree));
+        matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree));
         matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
         matrixStack2.scale((float) size, (float) size, (float) size);
-        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-        Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue());
-        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
-        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
-        quaternion.hamiltonProduct(quaternion2);
+        Quaternionf quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(180.0F);
+        Quaternionf quaternion2 = RotationAxis.POSITIVE_X.rotationDegrees((float) Configs.ROTATION_X.getDoubleValue());
+        quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees((float) Configs.ROTATION_Y.getDoubleValue()));
+        quaternion2.mul(RotationAxis.POSITIVE_Z.rotationDegrees((float) Configs.ROTATION_Z.getDoubleValue()));
+        quaternion.mul(quaternion2);
         matrixStack2.multiply(quaternion);
 
         DiffuseLighting.method_34742();
