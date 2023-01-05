@@ -38,8 +38,8 @@
 
   "depends": {
     "malilib": "*",
-    "fabricloader": ">=0.14.9",
-    "minecraft": "~1.19.2"
+    "fabricloader": ">=0.14.10",
+    "minecraft": "~1.19.3"
   },
   "suggests": {
     "flamingo": "*"
