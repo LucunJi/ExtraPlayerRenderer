@@ -15,7 +15,7 @@ It is recommended **download this mod here**: https://www.curseforge.com/minecra
 推荐**在这里下载**：https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer
 
 ~~This mod **requires malilib and Fabric API** (not Fabric loader, they are separate things), you should also install it.~~
-(this line is depreciated since 1.3.0)
+(this line is deprecated since 1.3.0)
 
 ~~这个模组**需要 malilib 和 Fabric API**（不是 Fabric Loader，它们是两个不同的东西）~~
 （这行字在 1.3.0 版本后失效）
