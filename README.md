@@ -25,10 +25,10 @@ Since v1.3.0 (inclusive) this mod **only requires malilib**.
 在 1.3.0 版本之后（包括 1.3.0）这个模组**只需要 malilib**。
 
 If you have any problem, please first try to update the dependencies (malilib and Fabric Loader),
-then report the bug in CurseForge or GitHub Issues.
+then report the bug in GitHub Issues (I rarely look into CurseForge or other places).
 
 如果遇到任何问题，请先尝试更新依赖模组（malilib 和 Fabric Loader），
-然后在 CourseForge 或 GitHub Issues 提交问题。
+然后在 GitHub Issues 提交问题（我基本上不关注 CurseForge 或其它平台）。
 
 This mod is compatible with Gamepiaynmo's [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel) mod, but the compatibility is not ensured if you use models smaller or larger than a normal player model.
 
