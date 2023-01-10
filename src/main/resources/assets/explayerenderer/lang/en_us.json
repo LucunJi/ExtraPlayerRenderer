@@ -16,7 +16,7 @@
   
   "config.explayerenderer.enabled.desc": "If this mod is enabled.",
   "config.explayerenderer.open_menu_key.desc": "Key to open config menu.",
-  "config.explayerenderer.spectator_auto_switch.desc": "Automatically switch entity model in spectator mode.\nOverrides §2Player Name§r option if enabled.",
+  "config.explayerenderer.spectator_auto_switch.desc": "Automatically switch entity model in spectator mode.\n\nOverrides §2Player Name§r option if enabled.",
   "config.explayerenderer.player_name.desc": "The name of the player to render. It will be your name in default.",
   "config.explayerenderer.offset_x.desc": "X offset of rendered model.",
   "config.explayerenderer.offset_y.desc": "Y offset of rendered model.",
@@ -26,7 +26,23 @@
   "config.explayerenderer.size.desc": "Rendering size.",
   "config.explayerenderer.mirror.desc": "Flip rendered model horizontally.",
 
-  "config.explayerenderer.details": "Details",
+  "config.explayerenderer.postures": "Postures",
+
+  "config.explayerenderer.pose_offset_method": "Pose Offset Method",
+  "config_option.explayerenderer.pose_offset_method.auto": "Auto",
+  "config_option.explayerenderer.pose_offset_method.manual": "Manual",
+  "config_option.explayerenderer.pose_offset_method.force_standing": "Standing",
+  "config_option.explayerenderer.pose_offset_method.disabled": "Disabled",
+  "config.explayerenderer.sneaking_y_offset": "Sneaking Y Offset",
+  "config.explayerenderer.swim_crawl_y_offset": "Swim/Craw Y Offset",
+  "config.explayerenderer.elytra_y_offset": "Elytra Y Offset",
+
+  "config.explayerenderer.pose_offset_method.desc": "Method of offsetting player's position when the player changes its pose.\n\n§eAuto§r\n    Adjust height according to the height of entity's eyes.\n§eManual§r\n    Manually set the offset when sneaking, swimming, using elytra and crawling.\n§eStanding§r\n    Only renders in standing pose.\n§eDisabled§r\n    No offset.",
+  "config.explayerenderer.sneaking_y_offset.desc": "Y offset when player is sneaking.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
+  "config.explayerenderer.swim_crawl_y_offset.desc": "Y offset when player is swimming or crawling.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
+  "config.explayerenderer.elytra_y_offset.desc": "Y offset when player is flying using an elytra.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
+
+  "config.explayerenderer.rotations": "Rotations",
 
   "config.explayerenderer.pitch_min": "Min Pitch",
   "config.explayerenderer.pitch_max": "Max Pitch",
@@ -35,13 +51,6 @@
   "config.explayerenderer.head_yaw_max": "Max Head Yaw",
   "config.explayerenderer.body_yaw_min": "Min Body Yaw",
   "config.explayerenderer.body_yaw_max": "Max Body Yaw",
-  "config.explayerenderer.sneaking_y_offset": "Sneaking Y Offset",
-  "config.explayerenderer.swim_y_offset": "Swimming Y Offset",
-  "config.explayerenderer.elytra_y_offset": "Elytra Y Offset",
-  "config.explayerenderer.hurt_flash": "Show Hurt Flash",
-  "config.explayerenderer.swing_hands": "Show Hand Swing",
-  "config.explayerenderer.use_world_light": "Use World Light",
-  "config.explayerenderer.world_light_min": "Min World Light",
 
   "config.explayerenderer.pitch_min.desc": "Lower bound of pitch.",
   "config.explayerenderer.pitch_max.desc": "Upper bound of pitch.",
@@ -50,11 +59,18 @@
   "config.explayerenderer.head_yaw_max.desc": "Upper bound of head yaw.",
   "config.explayerenderer.body_yaw_min.desc": "Lower bound of body yaw.",
   "config.explayerenderer.body_yaw_max.desc": "Upper bound of body yaw.",
-  "config.explayerenderer.sneaking_y_offset.desc": "Y offset when player is sneaking.",
-  "config.explayerenderer.swim_y_offset.desc": "Y offset when player is swimming.",
-  "config.explayerenderer.elytra_y_offset.desc": "Y offset when player is flying using an elytra.",
+
+  "config.explayerenderer.details": "Details",
+
+  "config.explayerenderer.hurt_flash": "Hurt Flash On",
+  "config.explayerenderer.swing_hands": "Hand Swing On",
+  "config.explayerenderer.light_degree": "Light Degree",
+  "config.explayerenderer.use_world_light": "Use World Light",
+  "config.explayerenderer.world_light_min": "Min World Light",
+
   "config.explayerenderer.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "config.explayerenderer.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
+  "config.explayerenderer.light_degree.desc": "The degree of light source producing shadow effects.",
   "config.explayerenderer.use_world_light.desc": "If use the light level in the world to render.",
   "config.explayerenderer.world_light_min.desc": "Minimum brightness when useWorldLight is enabled."
 }

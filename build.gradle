@@ -1,11 +1,9 @@
 plugins {
-    id('fabric-loom').version('0.7-SNAPSHOT')
+    id('fabric-loom').version('1.0-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
-
-ext.configFile = file "build.properties"
 
 // follow semantic versioning! https://semver.org/
 archivesBaseName = project.mod_filename
@@ -16,6 +14,9 @@ repositories {
     maven {
         url 'https://masa.dy.fi/maven'
     }
+    maven {
+        url 'https://api.modrinth.com/maven'
+    }
 }
 
 dependencies {
@@ -24,9 +25,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     //Fabric api
-//    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_full}:${project.malilib_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_minecraft_version}:${project.malilib_version}"
+    modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
 }
 
 processResources {

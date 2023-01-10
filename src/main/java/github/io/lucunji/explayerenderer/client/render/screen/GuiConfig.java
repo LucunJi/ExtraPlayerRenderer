@@ -5,6 +5,7 @@ import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.config.Category;
+import github.io.lucunji.explayerenderer.config.Utils;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class GuiConfig extends GuiConfigsBase {
     private static Category currentTab = Category.GENERAL;
 
     public GuiConfig() {
-        super(10, 50, Main.MOD_ID, null, "config.explayerenderer.title");
+        super(10, 50, Main.MOD_ID, null, Utils.getConfigI18nNameKey(Main.MOD_ID, "title"));
     }
 
     @Override

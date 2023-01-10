@@ -15,7 +15,7 @@ public class Main implements ClientModInitializer {
     public static final PlayerHUDRenderer PLAYER_HUD_RENDERER = new PlayerHUDRenderer();
 
     @Override
-    public void onInitializeClient(){
+    public void onInitializeClient() {
         ConfigManager.getInstance().registerConfigHandler(MOD_ID, new ConfigHandler());
         //noinspection InstantiationOfUtilityClass
         new Configs();  // just load the class and run static code block
