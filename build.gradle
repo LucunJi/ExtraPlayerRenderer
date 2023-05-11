@@ -56,3 +56,9 @@ jar {
         rename { "${it}_${project.archivesBaseName}"}
     }
 }
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+}

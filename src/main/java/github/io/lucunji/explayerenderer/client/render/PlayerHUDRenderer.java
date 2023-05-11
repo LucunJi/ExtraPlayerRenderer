@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.interfaces.IRenderer;
+import github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.config.PoseOffsetMethod;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
@@ -28,7 +29,6 @@ import org.joml.*;
 
 import java.util.List;
 
-import static github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
 
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -247,8 +247,8 @@ public class PlayerHUDRenderer implements IRenderer {
     private static int getLight(LivingEntity entity, float tickDelta) {
         if (Configs.USE_WORLD_LIGHT.getBooleanValue()) {
             World world = entity.world;
-            int blockLight = world.getLightLevel(LightType.BLOCK, new BlockPos(entity.getCameraPosVec(tickDelta)));
-            int skyLight = world.getLightLevel(LightType.SKY, new BlockPos(entity.getCameraPosVec(tickDelta)));
+            int blockLight = world.getLightLevel(LightType.BLOCK, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
+            int skyLight = world.getLightLevel(LightType.SKY, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
             int min = Configs.WORLD_LIGHT_MIN.getIntegerValue();
             blockLight = MathHelper.clamp(blockLight, min, 15);
             skyLight = MathHelper.clamp(skyLight, min, 15);
