@@ -11,6 +11,7 @@ import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
 import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
 import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.DiffuseLighting;
@@ -69,7 +70,7 @@ public class PlayerHUDRenderer implements IRenderer {
      * returns.
      */
     @Override
-    public void onRenderGameOverlayPost(MatrixStack matrixStack) {
+    public void onRenderGameOverlayPost(DrawContext context) {
         if (client.skipGameRender || client.currentScreen != null) return;
         doRender(client.getTickDelta());
     }
@@ -246,7 +247,7 @@ public class PlayerHUDRenderer implements IRenderer {
 
     private static int getLight(LivingEntity entity, float tickDelta) {
         if (Configs.USE_WORLD_LIGHT.getBooleanValue()) {
-            World world = entity.world;
+            World world = entity.getWorld();
             int blockLight = world.getLightLevel(LightType.BLOCK, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
             int skyLight = world.getLightLevel(LightType.SKY, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
             int min = Configs.WORLD_LIGHT_MIN.getIntegerValue();

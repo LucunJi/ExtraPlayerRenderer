@@ -6,7 +6,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.config.Category;
 import github.io.lucunji.explayerenderer.config.Utils;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 
 import java.util.List;
 
@@ -40,9 +40,9 @@ public class GuiConfig extends GuiConfigsBase {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float partialTicks) {
         Main.PLAYER_HUD_RENDERER.doRender(partialTicks);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        super.render(drawContext, mouseX, mouseY, partialTicks);
     }
 
     @Override

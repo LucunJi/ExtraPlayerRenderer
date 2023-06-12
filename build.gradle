@@ -13,12 +13,9 @@ version = project.mod_version
 group = project.maven_group + "." + project.mod_id
 
 repositories {
-    maven {
-        url 'https://masa.dy.fi/maven'
-    }
-    maven {
-        url 'https://api.modrinth.com/maven'
-    }
+//    maven { url 'https://masa.dy.fi/maven' }
+    maven { url 'https://api.modrinth.com/maven' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -28,8 +25,11 @@ dependencies {
 
     //Fabric api
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_minecraft_version}:${project.malilib_version}"
+//    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_minecraft_version}:${project.malilib_version}"
     modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
+
+    // unofficial malilib release
+    modImplementation "com.github.kosmolot-mods:malilib:11e09ac4c5"
 }
 
 processResources {
@@ -53,7 +53,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 
