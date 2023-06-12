@@ -4,10 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.interfaces.IRenderer;
+import github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.config.PoseOffsetMethod;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
-import github.io.lucunji.explayerenderer.mixin.EntityInvoker;
+import github.io.lucunji.explayerenderer.mixin.EntityMixin;
 import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -27,19 +28,19 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
 
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final List<DataBackupEntry<LivingEntity, ?>> ENTITY_DATA_BACKUP_ENTRIES = ImmutableList.of(
+    private static final List<DataBackupEntry<LivingEntity, ?>> LIVINGENTITY_BACKUP_ENTRIES = ImmutableList.of(
             new DataBackupEntry<>(LivingEntity::getPose, LivingEntity::setPose),
             new DataBackupEntry<>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
             }),
             new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
             new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
-            new DataBackupEntry<>(LivingEntity::isFallFlying, (e, flag) -> ((EntityInvoker) e).callSetFlag(7, flag)),
+            new DataBackupEntry<>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
             new DataBackupEntry<>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll)),
+            new DataBackupEntry<>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
             new DataBackupEntry<>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
             new DataBackupEntry<>(e -> e.bodyYaw, (e, yaw) -> e.bodyYaw = yaw),
@@ -52,7 +53,8 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<>(e -> e.lastHandSwingProgress, (e, prog) -> e.lastHandSwingProgress = prog),
             new DataBackupEntry<>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
             new DataBackupEntry<>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
-            new DataBackupEntry<>(e -> ((EntityInvoker) e).callGetFlag(0), (e, flag) -> ((EntityInvoker) e).callSetFlag(0, flag)) // on fire
+            new DataBackupEntry<>(e -> ((EntityMixin) e).callGetFlag(0), (e, flag) -> ((EntityMixin) e).callSetFlag(0,flag)) // on fire
+
     );
 
 
@@ -91,10 +93,33 @@ public class PlayerHUDRenderer implements IRenderer {
         int scaledHeight = client.getWindow().getScaledHeight();
         IConfigOptionListEntry poseOffsetMethod = Configs.POSE_OFFSET_METHOD.getOptionListValue();
 
-        DataBackup<LivingEntity> backup = new DataBackup<>(targetEntity, ENTITY_DATA_BACKUP_ENTRIES);
+        DataBackup<LivingEntity> backup = new DataBackup<>(targetEntity, LIVINGENTITY_BACKUP_ENTRIES);
         backup.save();
 
         transformEntity(targetEntity, partialTicks, poseOffsetMethod == PoseOffsetMethod.FORCE_STANDING);
+
+        DataBackup<LivingEntity> vehicleBackup = null;
+        if (Configs.RENDER_VEHICLE.getBooleanValue() && poseOffsetMethod != PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
+            Entity vehicle = targetEntity.getVehicle();
+            if (vehicle instanceof LivingEntity) {
+                LivingEntity livingVehicle = (LivingEntity)vehicle;
+                vehicleBackup = new DataBackup<>(livingVehicle, LIVINGENTITY_BACKUP_ENTRIES);
+                vehicleBackup.save();
+                transformEntity(livingVehicle, partialTicks, false);
+            }
+
+            performRendering(vehicle,
+                    Configs.OFFSET_X.getDoubleValue() * scaledWidth,
+                    Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
+                    Configs.SIZE.getDoubleValue() * scaledHeight,
+                    Configs.MIRRORED.getBooleanValue(),
+                    -vehicle.getMountedHeightOffset() - targetEntity.getHeightOffset(),
+                    PoseOffsetMethod.AUTO,
+//                    Configs.LIGHT_DEGREE.getDoubleValue(),
+                    partialTicks);
+        }
+
+
         performRendering(targetEntity,
                 Configs.OFFSET_X.getDoubleValue() * scaledWidth,
                 Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
@@ -104,6 +129,8 @@ public class PlayerHUDRenderer implements IRenderer {
                 poseOffsetMethod,
 //                Configs.LIGHT_DEGREE.getDoubleValue(),
                 partialTicks);
+
+        if (vehicleBackup != null) vehicleBackup.restore();
 
         backup.restore();
     }
@@ -150,11 +177,12 @@ public class PlayerHUDRenderer implements IRenderer {
             if (targetEntity instanceof ClientPlayerEntity) {
                 ((ClientPlayerEntityAccessor) targetEntity).setInSneakingPose(false);
             }
+            ((EntityMixin) targetEntity).setVehicle(null);
 
             ((LivingEntityAccessor) targetEntity).setLeaningPitch(0);
             ((LivingEntityAccessor) targetEntity).setLastLeaningPitch(0);
 
-            ((EntityInvoker) targetEntity).callSetFlag(7, false);
+            ((EntityMixin) targetEntity).callSetFlag(7, false);
             ((LivingEntityAccessor) targetEntity).setRoll(0);
         }
 
@@ -179,10 +207,10 @@ public class PlayerHUDRenderer implements IRenderer {
         }
 
         targetEntity.setFireTicks(0);
-        ((EntityInvoker) targetEntity).callSetFlag(0, false);
+        ((EntityMixin) targetEntity).callSetFlag(0, false);
     }
 
-    private void performRendering(LivingEntity targetEntity, double posX, double posY, double size, boolean mirror,
+    private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
                                   double poseOffsetY, IConfigOptionListEntry poseOffsetMethod,
 //                                  double lightDegree,
                                   float partialTicks) {
@@ -223,7 +251,7 @@ public class PlayerHUDRenderer implements IRenderer {
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         //noinspection deprecation
         RenderSystem.runAsFancy(() ->
-                entityRenderDispatcher.render(targetEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
+                entityRenderDispatcher.render(targetEntity, 0, 0, 0, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
         );
         // disable cull to fix item rendering glitches when mirror option is on
         needFixMirroredItem = mirror;
@@ -243,7 +271,7 @@ public class PlayerHUDRenderer implements IRenderer {
         return entity.isInSwimmingPose() && !entity.isTouchingWater();
     }
 
-    private static int getLight(LivingEntity entity, float tickDelta) {
+    private static int getLight(Entity entity, float tickDelta) {
         if (Configs.USE_WORLD_LIGHT.getBooleanValue()) {
             World world = entity.world;
             int blockLight = world.getLightLevel(LightType.BLOCK, new BlockPos(entity.getCameraPosVec(tickDelta)));

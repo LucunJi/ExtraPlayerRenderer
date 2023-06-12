@@ -38,6 +38,7 @@ public class Configs {
 //    public static final ConfigDouble LIGHT_DEGREE;
     public static final ConfigBoolean USE_WORLD_LIGHT;
     public static final ConfigInteger WORLD_LIGHT_MIN;
+    public static final ConfigBoolean RENDER_VEHICLE;
 
     static {
         MENU_OPEN_KEY = Category.GENERAL.add(new LocalizedConfigHotkey(MOD_ID, "open_menu_key", "F8"));
@@ -71,6 +72,7 @@ public class Configs {
 //        LIGHT_DEGREE = Category.DETAILS.add(new LocalizedConfigDouble(MOD_ID, "light_degree", 0, -180, 180));
         USE_WORLD_LIGHT = Category.DETAILS.add(new LocalizedConfigBoolean(MOD_ID, "use_world_light", true));
         WORLD_LIGHT_MIN = Category.DETAILS.add(new LocalizedConfigInteger(MOD_ID, "world_light_min", 2, 0, 15));
+        RENDER_VEHICLE = Category.DETAILS.add(new LocalizedConfigBoolean(MOD_ID, "render_vehicle", true));
     }
 
 }

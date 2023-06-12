@@ -31,13 +31,13 @@
   "config.explayerenderer.pose_offset_method": "Pose Offset Method",
   "config_option.explayerenderer.pose_offset_method.auto": "Auto",
   "config_option.explayerenderer.pose_offset_method.manual": "Manual",
-  "config_option.explayerenderer.pose_offset_method.force_standing": "Standing",
+  "config_option.explayerenderer.pose_offset_method.force_standing": "Force Standing",
   "config_option.explayerenderer.pose_offset_method.disabled": "Disabled",
   "config.explayerenderer.sneaking_y_offset": "Sneaking Y Offset",
   "config.explayerenderer.swim_crawl_y_offset": "Swim/Craw Y Offset",
   "config.explayerenderer.elytra_y_offset": "Elytra Y Offset",
 
-  "config.explayerenderer.pose_offset_method.desc": "Method of offsetting player's position when the player changes its pose.\n\n§eAuto§r\n    Adjust height according to the height of entity's eyes.\n§eManual§r\n    Manually set the offset when sneaking, swimming, using elytra and crawling.\n§eStanding§r\n    Only renders in standing pose.\n§eDisabled§r\n    No offset.",
+  "config.explayerenderer.pose_offset_method.desc": "Method of offsetting player's position when the player changes its pose.\n\n§eAuto§r\n    Adjust height according to the height of entity's eyes.\n§eManual§r\n    Manually set the offset when sneaking, swimming, using elytra and crawling.\n§eForce Standing§r\n    Only renders in standing pose.\n§eDisabled§r\n    No offset.",
   "config.explayerenderer.sneaking_y_offset.desc": "Y offset when player is sneaking.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
   "config.explayerenderer.swim_crawl_y_offset.desc": "Y offset when player is swimming or crawling.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
   "config.explayerenderer.elytra_y_offset.desc": "Y offset when player is flying using an elytra.\n\nWorks only when §aPosture Offset Method§r is set to §eManual§r.",
@@ -67,10 +67,12 @@
   "config.explayerenderer.light_degree": "Light Degree",
   "config.explayerenderer.use_world_light": "Use World Light",
   "config.explayerenderer.world_light_min": "Min World Light",
+  "config.explayerenderer.render_vehicle": "Render Vehicle",
 
   "config.explayerenderer.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "config.explayerenderer.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
   "config.explayerenderer.light_degree.desc": "The degree of light source producing shadow effects.",
   "config.explayerenderer.use_world_light.desc": "If use the light level in the world to render.",
-  "config.explayerenderer.world_light_min.desc": "Minimum brightness when useWorldLight is enabled."
+  "config.explayerenderer.world_light_min.desc": "Minimum brightness when useWorldLight is enabled.",
+  "config.explayerenderer.render_vehicle.desc": "Render the vehicle, does not work when §aPosture Offset Method§r is §eForce Standing§r."
 }
