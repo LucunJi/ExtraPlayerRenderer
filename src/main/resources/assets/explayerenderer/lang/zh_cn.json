@@ -31,13 +31,13 @@
   "config.explayerenderer.pose_offset_method": "姿态修正方法",
   "config_option.explayerenderer.pose_offset_method.auto": "自动",
   "config_option.explayerenderer.pose_offset_method.manual": "手动",
-  "config_option.explayerenderer.pose_offset_method.force_standing": "站立",
+  "config_option.explayerenderer.pose_offset_method.force_standing": "强制站立",
   "config_option.explayerenderer.pose_offset_method.disabled": "关闭",
   "config.explayerenderer.sneaking_y_offset": "潜行Y轴修正",
   "config.explayerenderer.swim_crawl_y_offset": "游泳/爬行Y轴修正",
   "config.explayerenderer.elytra_y_offset": "鞘翅Y轴修正",
 
-  "config.explayerenderer.pose_offset_method.desc": "在玩家处于不同姿态时修正玩家位置的方法\n\n§e自动§r\n    根据生物眼睛位置调整高度\n§e手动§r\n    手动设置潜行、游泳、鞘翅和爬行的修正\n§e站立§r\n    只渲染站立姿态\n§e关闭§r\n    不进行修正",
+  "config.explayerenderer.pose_offset_method.desc": "在玩家处于不同姿态时修正玩家位置的方法\n\n§e自动§r\n    根据生物眼睛位置调整高度\n§e手动§r\n    手动设置潜行、游泳、鞘翅和爬行的修正\n§e强制站立§r\n    只渲染站立姿态\n§e关闭§r\n    不进行修正",
   "config.explayerenderer.sneaking_y_offset.desc": "玩家潜行时的Y轴修正距离\n\n只在§a姿态修正方法§r为§e手动§r时有效",
   "config.explayerenderer.swim_crawl_y_offset.desc": "玩家游泳或爬行时的Y轴修正距离\n\n只在§a姿态修正方法§r为§e手动§r时有效",
   "config.explayerenderer.elytra_y_offset.desc": "玩家使用鞘翅飞行时的Y轴修正距离\n\n只在§a姿态修正方法§r为§e手动§r时有效",
@@ -67,10 +67,12 @@
   "config.explayerenderer.light_degree": "光照角度",
   "config.explayerenderer.use_world_light": "使用世界光",
   "config.explayerenderer.world_light_min": "最小世界光",
+  "config.explayerenderer.render_vehicle": "渲染坐骑",
 
   "config.explayerenderer.hurt_flash.desc": "玩家受伤时是否有红色闪烁",
   "config.explayerenderer.swing_hands.desc": "玩家破坏方块时是否会有手臂挥动效果",
   "config.explayerenderer.light_degree.desc": "产生阴影效果的光照角度",
   "config.explayerenderer.use_world_light.desc": "是否使用世界中的光照等级来渲染",
-  "config.explayerenderer.world_light_min.desc": "打开§2使用世界光§r时的亮度下限"
+  "config.explayerenderer.world_light_min.desc": "打开§2使用世界光§r时的亮度下限",
+  "config.explayerenderer.render_vehicle.desc": "渲染身下的坐骑，§a姿态修正方法§r为§e强制站立§r时无效"
 }

@@ -2,40 +2,57 @@
 
 ![](logo.png)
 
-Render a player entity on the bottom left corner of the screen.
+[![Quick Fabric Release](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml/badge.svg)](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml)
+![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&prefix=downloads%20&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)
+![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)
+![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)
 
-在屏幕的角落渲染一个玩家实体。
+*If you are looking for the same mod but for Forge, [click here](https://www.curseforge.com/minecraft/mc-mods/extra-player-render). It's not developed by me but still good to use.*
 
-This mod is released under GPL-3.0 License.
 
-这个模组遵循 GPL-3.0 证书发布。
+In short, this mod renders a player model in the bottom left corner (by default, configurable) of the screen. Adaptable & configurable. That's it.
 
-It is recommended **download this mod here**: https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer
+![](images/img1.jpg)
 
-推荐**在这里下载**：https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer
+## Features
 
-~~This mod **requires malilib and Fabric API** (not Fabric loader, they are separate things), you should also install it.~~
-(this line is deprecated since 1.3.0)
+In spectator mode, the rendered model gets automatically changed into the entity that your view is attached to.
 
-~~这个模组**需要 malilib 和 Fabric API**（不是 Fabric Loader，它们是两个不同的东西）~~
-（这行字在 1.3.0 版本后失效）
+![](images/spectator.jpg)
 
-Since v1.3.0 (inclusive) this mod **only requires malilib**.
+When the player's posture changes, the position of the rendered model changes smoothly.
 
-在 1.3.0 版本之后（包括 1.3.0）这个模组**只需要 malilib**。
+![](images/transition.webp)
 
-If you have any problem, please first try to update the dependencies (malilib and Fabric Loader),
-then report the bug in GitHub Issues (I rarely look into CurseForge or other places).
+The riding entity can also be rendered, so you can show your favourite horse.
 
-如果遇到任何问题，请先尝试更新依赖模组（malilib 和 Fabric Loader），
-然后在 GitHub Issues 提交问题（我基本上不关注 CurseForge 或其它平台）。
+![](images/vehicle.jpg)
 
-This mod is compatible with Gamepiaynmo's [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel) mod, but the compatibility is not ensured if you use models smaller or larger than a normal player model.
+## Fully Configurable
 
-这个模组与 Gamepiaynmo 的 [CustomPlayerModel](https://github.com/Gamepiaynmo/CustomModel)（自定义玩家模型）模组兼容，
-但不保证可以兼容使用不同于寻常玩家尺寸的模型。
+By pressing F8 in game (by default, still configurable), the configuration screen will pop up.
 
-## Configurations / 配置
-Press `F8` in default
+Explore the tabs and buttons, there are a lot for you to config: the scale, position and rotation of the figure, the head & body rotations, how to offset(transit) between postures and angle of light on the figure...
 
-默认按下 `F8`
+![](images/configs.jpg)
+
+## Downloads & Dependencies
+
+Downloading this mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer) or [Modrinth](https://modrinth.com/mod/extraplayerrenderer) is recommended, as this can help me gain some rewards.
+
+You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRenderer) or [mcmod](https://www.mcmod.cn/class/2374.html).
+
+This mod in all versions, except Minecraft 1.20.0, requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
+The alpha versions for Minecraft 1.20.0 requires [Kosmolot's unofficial port of malilib](https://kosma.pl/masamods-1.20/), as masa has not finished porting.
+
+[Mod Menu](https://modrinth.com/mod/modmenu/) is an optional dependency for the latest versions.
+
+Some earlier versions (now obsolete) requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).
+
+## Issues
+When facing any issue, please first try to update the dependencies (malilib and Fabric Loader),
+and then report the bug in [GitHub Issues](https://github.com/LucunJi/ExtraPlayerRenderer/issues) if the issue persists (I rarely look into other places other than GitHub).
+
+This mod is compatible *in theory* with other mods that modifies player's model.
+But such compatibility comes from the structure of vanilla Minecraft code, and is *not intended*. Glitches can happen.
+You may submit compatibility requests to GitHub Issues.

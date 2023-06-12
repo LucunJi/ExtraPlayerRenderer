@@ -1,5 +1,7 @@
+import groovy.json.JsonSlurper
+
 plugins {
-    id('fabric-loom').version('1.0-SNAPSHOT')
+    id('fabric-loom').version('1.2-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -8,17 +10,16 @@ targetCompatibility = JavaVersion.VERSION_17
 ext.configFile = file "build.properties"
 
 // follow semantic versioning! https://semver.org/
-archivesBaseName = project.mod_filename
-version = project.mod_version
-group = project.maven_group + "." + project.mod_id
+def modJson = file(sourceSets.main.resources.srcDirs.first().path + '/fabric.mod.json')
+def modSpec = new JsonSlurper().parseText(modJson.text)
+archivesBaseName = modSpec.name
+version = project.minecraft_version + "-" + modSpec.version
+group = project.maven_group + "." + modSpec.id
 
 repositories {
-    maven {
-        url 'https://masa.dy.fi/maven'
-    }
-    maven {
-        url 'https://api.modrinth.com/maven'
-    }
+    maven { url 'https://masa.dy.fi/maven' }
+    maven { url 'https://api.modrinth.com/maven' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -53,7 +54,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
+        rename { "${it}_${project.archivesBaseName}" }
     }
 }
 
@@ -62,3 +63,18 @@ gradle.projectsEvaluated {
         options.compilerArgs << "-Xlint:deprecation"
     }
 }
+
+tasks.register('printToGitHubActions') {
+    onlyIf { System.env.GITHUB_ACTIONS }
+    doLast {
+//        same as those in mc-publish
+        FileWriter fw = new FileWriter(System.env.GITHUB_ACTIONS)
+        fw.write("version=${project.version}\n")
+        fw.write("game_versions=${project.minecraft_version}\n")
+        fw.write("files=${remapJar.archiveFile.get().getAsFile().absolutePath}\n")
+        fw.write("release_name=${modSpec.name} v${modSpec.version} for mc ${project.minecraft_version}\n")
+        fw.close()
+    }
+}
+
+tasks.build.finalizedBy(printToGitHubActions)
