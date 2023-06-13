@@ -1,0 +1,33 @@
+name: Quick Fabric Release
+on:
+  push:
+    tags:
+      - '*-*'
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: remapJar
+
+      - name: Get mod file name
+        id: get_mod_file_name
+        run: |
+          echo "name=$(ls ./build/libs -1 | head -n 1)" >> ""$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./build/libs/${{ steps.get_mod_file_name.outputs.name }}
