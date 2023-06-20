@@ -22,8 +22,8 @@ public class DataBackup<T> {
         this.data.replaceAll((k, v) -> k.saver.apply(target));
     }
 
+    @SuppressWarnings("unchecked")
     public final void restore() {
-        //noinspection unchecked
         this.data.forEach((key, val) -> ((BiConsumer<Object, Object>) key.restorer).accept(target, val));
     }
 
