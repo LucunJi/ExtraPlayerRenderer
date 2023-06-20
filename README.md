@@ -3,7 +3,7 @@
 ![](logo.png)
 
 [![Quick Fabric Release](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml/badge.svg)](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml)
-![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&prefix=downloads%20&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)
+[![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&prefix=downloads%20&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)](https://modrinth.com/mod/7q8r8AtY)
 ![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)
 ![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)
 
