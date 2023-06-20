@@ -65,10 +65,10 @@ gradle.projectsEvaluated {
 }
 
 tasks.register('printToGitHubActions') {
-    onlyIf { System.env.GITHUB_ACTIONS }
+    onlyIf { System.getenv().GITHUB_OUTPUT }
     doLast {
 //        same as those in mc-publish
-        FileWriter fw = new FileWriter(System.env.GITHUB_ACTIONS)
+        FileWriter fw = new FileWriter(System.getenv().GITHUB_OUTPUT)
         fw.write("version=${project.version}\n")
         fw.write("game_versions=${project.minecraft_version}\n")
         fw.write("files=${remapJar.archiveFile.get().getAsFile().absolutePath}\n")
