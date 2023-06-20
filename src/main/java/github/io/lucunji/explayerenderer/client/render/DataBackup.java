@@ -1,49 +1,40 @@
 package github.io.lucunji.explayerenderer.client.render;
 
 
-import net.minecraft.entity.LivingEntity;
+import it.unimi.dsi.fastutil.objects.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class DataBackup<E extends LivingEntity> {
-    private final E entity;
-    private final List<DataBackupEntry<E, ?>> entries;
+public class DataBackup<T> {
+    private final T target;
+    private final Map<DataBackupEntry<T, ?>, Object> data;
 
-    public DataBackup(E entity, List<DataBackupEntry<E, ?>> entries) {
-        this.entity = entity;
-        this.entries = entries;
+    public DataBackup(T target, List<DataBackupEntry<T, ?>> entries) {
+        this.target = target;
+        this.data = new Reference2ObjectOpenHashMap<>();
+        entries.forEach(entry -> data.put(entry, null));
     }
 
-    public void save() {
-        this.entries.forEach(entry -> entry.save(this.entity));
+    public final void save() {
+        this.data.replaceAll((k, v) -> k.saver.apply(target));
     }
 
-    public void restore() {
-        for (int i = entries.size() - 1; i >= 0; i--) {
-            entries.get(i).restore(this.entity);
-        }
+    public final void restore() {
+        //noinspection unchecked
+        this.data.forEach((key, val) -> ((BiConsumer<Object, Object>) key.restorer).accept(target, val));
     }
 
 
-    public static class DataBackupEntry<E extends LivingEntity, T> {
-        private final Function<E, T> saver;
-        private final BiConsumer<E, T> restorer;
-        private T value = null;
+    public static class DataBackupEntry<U, V> {
+        private final Function<U, V> saver;
+        private final BiConsumer<U, V> restorer;
 
-        public DataBackupEntry(Function<E, T> saver, BiConsumer<E, T> restorer) {
+        public DataBackupEntry(Function<U, V> saver, BiConsumer<U, V> restorer) {
             this.saver = saver;
             this.restorer = restorer;
         }
-
-        private void save(E entity) {
-            this.value = saver.apply(entity);
-        }
-
-        private void restore(E entity) {
-            this.restorer.accept(entity, this.value);
-        }
     }
-
 }
