@@ -32,8 +32,8 @@ jobs:
 
           java: ${{ env.JAVA_VERSION }}
           version: ${{ steps.build.outputs.version }}
-          game-versions: ${{ steps.build.outputs.minecraft_version }}
-          name: "" # let curseforge and modrinth to determine name automatically
+          game-versions: ${{ steps.build.outputs.game_versions }}
+          files: ${{ steps.build.outputs.files }}
+          name: ${{ steps.build.outputs.release_name }}
 
           github-tag: ${{ github.ref_name }}
-          github-draft: true
