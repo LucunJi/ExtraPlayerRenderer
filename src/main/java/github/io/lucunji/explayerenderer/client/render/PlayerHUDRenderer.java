@@ -27,34 +27,35 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.joml.*;
 
+import java.lang.Math;
 import java.util.List;
 
 
 public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
     private static final List<DataBackupEntry<LivingEntity, ?>> LIVINGENTITY_BACKUP_ENTRIES = ImmutableList.of(
-            new DataBackupEntry<>(LivingEntity::getPose, LivingEntity::setPose),
-            new DataBackupEntry<>(Entity::isInSneakingPose, (e, flag) -> {
+            new DataBackupEntry<LivingEntity, EntityPose>(LivingEntity::getPose, LivingEntity::setPose),
+            new DataBackupEntry<LivingEntity, Boolean>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
             }),
-            new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
-            new DataBackupEntry<>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
-            new DataBackupEntry<>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
-            new DataBackupEntry<>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll)),
-            new DataBackupEntry<>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Boolean>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
+            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll)),
+            new DataBackupEntry<LivingEntity, Entity>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
-            new DataBackupEntry<>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
-            new DataBackupEntry<>(e -> e.bodyYaw, (e, yaw) -> e.bodyYaw = yaw),
-            new DataBackupEntry<>(e -> e.prevHeadYaw, (e, yaw) -> e.prevHeadYaw = yaw),
-            new DataBackupEntry<>(e -> e.headYaw, (e, yaw) -> e.headYaw = yaw),
-            new DataBackupEntry<>(e -> e.prevPitch, (e, pitch) -> e.prevPitch = pitch),
-            new DataBackupEntry<>(LivingEntity::getPitch, LivingEntity::setPitch),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.bodyYaw, (e, yaw) -> e.bodyYaw = yaw),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.prevHeadYaw, (e, yaw) -> e.prevHeadYaw = yaw),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.headYaw, (e, yaw) -> e.headYaw = yaw),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.prevPitch, (e, pitch) -> e.prevPitch = pitch),
+            new DataBackupEntry<LivingEntity, Float>(LivingEntity::getPitch, LivingEntity::setPitch),
 
-            new DataBackupEntry<>(e -> e.handSwingProgress, (e, prog) -> e.handSwingProgress = prog),
-            new DataBackupEntry<>(e -> e.lastHandSwingProgress, (e, prog) -> e.lastHandSwingProgress = prog),
-            new DataBackupEntry<>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
-            new DataBackupEntry<>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
-            new DataBackupEntry<>(e -> ((EntityMixin) e).callGetFlag(0), (e, flag) -> ((EntityMixin) e).callSetFlag(0,flag)) // on fire
+            new DataBackupEntry<LivingEntity, Float>(e -> e.handSwingProgress, (e, prog) -> e.handSwingProgress = prog),
+            new DataBackupEntry<LivingEntity, Float>(e -> e.lastHandSwingProgress, (e, prog) -> e.lastHandSwingProgress = prog),
+            new DataBackupEntry<LivingEntity, Integer>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
+            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
+            new DataBackupEntry<LivingEntity, Boolean>(e -> ((EntityMixin) e).callGetFlag(0), (e, flag) -> ((EntityMixin) e).callSetFlag(0, flag)) // on fire
 
     );
 
@@ -102,6 +103,8 @@ public class PlayerHUDRenderer implements IRenderer {
         DataBackup<LivingEntity> vehicleBackup = null;
         if (Configs.RENDER_VEHICLE.getBooleanValue() && poseOffsetMethod != PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
             var vehicle = targetEntity.getVehicle();
+            assert vehicle != null;
+
             if (vehicle instanceof LivingEntity livingVehicle) {
                 vehicleBackup = new DataBackup<>(livingVehicle, LIVINGENTITY_BACKUP_ENTRIES);
                 vehicleBackup.save();
@@ -186,12 +189,16 @@ public class PlayerHUDRenderer implements IRenderer {
             ((LivingEntityAccessor) targetEntity).setRoll(0);
         }
 
-        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw),
-                Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
-        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw),
+        float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
+        float headClamp = (float) MathHelper.clamp(headLerp,
                 Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
+        float bodyLerp = MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw);
+        float diff = headLerp - bodyLerp;
+
+        targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - headClamp;
+        targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
+                wrapDegree180(headClamp - diff),
+                Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                 MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
                 Configs.PITCH_MIN.getDoubleValue(), Configs.PITCH_MAX.getDoubleValue())
@@ -211,6 +218,7 @@ public class PlayerHUDRenderer implements IRenderer {
         ((EntityMixin) targetEntity).callSetFlag(0, false);
     }
 
+    @SuppressWarnings("deprecation")
     private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
                                   double poseOffsetY, IConfigOptionListEntry poseOffsetMethod, double lightDegree,
                                   float partialTicks) {
@@ -252,7 +260,6 @@ public class PlayerHUDRenderer implements IRenderer {
         entityRenderDispatcher.setRenderShadows(false);
 
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        //noinspection deprecation
         RenderSystem.runAsFancy(() ->
                 entityRenderDispatcher.render(targetEntity, 0, 0, 0, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
         );
@@ -286,5 +293,14 @@ public class PlayerHUDRenderer implements IRenderer {
     private static float getFallFlyingLeaning(LivingEntity entity, float partialTicks) {
         float ticks = partialTicks + entity.getRoll();
         return MathHelper.clamp(ticks * ticks / 100f, 0f, 1f);
+    }
+
+    /**
+     * Wrap angle between [-180, 180] in degrees.
+     */
+    private static float wrapDegree180(float x) {
+        x += 180;
+        if (x < 0) x += 360 * Math.ceil(-x / 360);
+        return (x % 360) - 180;
     }
 }
