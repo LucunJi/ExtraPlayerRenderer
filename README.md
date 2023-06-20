@@ -38,12 +38,11 @@ Explore the tabs and buttons, there are a lot for you to config: the scale, posi
 
 ## Downloads & Dependencies
 
-Downloading this mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer) or [Modrinth](https://modrinth.com/mod/extraplayerrenderer) is recommended, as this can help me gain some rewards.
+Downloading this mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer) or [Modrinth](https://modrinth.com/mod/7q8r8AtY) is recommended, as this can help me gain some rewards.
 
 You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRenderer) or [mcmod](https://www.mcmod.cn/class/2374.html).
 
-This mod in all versions, except Minecraft 1.20.0, requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
-The alpha versions for Minecraft 1.20.0 requires [Kosmolot's unofficial port of malilib](https://kosma.pl/masamods-1.20/), as masa has not finished porting.
+This mod requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
 
 [Mod Menu](https://modrinth.com/mod/modmenu/) is an optional dependency for the latest versions.
 
