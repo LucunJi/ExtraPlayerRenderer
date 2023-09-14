@@ -25,7 +25,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import org.joml.*;
 
 import java.lang.Math;
 import java.util.List;
@@ -144,7 +143,7 @@ public class PlayerHUDRenderer implements IRenderer {
 
     private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, IConfigOptionListEntry poseOffsetMethod) {
         if (poseOffsetMethod == PoseOffsetMethod.AUTO) {
-            final float defaultPlayerEyeHeight = PlayerEntity.DEFAULT_EYE_HEIGHT;
+            final float defaultPlayerEyeHeight = PlayerEntity.field_30651;
             final float defaultPlayerSwimmingBBHeight = PlayerEntity.field_30650;
             final float eyeHeightRatio = 0.85f;
             if (targetEntity.isFallFlying()) {
@@ -154,7 +153,7 @@ public class PlayerHUDRenderer implements IRenderer {
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
                 return (defaultPlayerEyeHeight - defaultPlayerSwimmingBBHeight * eyeHeightRatio * 0.85) * targetEntity.getLeaningPitch(partialTicks);
             } else {
-                return PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight();
+                return defaultPlayerEyeHeight - targetEntity.getStandingEyeHeight();
             }
         } else if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
             if (targetEntity.isFallFlying()) {
@@ -232,19 +231,19 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack1.push();
         matrixStack1.translate(0, 0, 550.0D);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
-        matrixStack1.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) lightDegree));
+        matrixStack1.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) lightDegree));
 
         RenderSystem.applyModelViewMatrix();
 
         MatrixStack matrixStack2 = new MatrixStack();
-        matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree));
+        matrixStack2.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-(float) lightDegree));
         matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
         matrixStack2.scale((float) size, (float) size, (float) size);
-        Quaternionf quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(180.0F);
-        Quaternionf quaternion2 = RotationAxis.POSITIVE_X.rotationDegrees((float) Configs.ROTATION_X.getDoubleValue());
-        quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees((float) Configs.ROTATION_Y.getDoubleValue()));
-        quaternion2.mul(RotationAxis.POSITIVE_Z.rotationDegrees((float) Configs.ROTATION_Z.getDoubleValue()));
-        quaternion.mul(quaternion2);
+        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
+        Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion((float) Configs.ROTATION_X.getDoubleValue());
+        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Y.getDegreesQuaternion((float) Configs.ROTATION_Y.getDoubleValue()));
+        quaternion2.hamiltonProduct(Vec3f.POSITIVE_Z.getDegreesQuaternion((float) Configs.ROTATION_Z.getDoubleValue()));
+        quaternion.hamiltonProduct(quaternion2);
         matrixStack2.multiply(quaternion);
 
         DiffuseLighting.method_34742();
@@ -280,8 +279,8 @@ public class PlayerHUDRenderer implements IRenderer {
     private static int getLight(Entity entity, float tickDelta) {
         if (Configs.USE_WORLD_LIGHT.getBooleanValue()) {
             World world = entity.getWorld();
-            int blockLight = world.getLightLevel(LightType.BLOCK, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
-            int skyLight = world.getLightLevel(LightType.SKY, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
+            int blockLight = world.getLightLevel(LightType.BLOCK, new BlockPos(entity.getCameraPosVec(tickDelta)));
+            int skyLight = world.getLightLevel(LightType.SKY, new BlockPos(entity.getCameraPosVec(tickDelta)));
             int min = Configs.WORLD_LIGHT_MIN.getIntegerValue();
             blockLight = MathHelper.clamp(blockLight, min, 15);
             skyLight = MathHelper.clamp(skyLight, min, 15);
