@@ -117,7 +117,7 @@ public class PlayerHUDRenderer implements IRenderer {
                     Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
                     Configs.SIZE.getDoubleValue() * scaledHeight,
                     Configs.MIRRORED.getBooleanValue(),
-                    -vehicle.getMountedHeightOffset() - targetEntity.getHeightOffset(),
+                    -targetEntity.getRidingOffset(vehicle),
                     PoseOffsetMethod.AUTO,
                     Configs.LIGHT_DEGREE.getDoubleValue(),
                     partialTicks);
@@ -301,7 +301,7 @@ public class PlayerHUDRenderer implements IRenderer {
      */
     private static float wrapDegree180(float x) {
         x += 180;
-        if (x < 0) x += 360 * Math.ceil(-x / 360);
+        if (x < 0) x += (float) (360 * Math.ceil(-x / 360));
         return (x % 360) - 180;
     }
 }
