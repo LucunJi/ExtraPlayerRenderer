@@ -7,8 +7,7 @@
   "client": [
     "ClientPlayerEntityAccessor",
     "LivingEntityMixin",
-      "EntityMixin",
-    "ImmediateMixin"
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -27,7 +27,7 @@
 - repository: https://api.modrinth.com/maven
   groupId: maven.modrinth
   artifactId: modmenu
-  version: "9.*"
+  version: "10.*"
   properties:
     mod_menu_version:
       source: version

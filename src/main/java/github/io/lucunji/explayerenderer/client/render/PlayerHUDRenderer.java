@@ -39,6 +39,7 @@ public class PlayerHUDRenderer implements IRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
     private static final List<DataBackupEntry<LivingEntity, ?>> LIVINGENTITY_BACKUP_ENTRIES = ImmutableList.of(
             new DataBackupEntry<LivingEntity, EntityPose>(LivingEntity::getPose, LivingEntity::setPose),
+            // required for player on client side
             new DataBackupEntry<LivingEntity, Boolean>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
             }),
@@ -46,6 +47,7 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLastLeaningPitch(pitch)),
             new DataBackupEntry<LivingEntity, Boolean>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
             new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFallFlyingTicks, (e, ticks) -> ((LivingEntityMixin) e).setFallFlyingTicks(ticks)),
+
             new DataBackupEntry<LivingEntity, Entity>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
             new DataBackupEntry<LivingEntity, Float>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
@@ -60,14 +62,9 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<LivingEntity, Integer>(e -> e.hurtTime, (e, time) -> e.hurtTime = time),
             new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
             new DataBackupEntry<LivingEntity, Boolean>(e -> ((EntityMixin) e).callGetFlag(0), (e, flag) -> ((EntityMixin) e).callSetFlag(0, flag)) // on fire
-
     );
 
-
-    private boolean needFixMirroredItem;
-
     public PlayerHUDRenderer() {
-        needFixMirroredItem = false;
     }
 
     /**
@@ -123,8 +120,8 @@ public class PlayerHUDRenderer implements IRenderer {
                         Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
                         Configs.SIZE.getDoubleValue() * scaledHeight,
                         Configs.MIRRORED.getBooleanValue(),
-                        getVehicleOffset(targetEntity, vehicle),
-                        PoseOffsetMethod.AUTO,
+                        vehicle.getLerpedPos(partialTicks).subtract(targetEntity.getLerpedPos(partialTicks))
+                                .rotateY((float) Math.toRadians(vehicle.getYaw())).toVector3f(),
                         Configs.LIGHT_DEGREE.getDoubleValue(),
                         partialTicks);
             } catch (NoSuchMethodException e) {
@@ -139,17 +136,12 @@ public class PlayerHUDRenderer implements IRenderer {
                 Configs.SIZE.getDoubleValue() * scaledHeight,
                 Configs.MIRRORED.getBooleanValue(),
                 new Vector3f(0, (float) getPoseOffsetY(targetEntity, partialTicks, poseOffsetMethod), 0),
-                poseOffsetMethod,
                 Configs.LIGHT_DEGREE.getDoubleValue(),
                 partialTicks);
 
         if (vehicleBackup != null) vehicleBackup.restore();
 
         backup.restore();
-    }
-
-    public boolean needFixMirrorItem() {
-        return needFixMirroredItem;
     }
 
     private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, IConfigOptionListEntry poseOffsetMethod) {
@@ -199,6 +191,7 @@ public class PlayerHUDRenderer implements IRenderer {
             ((LivingEntityMixin) targetEntity).setFallFlyingTicks(0);
         }
 
+        // FIXME: glitch when the mouse moves too fast, caused by lerping a warped value, currently not planned to fix, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
         float headClamp = (float) MathHelper.clamp(headLerp,
                 Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
@@ -207,7 +200,7 @@ public class PlayerHUDRenderer implements IRenderer {
 
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - headClamp;
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                wrapDegree180(headClamp - diff),
+                MathHelper.wrapDegrees(headClamp - diff),
                 Configs.BODY_YAW_MIN.getDoubleValue(), Configs.BODY_YAW_MAX.getDoubleValue());
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                 MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
@@ -230,20 +223,14 @@ public class PlayerHUDRenderer implements IRenderer {
 
     @SuppressWarnings("deprecation")
     private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
-                                  Vector3f offset, IConfigOptionListEntry poseOffsetMethod, double lightDegree,
-                                  float partialTicks) {
-        if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
-            posY += offset.y;
-        }
-
+                                  Vector3f offset, double lightDegree, float partialTicks) {
         EntityRenderDispatcher entityRenderDispatcher = client.getEntityRenderDispatcher();
-
 
         Matrix4fStack matrixStack1 = RenderSystem.getModelViewStack();
         matrixStack1.pushMatrix();
         matrixStack1.translate(0, 0, 550.0f);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
-        matrixStack1.rotate(RotationAxis.POSITIVE_Y.rotationDegrees((float) lightDegree));
+        matrixStack1.rotateY((float) Math.toRadians(lightDegree));
 
         RenderSystem.applyModelViewMatrix();
 
@@ -251,9 +238,11 @@ public class PlayerHUDRenderer implements IRenderer {
         matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree));
         matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
         matrixStack2.scale((float) size, (float) size, (float) size);
-        Quaternionf quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(180.0F);
-        Quaternionf quaternion2 = RotationAxis.POSITIVE_X.rotationDegrees((float) Configs.ROTATION_X.getDoubleValue());
-        quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees((float) Configs.ROTATION_Y.getDoubleValue()));
+        Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.PI);
+        Quaternionf quaternion2 = new Quaternionf()
+                .rotateXYZ((float) Math.toRadians(Configs.ROTATION_X.getDoubleValue()),
+                        (float) Math.toRadians(Configs.ROTATION_Y.getDoubleValue()),
+                        0);
 
         // FIXME: temporary fix for non-living vehicles
         // only affects vehicles because non-living entity is not even rendered as target in spectator mode
@@ -262,16 +251,13 @@ public class PlayerHUDRenderer implements IRenderer {
         else if (targetEntity instanceof MinecartEntity)
             quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(90));
 
-        quaternion2.mul(RotationAxis.POSITIVE_Z.rotationDegrees((float) Configs.ROTATION_Z.getDoubleValue()));
+        quaternion2.rotateZ((float) Math.toRadians(Configs.ROTATION_Z.getDoubleValue()));
+
         quaternion.mul(quaternion2);
         matrixStack2.multiply(quaternion);
 
         DiffuseLighting.method_34742();
         quaternion2.conjugate();
-
-        if (poseOffsetMethod == PoseOffsetMethod.AUTO) {
-            matrixStack2.translate(offset.x, offset.y, offset.z);
-        }
 
         entityRenderDispatcher.setRotation(quaternion2);
         boolean renderHitbox = entityRenderDispatcher.shouldRenderHitboxes();
@@ -280,12 +266,12 @@ public class PlayerHUDRenderer implements IRenderer {
 
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
         RenderSystem.runAsFancy(() ->
-                entityRenderDispatcher.render(targetEntity, 0, 0, 0, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
+                entityRenderDispatcher.render(targetEntity, offset.x, offset.y, offset.z, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
         );
         // disable cull to fix item rendering glitches when mirror option is on
-        needFixMirroredItem = mirror;
+        RenderSystem.disableCull();
         immediate.draw();
-        needFixMirroredItem = false;
+        RenderSystem.enableCull();
 
         // do not need to restore this value in fact
         entityRenderDispatcher.setRenderShadows(true);
@@ -312,29 +298,5 @@ public class PlayerHUDRenderer implements IRenderer {
     private static float getFallFlyingLeaning(LivingEntity entity, float partialTicks) {
         float ticks = partialTicks + entity.getFallFlyingTicks();
         return MathHelper.clamp(ticks * ticks / 100f, 0f, 1f);
-    }
-
-    /**
-     * Wrap angle between [-180, 180] in degrees.
-     */
-    private static float wrapDegree180(float x) {
-        x += 180;
-        if (x < 0) x += (float) (360 * Math.ceil(-x / 360));
-        return (x % 360) - 180;
-    }
-
-    /**
-     * Compute offset of vehicle relative to rider.
-     */
-    private static Vector3f getVehicleOffset(Entity rider, Entity vehicle) {
-        return vehicle.getPassengerRidingPos(rider).subtract(vehicle.getPos()).toVector3f();
-//        Vector3f ret;
-//        if (vehicle instanceof LivingEntity) {
-//            // FIXME: glitches when the vehicle is a horse
-//            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, vehicle.getDimensions(vehicle.getPose()), ((LivingEntityMixin) vehicle).callGetScaleFactor());
-//        } else {
-//            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, ((EntityMixin) vehicle).getDimensions(), 1f);
-//        }
-//        return ret.add(0, rider.getRidingOffset(vehicle), 0).mul(1, -1, 1);
     }
 }
