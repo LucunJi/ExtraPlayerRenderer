@@ -6,7 +6,7 @@
   ],
   "client": [
     "ClientPlayerEntityAccessor",
-    "LivingEntityAccessor",
+    "LivingEntityMixin",
       "EntityMixin",
     "ImmediateMixin"
   ],

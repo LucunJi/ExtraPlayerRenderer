@@ -9,7 +9,7 @@ import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.config.PoseOffsetMethod;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
 import github.io.lucunji.explayerenderer.mixin.EntityMixin;
-import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
+import github.io.lucunji.explayerenderer.mixin.LivingEntityMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -20,9 +20,12 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -39,10 +42,10 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<LivingEntity, Boolean>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
             }),
-            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
-            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLastLeaningPitch(pitch)),
             new DataBackupEntry<LivingEntity, Boolean>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
-            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityAccessor) e).setRoll(roll)),
+            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityMixin) e).setRoll(roll)),
             new DataBackupEntry<LivingEntity, Entity>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
             new DataBackupEntry<LivingEntity, Float>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
@@ -112,15 +115,21 @@ public class PlayerHUDRenderer implements IRenderer {
                 transformEntity(livingVehicle, partialTicks, false);
             }
 
-            performRendering(vehicle,
-                    Configs.OFFSET_X.getDoubleValue() * scaledWidth,
-                    Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
-                    Configs.SIZE.getDoubleValue() * scaledHeight,
-                    Configs.MIRRORED.getBooleanValue(),
-                    -targetEntity.getRidingOffset(vehicle),
-                    PoseOffsetMethod.AUTO,
-                    Configs.LIGHT_DEGREE.getDoubleValue(),
-                    partialTicks);
+            try {
+                var method = Entity.class.getDeclaredMethod("getPassengerAttachmentPos", Entity.class, EntityDimensions.class, float.class);
+                method.setAccessible(true);
+                performRendering(vehicle,
+                        Configs.OFFSET_X.getDoubleValue() * scaledWidth,
+                        Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
+                        Configs.SIZE.getDoubleValue() * scaledHeight,
+                        Configs.MIRRORED.getBooleanValue(),
+                        getVehicleOffset(targetEntity, vehicle),
+                        PoseOffsetMethod.AUTO,
+                        Configs.LIGHT_DEGREE.getDoubleValue(),
+                        partialTicks);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
@@ -129,7 +138,7 @@ public class PlayerHUDRenderer implements IRenderer {
                 Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
                 Configs.SIZE.getDoubleValue() * scaledHeight,
                 Configs.MIRRORED.getBooleanValue(),
-                getPoseOffsetY(targetEntity, partialTicks, poseOffsetMethod),
+                new Vector3f(0, (float) getPoseOffsetY(targetEntity, partialTicks, poseOffsetMethod), 0),
                 poseOffsetMethod,
                 Configs.LIGHT_DEGREE.getDoubleValue(),
                 partialTicks);
@@ -183,11 +192,11 @@ public class PlayerHUDRenderer implements IRenderer {
             }
             ((EntityMixin) targetEntity).setVehicle(null);
 
-            ((LivingEntityAccessor) targetEntity).setLeaningPitch(0);
-            ((LivingEntityAccessor) targetEntity).setLastLeaningPitch(0);
+            ((LivingEntityMixin) targetEntity).setLeaningPitch(0);
+            ((LivingEntityMixin) targetEntity).setLastLeaningPitch(0);
 
             ((EntityMixin) targetEntity).callSetFlag(7, false);
-            ((LivingEntityAccessor) targetEntity).setRoll(0);
+            ((LivingEntityMixin) targetEntity).setRoll(0);
         }
 
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
@@ -221,10 +230,10 @@ public class PlayerHUDRenderer implements IRenderer {
 
     @SuppressWarnings("deprecation")
     private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
-                                  double poseOffsetY, IConfigOptionListEntry poseOffsetMethod, double lightDegree,
+                                  Vector3f offset, IConfigOptionListEntry poseOffsetMethod, double lightDegree,
                                   float partialTicks) {
         if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
-            posY += poseOffsetY;
+            posY += offset.y;
         }
 
         EntityRenderDispatcher entityRenderDispatcher = client.getEntityRenderDispatcher();
@@ -244,6 +253,14 @@ public class PlayerHUDRenderer implements IRenderer {
         Quaternionf quaternion = RotationAxis.POSITIVE_Z.rotationDegrees(180.0F);
         Quaternionf quaternion2 = RotationAxis.POSITIVE_X.rotationDegrees((float) Configs.ROTATION_X.getDoubleValue());
         quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees((float) Configs.ROTATION_Y.getDoubleValue()));
+
+        // FIXME: temporary fix for non-living vehicles
+        // only affects vehicles because non-living entity is not even rendered as target in spectator mode
+        if (targetEntity instanceof BoatEntity)
+            quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+        else if (targetEntity instanceof MinecartEntity)
+            quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+
         quaternion2.mul(RotationAxis.POSITIVE_Z.rotationDegrees((float) Configs.ROTATION_Z.getDoubleValue()));
         quaternion.mul(quaternion2);
         matrixStack2.multiply(quaternion);
@@ -252,7 +269,7 @@ public class PlayerHUDRenderer implements IRenderer {
         quaternion2.conjugate();
 
         if (poseOffsetMethod == PoseOffsetMethod.AUTO) {
-            matrixStack2.translate(0, poseOffsetY, 0);
+            matrixStack2.translate(offset.x, offset.y, offset.z);
         }
 
         entityRenderDispatcher.setRotation(quaternion2);
@@ -303,5 +320,19 @@ public class PlayerHUDRenderer implements IRenderer {
         x += 180;
         if (x < 0) x += (float) (360 * Math.ceil(-x / 360));
         return (x % 360) - 180;
+    }
+
+    /**
+     * Compute offset of vehicle relative to rider.
+     */
+    private static Vector3f getVehicleOffset(Entity rider, Entity vehicle) {
+        Vector3f ret;
+        if (vehicle instanceof LivingEntity) {
+            // FIXME: glitches when the vehicle is a horse
+            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, vehicle.getDimensions(vehicle.getPose()), ((LivingEntityMixin) vehicle).callGetScaleFactor());
+        } else {
+            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, ((EntityMixin) vehicle).getDimensions(), 1f);
+        }
+        return ret.add(0, rider.getRidingOffset(vehicle), 0).mul(1, -1, 1);
     }
 }
