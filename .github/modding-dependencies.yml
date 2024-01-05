@@ -1,0 +1,38 @@
+# Yarn Mapping
+# - repository: https://maven.fabricmc.net
+#   groupId: net.fabricmc
+#   artifactId: yarn
+#   version: "${mcVersion}+build.#"
+#   variables:
+#     - yarn_mappings: version
+# Fabric Loader
+- repository: https://maven.fabricmc.net
+  groupId: net.fabricmc
+  artifactId: fabric-loader
+  version: "#.#.#"
+  variables:
+    - loader_version: version
+# Fabric API
+- repository: https://maven.fabricmc.net
+  groupId: net.fabricmc.fabric-api
+  artifactId: fabric-api
+  version: "#.#.#+${mcVersion}"
+  variables:
+    - fabric_version: version
+
+# Mod Menu
+- repository: https://api.modrinth.com/maven
+  groupId: maven.modrinth
+  artifactId: modmenu
+  version: "9.#.#"
+  variables:
+    - mod_menu_version: version
+
+# malilib
+- repository: https://masa.dy.fi/maven
+  groupId: fi.dy.masa.malilib
+  artifactId: malilib-fabric-${mcMajor}.${mcMinor}.${mcPatch}
+  version: "#.#.#"
+  variables:
+    - malilib_artifact: artifactId
+    - malilib_version: version
