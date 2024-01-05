@@ -53,7 +53,7 @@ jobs:
         if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN  }}
+          token: ${{ secrets.PR_BOT_PAT  }}
           add-paths: gradle.properties
           commit-message: Update dependencies
           title: Update dependencies
