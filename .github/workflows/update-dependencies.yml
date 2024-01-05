@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '15 14 * * 5'  # minute and hour are randomized to avoid peak hours
   workflow_dispatch:  # enables manual running this workflow
+  push:
 
 env:
   JAVA_VERSION: 17 # must be the same as the version used in build.gradle
