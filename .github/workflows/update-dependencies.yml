@@ -19,7 +19,7 @@ jobs:
         id: depup
         uses: LucunJi/mc-depup@v0.0.1
         with:
-          update_mc_patch: true
+          update_mc_patch: false
           update_only_with_mc: false
           tolerable: false
 
