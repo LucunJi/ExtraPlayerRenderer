@@ -2,7 +2,7 @@
 - repository: https://maven.fabricmc.net
   groupId: net.fabricmc
   artifactId: yarn
-  version: "${mcVersion}+build.#"
+  version: "${mcVersion}+*"
   properties:
     yarn_mappings:
       source: version

@@ -19,7 +19,7 @@ jobs:
 
       - name: Update Dependencies
         id: depup
-        uses: LucunJi/mc-depup@v0.1.1
+        uses: LucunJi/mc-depup@v0.1.2
       
       - name: Pull Request
         if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
