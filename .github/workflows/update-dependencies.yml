@@ -21,7 +21,6 @@ jobs:
         id: depup
         uses: LucunJi/mc-depup@v0.0.1
         with:
-          update_mc_patch: false
           update_only_with_mc: false
           tolerable: false
 
@@ -53,7 +52,7 @@ jobs:
         if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PR_BOT_PAT  }}
+          token: ${{ secrets.MC_DEPUP_PR_PAT  }}
           add-paths: gradle.properties
           commit-message: Update dependencies
           title: Update dependencies
