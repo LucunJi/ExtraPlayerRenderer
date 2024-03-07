@@ -20,33 +20,6 @@ jobs:
       - name: Update Dependencies
         id: depup
         uses: LucunJi/mc-depup@v0.0.1
-        with:
-          update_only_with_mc: false
-          tolerable: false
-
-      # #   send file to other jobs using outputs when it is less than 50MB
-      # #   so we don't need to repeat 'if' in each step
-      # - name: Send Properties
-      #   id: send_properties
-      #   run: |
-      #     properties="$(cat gradle.properties)"
-      #     properties_escaped="${properties//$'\n'/\\n}"
-      #     properties_escaped="${properties_escaped//$'\r'/\\r}"
-      #     echo "properties=$properties_escaped" >> "$GITHUB_OUTPUT"
-  
-      - name: Setup Java
-        if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Build
-        if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
-        id: build
-        run: |
-          chmod +x ./gradlew
-          ./gradlew clean build
       
       - name: Pull Request
         if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
