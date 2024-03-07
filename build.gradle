@@ -1,7 +1,7 @@
 import groovy.json.JsonSlurper
 
 plugins {
-    id('fabric-loom').version('1.2-SNAPSHOT')
+    id('fabric-loom').version('1.5-SNAPSHOT')
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
