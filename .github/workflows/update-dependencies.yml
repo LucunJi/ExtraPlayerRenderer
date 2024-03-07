@@ -23,7 +23,7 @@ jobs:
       
       - name: Pull Request
         if: ${{ success() && steps.depup.outputs.any_update == 'true' }}
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.MC_DEPUP_PR_PAT  }}
           add-paths: gradle.properties
