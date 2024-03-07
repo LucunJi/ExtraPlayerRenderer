@@ -1,10 +1,10 @@
 # Yarn Mapping
-# - repository: https://maven.fabricmc.net
-#   groupId: net.fabricmc
-#   artifactId: yarn
-#   version: "${mcVersion}+build.#"
-#   variables:
-#     - yarn_mappings: version
+- repository: https://maven.fabricmc.net
+  groupId: net.fabricmc
+  artifactId: yarn
+  version: "${mcVersion}+build.#"
+  variables:
+    - yarn_mappings: version
 # Fabric Loader
 - repository: https://maven.fabricmc.net
   groupId: net.fabricmc
