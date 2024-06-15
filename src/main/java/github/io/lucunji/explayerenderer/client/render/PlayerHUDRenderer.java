@@ -45,7 +45,7 @@ public class PlayerHUDRenderer implements IRenderer {
             new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLeaningPitch(pitch)),
             new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLastLeaningPitch(pitch)),
             new DataBackupEntry<LivingEntity, Boolean>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
-            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getRoll, (e, roll) -> ((LivingEntityMixin) e).setRoll(roll)),
+            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFallFlyingTicks, (e, ticks) -> ((LivingEntityMixin) e).setFallFlyingTicks(ticks)),
             new DataBackupEntry<LivingEntity, Entity>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
             new DataBackupEntry<LivingEntity, Float>(e -> e.prevBodyYaw, (e, yaw) -> e.prevBodyYaw = yaw),
@@ -196,7 +196,7 @@ public class PlayerHUDRenderer implements IRenderer {
             ((LivingEntityMixin) targetEntity).setLastLeaningPitch(0);
 
             ((EntityMixin) targetEntity).callSetFlag(7, false);
-            ((LivingEntityMixin) targetEntity).setRoll(0);
+            ((LivingEntityMixin) targetEntity).setFallFlyingTicks(0);
         }
 
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
@@ -238,11 +238,12 @@ public class PlayerHUDRenderer implements IRenderer {
 
         EntityRenderDispatcher entityRenderDispatcher = client.getEntityRenderDispatcher();
 
-        MatrixStack matrixStack1 = RenderSystem.getModelViewStack();
-        matrixStack1.push();
-        matrixStack1.translate(0, 0, 550.0D);
+
+        Matrix4fStack matrixStack1 = RenderSystem.getModelViewStack();
+        matrixStack1.pushMatrix();
+        matrixStack1.translate(0, 0, 550.0f);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
-        matrixStack1.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float) lightDegree));
+        matrixStack1.rotate(RotationAxis.POSITIVE_Y.rotationDegrees((float) lightDegree));
 
         RenderSystem.applyModelViewMatrix();
 
@@ -290,7 +291,7 @@ public class PlayerHUDRenderer implements IRenderer {
         entityRenderDispatcher.setRenderShadows(true);
         entityRenderDispatcher.setRenderHitboxes(renderHitbox);
 
-        matrixStack1.pop();
+        matrixStack1.popMatrix();
         RenderSystem.applyModelViewMatrix();
         DiffuseLighting.enableGuiDepthLighting();
     }
@@ -309,7 +310,7 @@ public class PlayerHUDRenderer implements IRenderer {
     }
 
     private static float getFallFlyingLeaning(LivingEntity entity, float partialTicks) {
-        float ticks = partialTicks + entity.getRoll();
+        float ticks = partialTicks + entity.getFallFlyingTicks();
         return MathHelper.clamp(ticks * ticks / 100f, 0f, 1f);
     }
 
@@ -326,13 +327,14 @@ public class PlayerHUDRenderer implements IRenderer {
      * Compute offset of vehicle relative to rider.
      */
     private static Vector3f getVehicleOffset(Entity rider, Entity vehicle) {
-        Vector3f ret;
-        if (vehicle instanceof LivingEntity) {
-            // FIXME: glitches when the vehicle is a horse
-            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, vehicle.getDimensions(vehicle.getPose()), ((LivingEntityMixin) vehicle).callGetScaleFactor());
-        } else {
-            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, ((EntityMixin) vehicle).getDimensions(), 1f);
-        }
-        return ret.add(0, rider.getRidingOffset(vehicle), 0).mul(1, -1, 1);
+        return vehicle.getPassengerRidingPos(rider).subtract(vehicle.getPos()).toVector3f();
+//        Vector3f ret;
+//        if (vehicle instanceof LivingEntity) {
+//            // FIXME: glitches when the vehicle is a horse
+//            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, vehicle.getDimensions(vehicle.getPose()), ((LivingEntityMixin) vehicle).callGetScaleFactor());
+//        } else {
+//            ret = ((EntityMixin) vehicle).callGetPassengerAttachmentPos(rider, ((EntityMixin) vehicle).getDimensions(), 1f);
+//        }
+//        return ret.add(0, rider.getRidingOffset(vehicle), 0).mul(1, -1, 1);
     }
 }

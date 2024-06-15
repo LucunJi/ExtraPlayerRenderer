@@ -18,8 +18,8 @@ public interface EntityMixin {
     @Accessor
     void setVehicle(Entity vehicle);
 
-    @Invoker
-    Vector3f callGetPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scaleFactor);
+//    @Invoker
+//    Vector3f callGetPassengerAttachmentPos(Entity passenger, EntityDimensions dimensions, float scaleFactor);
 
     @Accessor
     EntityDimensions getDimensions();
