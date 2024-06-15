@@ -34,3 +34,8 @@ bin/
 
 run/
 logs/
+
+# misc
+
+.directory
+Test-Env-world.zip
