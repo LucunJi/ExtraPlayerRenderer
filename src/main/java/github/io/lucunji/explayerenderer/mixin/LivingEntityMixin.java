@@ -20,7 +20,7 @@ public interface LivingEntityMixin {
     void setLastLeaningPitch(float lastLeaningPitch);
 
     @Accessor
-    void setRoll(int roll);
+    void setFallFlyingTicks(int fallFlyingTicks);
 
     @Invoker
     float callGetScaleFactor();
