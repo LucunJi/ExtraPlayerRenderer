@@ -25,7 +25,6 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.util.math.*;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -106,6 +105,10 @@ public class PlayerHUDRenderer implements IRenderer {
             var vehicle = targetEntity.getVehicle();
             assert vehicle != null;
 
+            // get the overall yaw before transforming
+            var yawLerped = vehicle.getYaw(partialTicks);
+
+            // FIXME: NEVERFIX - the rendered yaw of minecart is determined non-trivially in its MinecartEntityRenderer#render, so it cannot be fixed to 0 easily
             if (vehicle instanceof LivingEntity livingVehicle) {
                 vehicleBackup = new DataBackup<>(livingVehicle, LIVINGENTITY_BACKUP_ENTRIES);
                 vehicleBackup.save();
@@ -121,7 +124,7 @@ public class PlayerHUDRenderer implements IRenderer {
                         Configs.SIZE.getDoubleValue() * scaledHeight,
                         Configs.MIRRORED.getBooleanValue(),
                         vehicle.getLerpedPos(partialTicks).subtract(targetEntity.getLerpedPos(partialTicks))
-                                .rotateY((float) Math.toRadians(vehicle.getYaw())).toVector3f(),
+                                .rotateY((float)Math.toRadians(yawLerped)).toVector3f(), // undo the rotation
                         Configs.LIGHT_DEGREE.getDoubleValue(),
                         partialTicks);
             } catch (NoSuchMethodException e) {
@@ -191,7 +194,7 @@ public class PlayerHUDRenderer implements IRenderer {
             ((LivingEntityMixin) targetEntity).setFallFlyingTicks(0);
         }
 
-        // FIXME: glitch when the mouse moves too fast, caused by lerping a warped value, currently not planned to fix, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead
+        // FIXME: NEVERFIX - glitch when the mouse moves too fast, caused by lerping a warped value, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
         float headClamp = (float) MathHelper.clamp(headLerp,
                 Configs.HEAD_YAW_MIN.getDoubleValue(), Configs.HEAD_YAW_MAX.getDoubleValue());
@@ -244,12 +247,8 @@ public class PlayerHUDRenderer implements IRenderer {
                         (float) Math.toRadians(Configs.ROTATION_Y.getDoubleValue()),
                         0);
 
-        // FIXME: temporary fix for non-living vehicles
-        // only affects vehicles because non-living entity is not even rendered as target in spectator mode
         if (targetEntity instanceof BoatEntity)
             quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-        else if (targetEntity instanceof MinecartEntity)
-            quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(90));
 
         quaternion2.rotateZ((float) Math.toRadians(Configs.ROTATION_Z.getDoubleValue()));
 
