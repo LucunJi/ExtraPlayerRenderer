@@ -5,7 +5,7 @@ on:
   workflow_dispatch:  # enables manual running this workflow
 
 env:
-  JAVA_VERSION: 17 # must be the same as the version used in build.gradle
+  JAVA_VERSION: 21 # must be the same as the version used in build.gradle
 
 jobs:
   update:

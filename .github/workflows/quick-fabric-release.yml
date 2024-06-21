@@ -4,7 +4,7 @@ on:
     tags:
       - '*-*'
 env:
-  JAVA_VERSION: 17 # must be the same as the version used in build.gradle
+  JAVA_VERSION: 21 # must be the same as the version used in build.gradle
 jobs:
   build-release:
     runs-on: ubuntu-latest
