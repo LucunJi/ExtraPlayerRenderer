@@ -7,7 +7,7 @@
 ![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)
 ![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)
 
-<p style="color: red;">For Minecraft 1.21+, malilib should be downloaded from <a href="https://github.com/sakura-ryoko/malilib/releases">sakura-ryoko's fork</a>.</p>
+**For Minecraft 1.21+, malilib should be downloaded from [sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)**
 
 *If you are looking for the same mod but for Forge, [click here](https://www.curseforge.com/minecraft/mc-mods/extra-player-render). It's not developed by me but still good to use.*
 
@@ -46,7 +46,7 @@ You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRender
 
 This mod requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
 
-<p style="color: red;">For Minecraft 1.21+, malilib should be downloaded from <a href="https://github.com/sakura-ryoko/malilib/releases">sakura-ryoko's fork</a>.</p>
+**For Minecraft 1.21+, malilib should be downloaded from [sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)**
 
 [Mod Menu](https://modrinth.com/mod/modmenu/) is an optional dependency for the latest versions.
 
