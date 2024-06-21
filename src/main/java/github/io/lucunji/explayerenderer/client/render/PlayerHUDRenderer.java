@@ -154,6 +154,8 @@ public class PlayerHUDRenderer implements IRenderer {
             final float eyeHeightRatio = 0.85f;
             if (targetEntity.isFallFlying()) {
                 return (defaultPlayerEyeHeight - targetEntity.getStandingEyeHeight()) * getFallFlyingLeaning(targetEntity, partialTicks);
+            } else if (targetEntity.isUsingRiptide()) {
+                return  defaultPlayerEyeHeight - defaultPlayerSwimmingBBHeight * eyeHeightRatio * 0.8;
             } else if (targetEntity.isInSwimmingPose()) {
                 return targetEntity.getLeaningPitch(partialTicks) <= 0 ? 0 : defaultPlayerEyeHeight - targetEntity.getStandingEyeHeight();
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
@@ -164,7 +166,7 @@ public class PlayerHUDRenderer implements IRenderer {
         } else if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
             if (targetEntity.isFallFlying()) {
                 return Configs.ELYTRA_OFFSET_Y.getDoubleValue() * getFallFlyingLeaning(targetEntity, partialTicks);
-            } else if ((targetEntity.isInSwimmingPose()) && targetEntity.getLeaningPitch(partialTicks) > 0) { // require nonzero leaning to filter out glitch
+            } else if ((targetEntity.isInSwimmingPose()) && targetEntity.getLeaningPitch(partialTicks) > 0 || targetEntity.isUsingRiptide()) { // require nonzero leaning to filter out glitch
                 return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue();
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
                 return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue() * targetEntity.getLeaningPitch(partialTicks);
