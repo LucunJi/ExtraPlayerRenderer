@@ -27,19 +27,26 @@
 - repository: https://api.modrinth.com/maven
   groupId: maven.modrinth
   artifactId: modmenu
-  version: "10.*"
+  version: "11.*"
   properties:
     mod_menu_version:
       source: version
 
 # malilib
-- repository: https://masa.dy.fi/maven
-  groupId: fi.dy.masa.malilib
-  artifactId: "malilib-fabric-${mcVersion}"
-  version: "*"
+#- repository: https://masa.dy.fi/maven
+#  groupId: fi.dy.masa.malilib
+#  artifactId: "malilib-fabric-${mcVersion}"
+#  version: "*"
+#  properties:
+#    malilib_minecraft_version:
+#      source: wildcard
+#      name: mcVersion
+#    malilib_version:
+#      source: version
+- repository: https://jitpack.io
+  groupId: com.github.sakura-ryoko
+  artifactId: "malilib"
+  version: "${mcVersion}-sakura.*"
   properties:
-    malilib_minecraft_version:
-      source: wildcard
-      name: mcVersion
     malilib_version:
       source: version

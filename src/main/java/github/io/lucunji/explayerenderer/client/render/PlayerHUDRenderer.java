@@ -73,7 +73,8 @@ public class PlayerHUDRenderer implements IRenderer {
     @Override
     public void onRenderGameOverlayPost(DrawContext context) {
         if (client.skipGameRender || client.currentScreen != null) return;
-        doRender(client.getTickDelta());
+        // TODO: investigate how this affects the rendering
+        doRender(client.getRenderTickCounter().getTickDelta(true));
     }
 
     /**
