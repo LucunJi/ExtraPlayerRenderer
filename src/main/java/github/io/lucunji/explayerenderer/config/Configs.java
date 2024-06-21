@@ -55,9 +55,9 @@ public class Configs {
         MIRRORED = Category.GENERAL.add(new LocalizedConfigBoolean(MOD_ID, "mirror", false));
 
         POSE_OFFSET_METHOD = Category.POSTURES.add(new LocalizedConfigOptionList(MOD_ID, POSE_OFFSET_METHOD_KEY, PoseOffsetMethod.AUTO));
-        SNEAK_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "sneaking_y_offset", 0.35, -3, 3));
-        SWIM_CRAWL_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "swim_crawl_y_offset", 1.22, -3, 3));
-        ELYTRA_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "elytra_y_offset", 1.22, -3, 3));
+        SNEAK_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "sneaking_y_offset", -35, -100, 100));
+        SWIM_CRAWL_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "swim_crawl_y_offset", -122, -300, 300));
+        ELYTRA_OFFSET_Y = Category.POSTURES.add(new LocalizedConfigDouble(MOD_ID, "elytra_y_offset", -122, -300, 300));
 
         PITCH_MIN = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "pitch_min", -20, -180, 180));
         PITCH_MAX = Category.ROTATIONS.add(new LocalizedConfigDouble(MOD_ID, "pitch_max", 20, -180, 180));

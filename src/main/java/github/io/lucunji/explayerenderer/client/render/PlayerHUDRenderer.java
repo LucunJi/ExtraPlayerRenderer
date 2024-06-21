@@ -164,14 +164,15 @@ public class PlayerHUDRenderer implements IRenderer {
                 return PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight();
             }
         } else if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
+            // TODO: remove the divisor (and update config's default values accordingly) when updating the major version
             if (targetEntity.isFallFlying()) {
-                return Configs.ELYTRA_OFFSET_Y.getDoubleValue() * getFallFlyingLeaning(targetEntity, partialTicks);
+                return Configs.ELYTRA_OFFSET_Y.getDoubleValue() / -100D * getFallFlyingLeaning(targetEntity, partialTicks);
             } else if ((targetEntity.isInSwimmingPose()) && targetEntity.getLeaningPitch(partialTicks) > 0 || targetEntity.isUsingRiptide()) { // require nonzero leaning to filter out glitch
-                return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue();
+                return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue() / -100D;
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
-                return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue() * targetEntity.getLeaningPitch(partialTicks);
+                return Configs.SWIM_CRAWL_OFFSET_Y.getDoubleValue() / -100D * targetEntity.getLeaningPitch(partialTicks);
             } else if (targetEntity.isInSneakingPose()) {
-                return Configs.SNEAK_OFFSET_Y.getDoubleValue();
+                return Configs.SNEAK_OFFSET_Y.getDoubleValue() / -100D;
             }
         }
         return 0;
