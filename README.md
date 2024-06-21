@@ -7,6 +7,8 @@
 ![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)
 ![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)
 
+<p style="color: red;">For Minecraft 1.21+, malilib should be downloaded from <a href="https://github.com/sakura-ryoko/malilib/releases">sakura-ryoko's fork</a>.</p>
+
 *If you are looking for the same mod but for Forge, [click here](https://www.curseforge.com/minecraft/mc-mods/extra-player-render). It's not developed by me but still good to use.*
 
 
@@ -30,7 +32,7 @@ The riding entity can also be rendered, so you can show your favourite horse.
 
 ## Fully Configurable
 
-By pressing F8 in game (by default, still configurable), the configuration screen will pop up.
+By pressing F8 in game (by default, configurable as well), the configuration screen will pop up.
 
 Explore the tabs and buttons, there are a lot for you to config: the scale, position and rotation of the figure, the head & body rotations, how to offset(transit) between postures and angle of light on the figure...
 
@@ -43,6 +45,8 @@ Downloading this mod from [CurseForge](https://www.curseforge.com/minecraft/mc-m
 You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRenderer) or [mcmod](https://www.mcmod.cn/class/2374.html).
 
 This mod requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
+
+<p style="color: red;">For Minecraft 1.21+, malilib should be downloaded from <a href="https://github.com/sakura-ryoko/malilib/releases">sakura-ryoko's fork</a>.</p>
 
 [Mod Menu](https://modrinth.com/mod/modmenu/) is an optional dependency for the latest versions.
 

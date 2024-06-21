@@ -20,7 +20,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -73,7 +72,6 @@ public class PlayerHUDRenderer implements IRenderer {
     @Override
     public void onRenderGameOverlayPost(DrawContext context) {
         if (client.skipGameRender || client.currentScreen != null) return;
-        // TODO: investigate how this affects the rendering
         doRender(client.getRenderTickCounter().getTickDelta(true));
     }
 
@@ -116,21 +114,15 @@ public class PlayerHUDRenderer implements IRenderer {
                 transformEntity(livingVehicle, partialTicks, false);
             }
 
-            try {
-                var method = Entity.class.getDeclaredMethod("getPassengerAttachmentPos", Entity.class, EntityDimensions.class, float.class);
-                method.setAccessible(true);
-                performRendering(vehicle,
-                        Configs.OFFSET_X.getDoubleValue() * scaledWidth,
-                        Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
-                        Configs.SIZE.getDoubleValue() * scaledHeight,
-                        Configs.MIRRORED.getBooleanValue(),
-                        vehicle.getLerpedPos(partialTicks).subtract(targetEntity.getLerpedPos(partialTicks))
-                                .rotateY((float)Math.toRadians(yawLerped)).toVector3f(), // undo the rotation
-                        Configs.LIGHT_DEGREE.getDoubleValue(),
-                        partialTicks);
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            performRendering(vehicle,
+                    Configs.OFFSET_X.getDoubleValue() * scaledWidth,
+                    Configs.OFFSET_Y.getDoubleValue() * scaledHeight,
+                    Configs.SIZE.getDoubleValue() * scaledHeight,
+                    Configs.MIRRORED.getBooleanValue(),
+                    vehicle.getLerpedPos(partialTicks).subtract(targetEntity.getLerpedPos(partialTicks))
+                            .rotateY((float)Math.toRadians(yawLerped)).toVector3f(), // undo the rotation
+                    Configs.LIGHT_DEGREE.getDoubleValue(),
+                    partialTicks);
         }
 
 
