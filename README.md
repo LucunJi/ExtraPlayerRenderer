@@ -4,8 +4,8 @@
 
 [![Quick Fabric Release](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml/badge.svg)](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml)
 [![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&prefix=downloads%20&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)](https://modrinth.com/mod/7q8r8AtY)
-![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)
-![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)
+[![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer)
+[![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer)
 
 **For Minecraft 1.21+, malilib should be downloaded from [sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)**
 
