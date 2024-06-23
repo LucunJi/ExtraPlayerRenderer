@@ -44,13 +44,18 @@ Downloading this mod from [CurseForge](https://www.curseforge.com/minecraft/mc-m
 
 You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRenderer) or [mcmod](https://www.mcmod.cn/class/2374.html).
 
-This mod requires masa's [malilib](https://www.curseforge.com/minecraft/mc-mods/malilib).
+This mod depends on:
 
-**For Minecraft 1.21+, malilib should be downloaded from [sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)**
-
-[Mod Menu](https://modrinth.com/mod/modmenu/) is an optional dependency for the latest versions.
-
-Some earlier versions (now obsolete) requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).
+- v3.0.0-alpha and above (currently unstable):
+  - [Fabric API](https://modrinth.com/mod/fabric-api)
+  - [YACL](https://modrinth.com/mod/yacl)
+- before v3.0.0:
+  - For Minecraft 1.21+
+    - [malilib from sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)
+  - For Minecraft earlier than 1.21
+    - [malilib](https://modrinth.com/mod/malilib)
+- [Mod Menu](https://modrinth.com/mod/modmenu) (optional, recommended)
+- some very early versions (now obsolete) also requires [Fabric API](https://modrinth.com/mod/fabric-api)
 
 ## Issues
 When facing any issue, please first try to update the dependencies (malilib and Fabric Loader),
