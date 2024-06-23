@@ -1,19 +1,20 @@
 {
-  "required": false,
-  "package": "github.io.lucunji.explayerenderer.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-  ],
-  "client": [
-    "ClientPlayerEntityAccessor",
-    "EntityMixin",
-    "InGameHudMixin",
-    "LivingEntityAccessor",
-    "yacl.YACLScreenMixin",
-    "yacl.AbstractWidgetMixin",
-    "yacl.ControllerWidgetAccessor"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+    "required": false,
+    "package": "github.io.lucunji.explayerenderer.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+    ],
+    "client": [
+        "ClientPlayerEntityAccessor",
+        "EntityMixin",
+        "InGameHudMixin",
+        "LivingEntityAccessor",
+        "yacl.ControllerWidgetMixin",
+        "yacl.PressableWidgetMixin",
+        "yacl.ScreenMixin",
+        "yacl.YACLScreenMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
   }
 }

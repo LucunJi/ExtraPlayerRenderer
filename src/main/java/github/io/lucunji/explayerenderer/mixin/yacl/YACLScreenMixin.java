@@ -6,7 +6,6 @@ import dev.isxander.yacl3.api.utils.OptionUtils;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.impl.utils.YACLConstants;
 import github.io.lucunji.explayerenderer.config.Configs;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tab.TabManager;
 import net.minecraft.text.Text;
@@ -34,14 +33,6 @@ public abstract class YACLScreenMixin extends Screen {
 
     protected YACLScreenMixin(Text title) {
         super(title);
-    }
-
-    @Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true)
-    public void renderBackground(DrawContext guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        if (!Configs.isConfigScreen(this)) return;
-
-        renderDarkening(guiGraphics);
-        ci.cancel();
     }
 
     /**
