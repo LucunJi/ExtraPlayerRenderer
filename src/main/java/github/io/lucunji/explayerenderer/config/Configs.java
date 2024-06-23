@@ -71,16 +71,16 @@ public class Configs {
     public PoseOffsetMethod poseOffsetMethod = PoseOffsetMethod.AUTO;
     @SerialEntry
     @AutoGen(category = "postures")
-    @DoubleSlider(min = -100, max = 100, step = 0.1)
-    public double sneakOffsetY = -35;
+    @DoubleSlider(min = -3, max = 3, step = 0.01)
+    public double sneakOffsetY = -0.35;
     @SerialEntry
     @AutoGen(category = "postures")
-    @DoubleSlider(min = -300, max = 300, step = 0.1)
-    public double swimCrawlOffsetY = -122;
+    @DoubleSlider(min = -3, max = 3, step = 0.01)
+    public double swimCrawlOffsetY = -1.22;
     @SerialEntry
     @AutoGen(category = "postures")
-    @DoubleSlider(min = -300, max = 300, step = 0.1)
-    public double elytraOffsetY = -122;
+    @DoubleSlider(min = -3, max = 3, step = 0.01)
+    public double elytraOffsetY = -1.22;
 
     @SerialEntry
     @AutoGen(category = "rotations")
