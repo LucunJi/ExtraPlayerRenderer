@@ -25,7 +25,7 @@ jobs:
           __version="$(./gradlew -q properties --property version | grep version: | sed -r 's/version:\s*//')"
           if [ "$__version" == "${{ github.ref_name }}" ]
           then
-            echo "OK: version and tag matches"
+            echo "OK: version and tag match"
           else
             echo "ERR: version ${__version} and tag (${{ github.ref_name }}) does not match"
             exit 1
