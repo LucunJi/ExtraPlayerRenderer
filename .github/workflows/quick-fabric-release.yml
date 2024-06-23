@@ -16,10 +16,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Check Version
+      - name: Setup Gradlew
         run: |
           chmod +x ./gradlew
-          ./gradlew configureLaunch  # setup dependencies required for properties task
+          ./gradlew configureLaunch
+      - name: Check Version
+        run: |
           __version="$(./gradlew -q properties --property version | grep version: | sed -r 's/version:\s*//')"
           if [ "$__version" == "${{ github.ref_name }}" ]
           then
