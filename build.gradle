@@ -19,7 +19,7 @@ group = project.maven_group + "." + modSpec.id
 repositories {
     maven { url 'https://masa.dy.fi/maven' }
     maven { url 'https://api.modrinth.com/maven' }
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.isxander.dev/releases' }
 }
 
 dependencies {
@@ -29,8 +29,9 @@ dependencies {
 
     //Fabric api
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//    modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.malilib_minecraft_version}:${project.malilib_version}"
-    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
+//    include(modApi(fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)))
+//    include(modApi(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version)))
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
     modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
 }
 

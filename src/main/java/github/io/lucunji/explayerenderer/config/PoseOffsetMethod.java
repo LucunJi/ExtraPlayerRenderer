@@ -1,40 +1,20 @@
 package github.io.lucunji.explayerenderer.config;
 
-import com.google.common.base.CaseFormat;
-import fi.dy.masa.malilib.config.IConfigOptionListEntry;
-import fi.dy.masa.malilib.util.StringUtils;
+import dev.isxander.yacl3.api.NameableEnum;
 import github.io.lucunji.explayerenderer.Main;
+import net.minecraft.text.Text;
 
-public enum PoseOffsetMethod implements IConfigOptionListEntry {
+public enum PoseOffsetMethod implements NameableEnum {
     AUTO, MANUAL, FORCE_STANDING, DISABLED;
 
     public final String nameKey;
 
     PoseOffsetMethod() {
-        this.nameKey = Utils.getConfigOptionI18nNameKey(Main.MOD_ID, Configs.POSE_OFFSET_METHOD_KEY,
-                CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_UNDERSCORE, this.toString()));
-    }
-
-
-    @Override
-    public String getStringValue() {
-        return this.toString();
+        this.nameKey = "yacl3.config." + Main.MOD_ID + ":config.poseOffsetMethod." + this.name();
     }
 
     @Override
-    public String getDisplayName() {
-        return StringUtils.translate(nameKey);
-    }
-
-    @Override
-    public IConfigOptionListEntry cycle(boolean forward) {
-        IConfigOptionListEntry[] values = PoseOffsetMethod.values();
-        return forward ? values[(this.ordinal() + 1) % values.length]
-                : values[(this.ordinal() + values.length - 1) % values.length];
-    }
-
-    @Override
-    public IConfigOptionListEntry fromString(String value) {
-        return PoseOffsetMethod.valueOf(value);
+    public Text getDisplayName() {
+        return Text.translatable(this.nameKey);
     }
 }
