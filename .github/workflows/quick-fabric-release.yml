@@ -6,7 +6,31 @@ on:
 env:
   JAVA_VERSION: 21 # must be the same as the version used in build.gradle
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: Check Version
+        run: |
+          chmod +x ./gradlew
+          ./gradlew configureLaunch  # setup dependencies required for properties task
+          __version="$(./gradlew -q properties --property version | grep version: | sed -r 's/version:\s*//')"
+          if [ "$__version" == "${{ github.ref_name }}" ]
+          then
+            echo "OK: version and tag matches"
+          else
+            echo "ERR: version ${__version} and tag (${{ github.ref_name }}) does not match"
+            exit 1
+          fi
+
   build-release:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

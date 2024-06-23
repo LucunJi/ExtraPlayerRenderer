@@ -7,6 +7,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(ControllerWidget.class)
 public interface ControllerWidgetAccessor {
-    @Accessor
+    @Accessor(remap = false)
     YACLScreen getScreen();
 }

@@ -19,18 +19,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(YACLScreen.class)
 public abstract class YACLScreenMixin extends Screen {
-    @Shadow
+    @Shadow(remap = false)
     public abstract boolean pendingChanges();
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public YetAnotherConfigLib config;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public TabManager tabManager;
 
-    @Shadow private boolean pendingChanges;
+    @Shadow(remap = false) private boolean pendingChanges;
 
     protected YACLScreenMixin(Text title) {
         super(title);
