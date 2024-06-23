@@ -7,7 +7,7 @@ import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.config.PoseOffsetMethod;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
 import github.io.lucunji.explayerenderer.mixin.EntityMixin;
-import github.io.lucunji.explayerenderer.mixin.LivingEntityMixin;
+import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -38,10 +38,10 @@ public class PlayerHUDRenderer {
             new DataBackupEntry<LivingEntity, Boolean>(Entity::isInSneakingPose, (e, flag) -> {
                 if (e instanceof ClientPlayerEntity) ((ClientPlayerEntityAccessor) e).setInSneakingPose(flag);
             }),
-            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLeaningPitch(pitch)),
-            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityMixin) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityMixin) e).setLastLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLeaningPitch(pitch)),
+            new DataBackupEntry<LivingEntity, Float>(e -> ((LivingEntityAccessor) e).getLastLeaningPitch(), (e, pitch) -> ((LivingEntityAccessor) e).setLastLeaningPitch(pitch)),
             new DataBackupEntry<LivingEntity, Boolean>(LivingEntity::isFallFlying, (e, flag) -> ((EntityMixin) e).callSetFlag(7, flag)),
-            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFallFlyingTicks, (e, ticks) -> ((LivingEntityMixin) e).setFallFlyingTicks(ticks)),
+            new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFallFlyingTicks, (e, ticks) -> ((LivingEntityAccessor) e).setFallFlyingTicks(ticks)),
 
             new DataBackupEntry<LivingEntity, Entity>(LivingEntity::getVehicle, (e, vehicle) -> ((EntityMixin) e).setVehicle(vehicle)),
 
@@ -169,11 +169,11 @@ public class PlayerHUDRenderer {
             }
             ((EntityMixin) targetEntity).setVehicle(null);
 
-            ((LivingEntityMixin) targetEntity).setLeaningPitch(0);
-            ((LivingEntityMixin) targetEntity).setLastLeaningPitch(0);
+            ((LivingEntityAccessor) targetEntity).setLeaningPitch(0);
+            ((LivingEntityAccessor) targetEntity).setLastLeaningPitch(0);
 
             ((EntityMixin) targetEntity).callSetFlag(7, false);
-            ((LivingEntityMixin) targetEntity).setFallFlyingTicks(0);
+            ((LivingEntityAccessor) targetEntity).setFallFlyingTicks(0);
         }
 
         // FIXME: NEVERFIX - glitch when the mouse moves too fast, caused by lerping a warped value, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead

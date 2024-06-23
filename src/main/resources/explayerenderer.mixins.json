@@ -8,7 +8,10 @@
     "ClientPlayerEntityAccessor",
     "EntityMixin",
     "InGameHudMixin",
-    "LivingEntityMixin"
+    "LivingEntityAccessor",
+    "yacl.YACLScreenMixin",
+    "yacl.AbstractWidgetMixin",
+    "yacl.ControllerWidgetAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
