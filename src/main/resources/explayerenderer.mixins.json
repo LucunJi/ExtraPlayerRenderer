@@ -12,6 +12,7 @@
         "yacl.ControllerWidgetMixin",
         "yacl.PressableWidgetMixin",
         "yacl.ScreenMixin",
+        "yacl.TextFieldWidgetMixin",
         "yacl.YACLScreenMixin"
     ],
     "injectors": {
