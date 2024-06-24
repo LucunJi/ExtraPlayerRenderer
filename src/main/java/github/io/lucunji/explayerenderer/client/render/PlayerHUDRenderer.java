@@ -28,6 +28,8 @@ import org.joml.*;
 import java.lang.Math;
 import java.util.List;
 
+import static github.io.lucunji.explayerenderer.Main.CONFIGS;
+
 
 public class PlayerHUDRenderer {
     private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -62,10 +64,9 @@ public class PlayerHUDRenderer {
      * Mimics the code in {@link InventoryScreen#drawEntity}
      */
     public void render(float partialTicks) {
-        Configs configs = Configs.getInstance();
-        if (client.world == null || client.player == null || !configs.enabled) return;
-        LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(configs.playerName)).findFirst().orElse(client.player);
-        if (configs.spectatorAutoSwitch && client.player.isSpectator()) {
+        if (client.world == null || client.player == null || !CONFIGS.enabled.getValue()) return;
+        LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(CONFIGS.playerName.getValue())).findFirst().orElse(client.player);
+        if (CONFIGS.spectatorAutoSwitch.getValue() && client.player.isSpectator()) {
             Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity instanceof LivingEntity) {
                 targetEntity = (LivingEntity) cameraEntity;
@@ -76,7 +77,7 @@ public class PlayerHUDRenderer {
 
         int scaledWidth = client.getWindow().getScaledWidth();
         int scaledHeight = client.getWindow().getScaledHeight();
-        Configs.PoseOffsetMethod poseOffsetMethod = configs.poseOffsetMethod;
+        Configs.PoseOffsetMethod poseOffsetMethod = CONFIGS.poseOffsetMethod.getValue();
 
         var backup = new DataBackup<>(targetEntity, LIVINGENTITY_BACKUP_ENTRIES);
         backup.save();
@@ -84,7 +85,7 @@ public class PlayerHUDRenderer {
         transformEntity(targetEntity, partialTicks, poseOffsetMethod == Configs.PoseOffsetMethod.FORCE_STANDING);
 
         DataBackup<LivingEntity> vehicleBackup = null;
-        if (configs.renderVehicle && poseOffsetMethod != Configs.PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
+        if (CONFIGS.renderVehicle.getValue() && poseOffsetMethod != Configs.PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
             var vehicle = targetEntity.getVehicle();
             assert vehicle != null;
 
@@ -99,24 +100,24 @@ public class PlayerHUDRenderer {
             }
 
             performRendering(vehicle,
-                    configs.offsetX * scaledWidth,
-                    configs.offsetY * scaledHeight,
-                    configs.size * scaledHeight,
-                    configs.mirrored,
+                    CONFIGS.offsetX.getValue() * scaledWidth,
+                    CONFIGS.offsetY.getValue() * scaledHeight,
+                    CONFIGS.size.getValue() * scaledHeight,
+                    CONFIGS.mirrored.getValue(),
                     vehicle.getLerpedPos(partialTicks).subtract(targetEntity.getLerpedPos(partialTicks))
                             .rotateY((float)Math.toRadians(yawLerped)).toVector3f(), // undo the rotation
-                    configs.lightDegree,
+                    CONFIGS.lightDegree.getValue(),
                     partialTicks);
         }
 
 
         performRendering(targetEntity,
-                configs.offsetX * scaledWidth,
-                configs.offsetY * scaledHeight,
-                configs.size * scaledHeight,
-                configs.mirrored,
+                CONFIGS.offsetX.getValue() * scaledWidth,
+                CONFIGS.offsetY.getValue() * scaledHeight,
+                CONFIGS.size.getValue() * scaledHeight,
+                CONFIGS.mirrored.getValue(),
                 new Vector3f(0, (float) getPoseOffsetY(targetEntity, partialTicks, poseOffsetMethod), 0),
-                configs.lightDegree,
+                CONFIGS.lightDegree.getValue(),
                 partialTicks);
 
         if (vehicleBackup != null) vehicleBackup.restore();
@@ -125,7 +126,6 @@ public class PlayerHUDRenderer {
     }
 
     private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, Configs.PoseOffsetMethod poseOffsetMethod) {
-        Configs configs = Configs.getInstance();
         if (poseOffsetMethod == Configs.PoseOffsetMethod.AUTO) {
             final float defaultPlayerEyeHeight = PlayerEntity.DEFAULT_EYE_HEIGHT;
             final float defaultPlayerSwimmingBBHeight = PlayerEntity.field_30650;
@@ -143,20 +143,19 @@ public class PlayerHUDRenderer {
             }
         } else if (poseOffsetMethod == Configs.PoseOffsetMethod.MANUAL) {
             if (targetEntity.isFallFlying()) {
-                return configs.elytraOffsetY * getFallFlyingLeaning(targetEntity, partialTicks);
+                return CONFIGS.elytraOffsetY.getValue() * getFallFlyingLeaning(targetEntity, partialTicks);
             } else if ((targetEntity.isInSwimmingPose()) && targetEntity.getLeaningPitch(partialTicks) > 0 || targetEntity.isUsingRiptide()) { // require nonzero leaning to filter out glitch
-                return configs.swimCrawlOffsetY;
+                return CONFIGS.swimCrawlOffsetY.getValue();
             } else if (!targetEntity.isInSwimmingPose() && targetEntity.getLeaningPitch(partialTicks) > 0) { // for swimming/crawling pose, only smooth the falling edge
-                return configs.swimCrawlOffsetY * targetEntity.getLeaningPitch(partialTicks);
+                return CONFIGS.swimCrawlOffsetY.getValue() * targetEntity.getLeaningPitch(partialTicks);
             } else if (targetEntity.isInSneakingPose()) {
-                return configs.sneakOffsetY;
+                return CONFIGS.sneakOffsetY.getValue();
             }
         }
         return 0;
     }
 
     private void transformEntity(LivingEntity targetEntity, float partialTicks, boolean forceStanding) {
-        Configs configs = Configs.getInstance();
         // synchronize values to remove glitch
         if (!targetEntity.isSwimming() && !targetEntity.isFallFlying() && !targetEntity.isCrawling()) {
             targetEntity.setPose(targetEntity.isInSneakingPose() ? EntityPose.CROUCHING : EntityPose.STANDING);
@@ -177,25 +176,25 @@ public class PlayerHUDRenderer {
 
         // FIXME: NEVERFIX - glitch when the mouse moves too fast, caused by lerping a warped value, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
-        float headClamp = (float) MathHelper.clamp(headLerp, configs.headYawMin, configs.headYawMax);
+        float headClamp = (float) MathHelper.clamp(headLerp, CONFIGS.headYawMin.getValue(), CONFIGS.headYawMax.getValue());
         float bodyLerp = MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw);
         float diff = headLerp - bodyLerp;
 
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - headClamp;
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.wrapDegrees(headClamp - diff), configs.bodyYawMin, configs.bodyYawMax);
+                MathHelper.wrapDegrees(headClamp - diff), CONFIGS.bodyYawMin.getValue(), CONFIGS.bodyYawMax.getValue());
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                 MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
-                configs.pitchMin, configs.pitchMax)
-                + configs.pitchOffset)
+                CONFIGS.pitchMin.getValue(), CONFIGS.pitchMax.getValue())
+                + CONFIGS.pitchOffset.getValue())
         );
 
-        if (!configs.swingHands) {
+        if (!CONFIGS.swingHands.getValue()) {
             targetEntity.handSwingProgress = 0;
             targetEntity.lastHandSwingProgress = 0;
         }
 
-        if (!configs.hurtFlash) {
+        if (!CONFIGS.hurtFlash.getValue()) {
             targetEntity.hurtTime = 0;
         }
 
@@ -206,7 +205,6 @@ public class PlayerHUDRenderer {
     @SuppressWarnings("deprecation")
     private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
                                   Vector3f offset, double lightDegree, float partialTicks) {
-        Configs configs = Configs.getInstance();
         EntityRenderDispatcher entityRenderDispatcher = client.getEntityRenderDispatcher();
 
         Matrix4fStack matrixStack1 = RenderSystem.getModelViewStack();
@@ -224,14 +222,14 @@ public class PlayerHUDRenderer {
         matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.PI);
         Quaternionf quaternion2 = new Quaternionf()
-                .rotateXYZ((float) Math.toRadians(configs.rotationX),
-                        (float) Math.toRadians(configs.rotationY),
+                .rotateXYZ((float) Math.toRadians(CONFIGS.rotationX.getValue()),
+                        (float) Math.toRadians(CONFIGS.rotationY.getValue()),
                         0);
 
         if (targetEntity instanceof BoatEntity)
             quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(180));
 
-        quaternion2.rotateZ((float) Math.toRadians(configs.rotationZ));
+        quaternion2.rotateZ((float) Math.toRadians(CONFIGS.rotationZ.getValue()));
 
         quaternion.mul(quaternion2);
         matrixStack2.multiply(quaternion);
@@ -263,12 +261,11 @@ public class PlayerHUDRenderer {
     }
 
     private static int getLight(Entity entity, float tickDelta) {
-        Configs configs = Configs.getInstance();
-        if (configs.useWorldLight) {
+        if (CONFIGS.useWorldLight.getValue()) {
             World world = entity.getWorld();
             int blockLight = world.getLightLevel(LightType.BLOCK, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
             int skyLight = world.getLightLevel(LightType.SKY, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));
-            int min = configs.worldLightMin;
+            int min = CONFIGS.worldLightMin.getValue();
             blockLight = MathHelper.clamp(blockLight, min, 15);
             skyLight = MathHelper.clamp(skyLight, min, 15);
             return LightmapTextureManager.pack(blockLight, skyLight);

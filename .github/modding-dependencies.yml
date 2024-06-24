@@ -23,15 +23,6 @@
     fabric_version:
       source: version
 
-# YACL
-- repository: https://maven.isxander.dev/releases
-  groupId: dev.isxander
-  artifactId: yet-another-config-lib
-  version: "*+${mcVersion}-fabric"
-  properties:
-    yacl_version:
-      source: version
-
 # Mod Menu
 - repository: https://api.modrinth.com/maven
   groupId: maven.modrinth

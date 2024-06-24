@@ -19,7 +19,6 @@ group = project.maven_group + "." + modSpec.id
 repositories {
     maven { url 'https://masa.dy.fi/maven' }
     maven { url 'https://api.modrinth.com/maven' }
-    maven { url 'https://maven.isxander.dev/releases' }
 }
 
 dependencies {
@@ -31,7 +30,6 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 //    include(modApi(fabricApi.module("fabric-lifecycle-events-v1", project.fabric_version)))
 //    include(modApi(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version)))
-    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
     modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
 }
 
@@ -48,6 +46,11 @@ tasks.withType(JavaCompile) {
 
     // Minecraft 1.18 upwards uses Java 17.
     it.options.release = 21
+}
+
+// https://stackoverflow.com/questions/61849514/how-to-set-the-use-enable-preview-compile-and-run-flags-from-gradle
+tasks.withType(JavaCompile).all {
+    options.compilerArgs += ['--enable-preview']
 }
 
 java {

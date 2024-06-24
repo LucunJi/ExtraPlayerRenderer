@@ -39,17 +39,9 @@
   "depends": {
     "fabricloader": ">=0.15.11",
     "minecraft": "~1.21",
-    "fabric-api": ">=0.100.3",
-    "yet_another_config_lib_v3": "^3.5.0"
+    "fabric-api": ">=0.100.3"
   },
   "suggests": {
     "modmenu": "*"
-  },
-  "custom": {
-    "mc-publish": {
-      "dependencies": [
-        "yet_another_config_lib_v3(required){modrinth:1eAoo2KR}{curseforge:667299}#(ignore:github)"
-      ]
-    }
   }
 }

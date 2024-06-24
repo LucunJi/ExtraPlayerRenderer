@@ -1,4 +1,7 @@
 {
+  "config.explayerenderer.on": "开",
+  "config.explayerenderer.off": "关",
+
   "key.explayerenderer.category": "额外玩家渲染",
   "key.explayerenderer.openMenu": "打开设置面板",
 

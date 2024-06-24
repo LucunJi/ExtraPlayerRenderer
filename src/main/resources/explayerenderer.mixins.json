@@ -9,12 +9,10 @@
         "EntityMixin",
         "InGameHudMixin",
         "LivingEntityAccessor",
-        "yacl.ControllerWidgetMixin",
-        "yacl.PressableWidgetMixin",
-        "yacl.ScreenMixin",
-        "yacl.TextFieldWidgetMixin",
-        "yacl.patch.OptionImplMixin",
-        "yacl.patch.YACLScreenMixin"
+        "retexture.EntryListWidgetMixin",
+        "retexture.PressableWidgetMixin",
+        "retexture.SliderWidgetMixin",
+        "retexture.TextFieldWidgetMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -1,7 +1,7 @@
 package github.io.lucunji.explayerenderer.mixin;
 
 import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
-import github.io.lucunji.explayerenderer.config.Configs;
+import github.io.lucunji.explayerenderer.config.ConfigScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -25,7 +25,7 @@ public class InGameHudMixin {
     @Inject(method = "render", at = @At("RETURN"))
     void onRenderFinish(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (this.client.skipGameRender || this.client.options.hudHidden
-                || (this.client.currentScreen != null && !Configs.isConfigScreen(client.currentScreen)))
+                || !(this.client.currentScreen == null || this.client.currentScreen instanceof ConfigScreen))
             return;
         playerHUDRenderer.render(client.getRenderTickCounter().getTickDelta(true));
     }
