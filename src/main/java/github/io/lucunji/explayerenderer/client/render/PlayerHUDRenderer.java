@@ -213,12 +213,13 @@ public class PlayerHUDRenderer {
         matrixStack1.pushMatrix();
         matrixStack1.translate(0, 0, 550.0f);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
-        matrixStack1.rotateY((float) Math.toRadians(lightDegree));
+        // IDK what shit Mojang made but let's add 180 deg to restore the old behavior
+        matrixStack1.rotateY((float) Math.toRadians(lightDegree + 180));
 
         RenderSystem.applyModelViewMatrix();
 
         MatrixStack matrixStack2 = new MatrixStack();
-        matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree));
+        matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree - 180));
         matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
         matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.PI);

@@ -24,7 +24,8 @@ public class InGameHudMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     void onRenderFinish(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        if (this.client.skipGameRender || (this.client.currentScreen != null && !Configs.isConfigScreen(client.currentScreen)))
+        if (this.client.skipGameRender || this.client.options.hudHidden
+                || (this.client.currentScreen != null && !Configs.isConfigScreen(client.currentScreen)))
             return;
         playerHUDRenderer.render(client.getRenderTickCounter().getTickDelta(true));
     }

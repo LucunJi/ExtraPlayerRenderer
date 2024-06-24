@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "explayerenderer",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
 
   "name": "ExtraPlayerRenderer",
   "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
@@ -44,5 +44,12 @@
   },
   "suggests": {
     "modmenu": "*"
+  },
+  "custom": {
+    "mc-publish": {
+      "dependencies": [
+        "yet_another_config_lib_v3(required){modrinth:1eAoo2KR}{curseforge:667299}#(ignore:github)"
+      ]
+    }
   }
 }

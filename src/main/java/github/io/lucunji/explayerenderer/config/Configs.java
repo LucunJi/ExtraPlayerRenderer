@@ -137,7 +137,7 @@ public class Configs {
     @Boolean
     public boolean swingHands = true;
     @SerialEntry
-    @AutoGen(category = "rotations")
+    @AutoGen(category = "details")
     @DoubleSlider(min = -180, max = 180, step = 0.1)
     public double lightDegree = 0;
     @SerialEntry
@@ -145,7 +145,7 @@ public class Configs {
     @Boolean
     public boolean useWorldLight = true;
     @SerialEntry
-    @AutoGen(category = "rotations")
+    @AutoGen(category = "details")
     @IntSlider(min = 0, max = 15, step = 1)
     public int worldLightMin = 2;
     @SerialEntry
