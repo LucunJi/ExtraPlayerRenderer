@@ -15,6 +15,8 @@ public class Main implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        Configs.load();
+
         var configKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key." + MOD_ID + ".openMenu",
                 InputUtil.Type.KEYSYM,

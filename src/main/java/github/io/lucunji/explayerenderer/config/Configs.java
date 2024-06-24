@@ -22,6 +22,10 @@ public class Configs {
                     .build())
             .build();
 
+    public static boolean load() {
+        return HANDLER.load();
+    }
+
     public static Configs getInstance() {
         return HANDLER.instance();
     }
