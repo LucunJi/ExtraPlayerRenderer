@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
 import github.io.lucunji.explayerenderer.config.Configs;
-import github.io.lucunji.explayerenderer.config.PoseOffsetMethod;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
 import github.io.lucunji.explayerenderer.mixin.EntityMixin;
 import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
@@ -63,7 +62,7 @@ public class PlayerHUDRenderer {
      * Mimics the code in {@link InventoryScreen#drawEntity}
      */
     public void render(float partialTicks) {
-        Configs configs = Configs.HANDLER.instance();
+        Configs configs = Configs.getInstance();
         if (client.world == null || client.player == null || !configs.enabled) return;
         LivingEntity targetEntity = client.world.getPlayers().stream().filter(p -> p.getName().getString().equals(configs.playerName)).findFirst().orElse(client.player);
         if (configs.spectatorAutoSwitch && client.player.isSpectator()) {
@@ -77,15 +76,15 @@ public class PlayerHUDRenderer {
 
         int scaledWidth = client.getWindow().getScaledWidth();
         int scaledHeight = client.getWindow().getScaledHeight();
-        PoseOffsetMethod poseOffsetMethod = configs.poseOffsetMethod;
+        Configs.PoseOffsetMethod poseOffsetMethod = configs.poseOffsetMethod;
 
         var backup = new DataBackup<>(targetEntity, LIVINGENTITY_BACKUP_ENTRIES);
         backup.save();
 
-        transformEntity(targetEntity, partialTicks, poseOffsetMethod == PoseOffsetMethod.FORCE_STANDING);
+        transformEntity(targetEntity, partialTicks, poseOffsetMethod == Configs.PoseOffsetMethod.FORCE_STANDING);
 
         DataBackup<LivingEntity> vehicleBackup = null;
-        if (configs.renderVehicle && poseOffsetMethod != PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
+        if (configs.renderVehicle && poseOffsetMethod != Configs.PoseOffsetMethod.FORCE_STANDING && targetEntity.hasVehicle()) {
             var vehicle = targetEntity.getVehicle();
             assert vehicle != null;
 
@@ -125,9 +124,9 @@ public class PlayerHUDRenderer {
         backup.restore();
     }
 
-    private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, PoseOffsetMethod poseOffsetMethod) {
-        Configs configs = Configs.HANDLER.instance();
-        if (poseOffsetMethod == PoseOffsetMethod.AUTO) {
+    private double getPoseOffsetY(LivingEntity targetEntity, float partialTicks, Configs.PoseOffsetMethod poseOffsetMethod) {
+        Configs configs = Configs.getInstance();
+        if (poseOffsetMethod == Configs.PoseOffsetMethod.AUTO) {
             final float defaultPlayerEyeHeight = PlayerEntity.DEFAULT_EYE_HEIGHT;
             final float defaultPlayerSwimmingBBHeight = PlayerEntity.field_30650;
             final float eyeHeightRatio = 0.85f;
@@ -142,7 +141,7 @@ public class PlayerHUDRenderer {
             } else {
                 return PlayerEntity.DEFAULT_EYE_HEIGHT - targetEntity.getStandingEyeHeight();
             }
-        } else if (poseOffsetMethod == PoseOffsetMethod.MANUAL) {
+        } else if (poseOffsetMethod == Configs.PoseOffsetMethod.MANUAL) {
             if (targetEntity.isFallFlying()) {
                 return configs.elytraOffsetY * getFallFlyingLeaning(targetEntity, partialTicks);
             } else if ((targetEntity.isInSwimmingPose()) && targetEntity.getLeaningPitch(partialTicks) > 0 || targetEntity.isUsingRiptide()) { // require nonzero leaning to filter out glitch
@@ -157,7 +156,7 @@ public class PlayerHUDRenderer {
     }
 
     private void transformEntity(LivingEntity targetEntity, float partialTicks, boolean forceStanding) {
-        Configs configs = Configs.HANDLER.instance();
+        Configs configs = Configs.getInstance();
         // synchronize values to remove glitch
         if (!targetEntity.isSwimming() && !targetEntity.isFallFlying() && !targetEntity.isCrawling()) {
             targetEntity.setPose(targetEntity.isInSneakingPose() ? EntityPose.CROUCHING : EntityPose.STANDING);
@@ -207,7 +206,7 @@ public class PlayerHUDRenderer {
     @SuppressWarnings("deprecation")
     private void performRendering(Entity targetEntity, double posX, double posY, double size, boolean mirror,
                                   Vector3f offset, double lightDegree, float partialTicks) {
-        Configs configs = Configs.HANDLER.instance();
+        Configs configs = Configs.getInstance();
         EntityRenderDispatcher entityRenderDispatcher = client.getEntityRenderDispatcher();
 
         Matrix4fStack matrixStack1 = RenderSystem.getModelViewStack();
@@ -263,7 +262,7 @@ public class PlayerHUDRenderer {
     }
 
     private static int getLight(Entity entity, float tickDelta) {
-        Configs configs = Configs.HANDLER.instance();
+        Configs configs = Configs.getInstance();
         if (configs.useWorldLight) {
             World world = entity.getWorld();
             int blockLight = world.getLightLevel(LightType.BLOCK, BlockPos.ofFloored(entity.getCameraPosVec(tickDelta)));

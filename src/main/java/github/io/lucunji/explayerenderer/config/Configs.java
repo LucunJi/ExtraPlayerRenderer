@@ -1,5 +1,8 @@
 package github.io.lucunji.explayerenderer.config;
 
+import dev.isxander.yacl3.api.NameableEnum;
+import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.utils.OptionUtils;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.autogen.*;
@@ -12,12 +15,22 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class Configs {
-    public static ConfigClassHandler<Configs> HANDLER = ConfigClassHandler.createBuilder(Configs.class)
+    private static final ConfigClassHandler<Configs> HANDLER = ConfigClassHandler.createBuilder(Configs.class)
             .id(Identifier.of(Main.MOD_ID, "config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve(Main.MOD_ID + "_yacl.json"))
                     .build())
             .build();
+
+    public static Configs getInstance() {
+        return HANDLER.instance();
+    }
+
+    public static Screen genGui(Screen parent) {
+        YetAnotherConfigLib yacl = HANDLER.generateGui();
+        OptionUtils.forEachOptions(yacl, option -> option.addListener((o, p) -> o.applyValue()));
+        return yacl.generateScreen(parent);
+    }
 
     public static boolean isConfigScreen(Screen screen) {
         return screen != null && screen.getTitle() != null && screen.getTitle().equals(Text.translatable("yacl3.config." + Main.MOD_ID + ":config.title"));
@@ -135,4 +148,19 @@ public class Configs {
     @AutoGen(category = "details")
     @Boolean
     public boolean renderVehicle = true;
+
+    public enum PoseOffsetMethod implements NameableEnum {
+        AUTO, MANUAL, FORCE_STANDING, DISABLED;
+
+        public final String nameKey;
+
+        PoseOffsetMethod() {
+            this.nameKey = "yacl3.config." + Main.MOD_ID + ":config.poseOffsetMethod." + this.name();
+        }
+
+        @Override
+        public Text getDisplayName() {
+            return Text.translatable(this.nameKey);
+        }
+    }
 }

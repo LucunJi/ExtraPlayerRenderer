@@ -13,7 +13,8 @@
         "yacl.PressableWidgetMixin",
         "yacl.ScreenMixin",
         "yacl.TextFieldWidgetMixin",
-        "yacl.YACLScreenMixin"
+        "yacl.patch.OptionImplMixin",
+        "yacl.patch.YACLScreenMixin"
     ],
     "injectors": {
         "defaultRequire": 1

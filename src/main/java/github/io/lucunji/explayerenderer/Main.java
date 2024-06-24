@@ -22,7 +22,7 @@ public class Main implements ClientModInitializer {
                 "key." + MOD_ID + ".category"));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (configKey.wasPressed()) {
-                client.setScreen(Configs.HANDLER.generateGui().generateScreen(client.currentScreen));
+                client.setScreen(Configs.genGui(client.currentScreen));
             }
         });
     }

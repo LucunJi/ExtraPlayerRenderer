@@ -7,6 +7,6 @@ import github.io.lucunji.explayerenderer.config.Configs;
 public class ModMenuApiImpl implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return screen -> Configs.HANDLER.generateGui().generateScreen(screen);
+        return Configs::genGui;
     }
 }
