@@ -37,12 +37,6 @@ public class Main implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         Main.CONFIG_PERSISTENCE.load(Main.CONFIGS.getOptions());
-
-        var configKey = KeyBindingHelper.registerKeyBinding(CONFIG_KEY);
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (configKey.wasPressed()) {
-                client.setScreen(new ConfigScreen(client.currentScreen, Main.CONFIGS.getOptions()));
-            }
-        });
+        KeyBindingHelper.registerKeyBinding(CONFIG_KEY);
     }
 }

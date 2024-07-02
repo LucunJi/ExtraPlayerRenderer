@@ -9,6 +9,7 @@
         "EntityMixin",
         "InGameHudMixin",
         "LivingEntityAccessor",
+        "MinecraftClientMixin",
         "retexture.EntryListWidgetMixin",
         "retexture.PressableWidgetMixin",
         "retexture.SliderWidgetMixin",
