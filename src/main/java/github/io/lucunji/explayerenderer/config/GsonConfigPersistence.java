@@ -124,7 +124,7 @@ public class GsonConfigPersistence implements ConfigPersistence {
     private Map<Identifier, Map<Identifier, ConfigOption<?>>> categorize(List<? extends ConfigOption<?>> options) {
         var categories = new LinkedHashMap<Identifier, Map<Identifier, ConfigOption<?>>>();
         for (ConfigOption<?> option : options)
-            categories.computeIfAbsent(option.getCategory(), _ -> new LinkedHashMap<>()).put(option.getId(), option);
+            categories.computeIfAbsent(option.getCategory(), k -> new LinkedHashMap<>()).put(option.getId(), option);
         return categories;
     }
 }

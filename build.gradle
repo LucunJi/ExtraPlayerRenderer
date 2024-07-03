@@ -44,13 +44,8 @@ processResources {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 
-    // Minecraft 1.18 upwards uses Java 17.
+    // Minecraft 1.18 upwards uses Java 17. 1.20.5 upwards uses Java 21
     it.options.release = 21
-}
-
-// https://stackoverflow.com/questions/61849514/how-to-set-the-use-enable-preview-compile-and-run-flags-from-gradle
-tasks.withType(JavaCompile).all {
-    options.compilerArgs += ['--enable-preview']
 }
 
 java {

@@ -55,7 +55,7 @@ public class ConfigWidgetRegistry {
     }
 
     private static <T> ButtonWidget getResetButton(ConfigOption<T> option, ConfigValueUpdater<T> setter) {
-        var reset = new ConfigButton(RESET_BUTTON_WIDTH, WIDGET_HEIGHT, Text.translatable(RESET_LANGKEY), _ -> setter.setValue(option.getDefaultValue()));
+        var reset = new ConfigButton(RESET_BUTTON_WIDTH, WIDGET_HEIGHT, Text.translatable(RESET_LANGKEY), self -> setter.setValue(option.getDefaultValue()));
         reset.active = !option.isValueDefault();
         return reset;
     }
@@ -80,7 +80,7 @@ public class ConfigWidgetRegistry {
                 WIDGET_WIDTH, WIDGET_HEIGHT,
                 (option.getValue() - option.getMin()) / (option.getMax() - option.getMin()),
                 val -> setter.setValue(MathHelper.lerp(val, option.getMin(), option.getMax())),
-                _ -> Text.of("%.2f".formatted(option.getValue())));
+                val -> Text.of("%.2f".formatted(option.getValue())));
         var reset = getResetButton(option, setter);
         setter.setUpdateHandler(val -> {
             option.setValue(val);
@@ -97,7 +97,7 @@ public class ConfigWidgetRegistry {
                 WIDGET_WIDTH, WIDGET_HEIGHT,
                 (option.getValue() - option.getMin()) / steps,
                 val -> setter.setValue((int) Math.round(val * steps) + option.getMin()),
-                _ -> Text.of(Integer.toString(option.getValue())));
+                val -> Text.of(Integer.toString(option.getValue())));
         var reset = getResetButton(option, setter);
         setter.setUpdateHandler(val -> {
             option.setValue(val);
@@ -112,7 +112,7 @@ public class ConfigWidgetRegistry {
         var btn = new ConfigButton(
                 WIDGET_WIDTH, WIDGET_HEIGHT,
                 Text.translatable(option.getValue() ? ON_LANGKEY : OFF_LANGKEY),
-                _ -> setter.setValue(!option.getValue()));
+                self -> setter.setValue(!option.getValue()));
         var reset = getResetButton(option, setter);
         setter.setUpdateHandler(val -> {
             option.setValue(val);
@@ -132,7 +132,7 @@ public class ConfigWidgetRegistry {
         var btn = new ConfigButton(
                 WIDGET_WIDTH, WIDGET_HEIGHT,
                 translations[option.getValue().ordinal()],
-                _ -> setter.setValue(values[(option.getValue().ordinal() + 1) % values.length]));
+                self -> setter.setValue(values[(option.getValue().ordinal() + 1) % values.length]));
         var reset = getResetButton(option, setter);
         setter.setUpdateHandler(val -> {
             option.setValue(val);
