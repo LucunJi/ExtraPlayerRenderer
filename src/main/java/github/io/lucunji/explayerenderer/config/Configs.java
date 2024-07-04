@@ -69,6 +69,7 @@ public class Configs {
     public final SimpleOption<Boolean> useWorldLight = new SimpleOption<>(DETAILS_CATEGORY, id("use_world_light"), true);
     public final SimpleNumericOption<Integer> worldLightMin = new SimpleNumericOption<>(DETAILS_CATEGORY, id("world_light_min"), 2, 0, 15);
     public final SimpleOption<Boolean> renderVehicle = new SimpleOption<>(DETAILS_CATEGORY, id("render_vehicle"), true);
+    public final SimpleOption<Boolean> hideUnderDebug = new SimpleOption<>(DETAILS_CATEGORY, id("hide_under_debug"), true);
 
     public enum PoseOffsetMethod {
         AUTO, MANUAL, FORCE_STANDING, DISABLED;

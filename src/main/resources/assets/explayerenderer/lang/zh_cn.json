@@ -73,11 +73,13 @@
   "config.explayerenderer.option.use_world_light": "使用世界光",
   "config.explayerenderer.option.world_light_min": "最小世界光",
   "config.explayerenderer.option.render_vehicle": "渲染坐骑",
+  "config.explayerenderer.option.hide_under_debug": "调试屏幕下隐藏",
 
   "config.explayerenderer.option.hurt_flash.desc": "玩家受伤时是否有红色闪烁",
   "config.explayerenderer.option.swing_hands.desc": "玩家破坏方块时是否会有手臂挥动效果",
   "config.explayerenderer.option.light_degree.desc": "产生阴影效果的光照角度",
   "config.explayerenderer.option.use_world_light.desc": "是否使用世界中的光照等级来渲染",
   "config.explayerenderer.option.world_light_min.desc": "打开§2使用世界光§r时的亮度下限",
-  "config.explayerenderer.option.render_vehicle.desc": "渲染身下的坐骑，§a姿态修正方法§r为§e强制站立§r时无效"
+  "config.explayerenderer.option.render_vehicle.desc": "渲染身下的坐骑，§a姿态修正方法§r为§e强制站立§r时无效",
+  "config.explayerenderer.option.hide_under_debug.desc": "是否在 F3 打开的调试屏幕下隐藏"
 }

@@ -5,7 +5,10 @@ import github.io.lucunji.explayerenderer.api.config.model.ConfigOption;
 import github.io.lucunji.explayerenderer.api.config.ConfigWidgetRegistry;
 import github.io.lucunji.explayerenderer.api.config.view.ListWidget;
 import github.io.lucunji.explayerenderer.api.config.view.Tab;
+import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tab.TabManager;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -26,6 +29,7 @@ public class ConfigScreen extends Screen {
 
     private final Screen parent;
 
+    private final PlayerHUDRenderer previewHud;
     private final TabManager tabManager;
     private TabNavigationWidget tabNav;
     private final List<ListWidget> listWidgets;
@@ -35,6 +39,7 @@ public class ConfigScreen extends Screen {
     public ConfigScreen(Screen parent, List<? extends ConfigOption<?>> options) {
         super(Text.of("Config Screen"));
         this.parent = parent;
+        this.previewHud = new PlayerHUDRenderer(MinecraftClient.getInstance());
         this.tabManager = new TabManager(this::addDrawableChild, this::remove);
         this.options = options;
         this.listWidgets = new ArrayList<>();
@@ -99,6 +104,16 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void applyBlur(float delta) {}
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (this.client.world != null) {
+            this.previewHud.render(this.client.getRenderTickCounter().getTickDelta(true));
+            // put behind GUI
+            context.getMatrices().translate(0, 0, 200);
+        }
+        super.render(context, mouseX, mouseY, delta);
+    }
 
     @Override
     public boolean shouldPause() {return false;}

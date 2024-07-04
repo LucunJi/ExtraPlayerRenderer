@@ -73,11 +73,13 @@
   "config.explayerenderer.option.use_world_light": "Use World Light",
   "config.explayerenderer.option.world_light_min": "Min World Light",
   "config.explayerenderer.option.render_vehicle": "Render Vehicle",
+  "config.explayerenderer.option.hide_under_debug": "Hide Under Debug Screen",
 
   "config.explayerenderer.option.hurt_flash.desc": "If rendered model turns red when player takes damage.",
   "config.explayerenderer.option.swing_hands.desc": "If the rendered hands swing when trying to break blocks.",
   "config.explayerenderer.option.light_degree.desc": "The degree of light source producing shadow effects.",
   "config.explayerenderer.option.use_world_light.desc": "If use the light level in the world to render.",
   "config.explayerenderer.option.world_light_min.desc": "Minimum brightness when useWorldLight is enabled.",
-  "config.explayerenderer.option.render_vehicle.desc": "Render the vehicle, does not work when §aPosture Offset Method§r is §eForce Standing§r."
+  "config.explayerenderer.option.render_vehicle.desc": "Render the vehicle, does not work when §aPosture Offset Method§r is §eForce Standing§r.",
+  "config.explayerenderer.option.hide_under_debug.desc": "Hide under F3 debug screen"
 }

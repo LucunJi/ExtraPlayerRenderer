@@ -32,7 +32,6 @@ import static github.io.lucunji.explayerenderer.Main.CONFIGS;
 
 
 public class PlayerHUDRenderer {
-    private static final MinecraftClient client = MinecraftClient.getInstance();
     private static final List<DataBackupEntry<LivingEntity, ?>> LIVINGENTITY_BACKUP_ENTRIES = ImmutableList.of(
             new DataBackupEntry<LivingEntity, EntityPose>(LivingEntity::getPose, LivingEntity::setPose),
             // required for player on client side
@@ -59,6 +58,12 @@ public class PlayerHUDRenderer {
             new DataBackupEntry<LivingEntity, Integer>(LivingEntity::getFireTicks, LivingEntity::setFireTicks),
             new DataBackupEntry<LivingEntity, Boolean>(e -> ((EntityMixin) e).callGetFlag(0), (e, flag) -> ((EntityMixin) e).callSetFlag(0, flag)) // on fire
     );
+
+    private final MinecraftClient client;
+
+    public PlayerHUDRenderer(MinecraftClient client) {
+        this.client = client;
+    }
 
     /**
      * Mimics the code in {@link InventoryScreen#drawEntity}
@@ -209,7 +214,6 @@ public class PlayerHUDRenderer {
 
         Matrix4fStack matrixStack1 = RenderSystem.getModelViewStack();
         matrixStack1.pushMatrix();
-        matrixStack1.translate(0, 0, 550.0f);
         matrixStack1.scale(mirror ? -1 : 1, 1, -1);
         // IDK what shit Mojang made but let's add 180 deg to restore the old behavior
         matrixStack1.rotateY((float) Math.toRadians(lightDegree + 180));
@@ -218,7 +222,7 @@ public class PlayerHUDRenderer {
 
         MatrixStack matrixStack2 = new MatrixStack();
         matrixStack2.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-(float) lightDegree - 180));
-        matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 1000.0D);
+        matrixStack2.translate((mirror ? -1 : 1) * posX, posY, 0);
         matrixStack2.scale((float) size, (float) size, (float) size);
         Quaternionf quaternion = new Quaternionf().rotateZ((float) Math.PI);
         Quaternionf quaternion2 = new Quaternionf()
