@@ -1,8 +1,8 @@
-package github.io.lucunji.explayerenderer.client.render;
+package github.io.lucunji.explayerenderer.client.gui.hud;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
-import github.io.lucunji.explayerenderer.client.render.DataBackup.DataBackupEntry;
+import github.io.lucunji.explayerenderer.client.gui.hud.DataBackup.DataBackupEntry;
 import github.io.lucunji.explayerenderer.config.Configs;
 import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
 import github.io.lucunji.explayerenderer.mixin.EntityMixin;
@@ -31,7 +31,7 @@ import java.util.List;
 import static github.io.lucunji.explayerenderer.Main.CONFIGS;
 
 
-public class PlayerHUDRenderer {
+public class ExtraPlayerHud {
     private static final List<DataBackupEntry<LivingEntity, ?>> LIVINGENTITY_BACKUP_ENTRIES = ImmutableList.of(
             new DataBackupEntry<LivingEntity, EntityPose>(LivingEntity::getPose, LivingEntity::setPose),
             // required for player on client side
@@ -61,7 +61,7 @@ public class PlayerHUDRenderer {
 
     private final MinecraftClient client;
 
-    public PlayerHUDRenderer(MinecraftClient client) {
+    public ExtraPlayerHud(MinecraftClient client) {
         this.client = client;
     }
 

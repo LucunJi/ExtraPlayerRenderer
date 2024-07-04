@@ -1,8 +1,8 @@
 package github.io.lucunji.explayerenderer;
 
-import github.io.lucunji.explayerenderer.api.config.ConfigPersistence;
+import github.io.lucunji.explayerenderer.api.config.persistence.ConfigPersistence;
 import github.io.lucunji.explayerenderer.config.Configs;
-import github.io.lucunji.explayerenderer.config.GsonConfigPersistence;
+import github.io.lucunji.explayerenderer.api.config.persistence.GsonConfigPersistence;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 public class Main implements ClientModInitializer {
 
     public static final String MOD_ID = "explayerenderer";
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static final String MOD_NAME = FabricLoader.getInstance().getModContainer(Main.MOD_ID).get().getMetadata().getName();
 
     public static final KeyBinding CONFIG_KEY = new KeyBinding(

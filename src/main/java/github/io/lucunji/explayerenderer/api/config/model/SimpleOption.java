@@ -27,6 +27,7 @@ public class SimpleOption<T> implements ConfigOption<T> {
         this.name = Text.translatable("config.%s.option.%s".formatted(id.getNamespace(), id.getPath()));
         this.description = Text.translatable("config.%s.option.%s.desc".formatted(id.getNamespace(), id.getPath()));
         this.value = this.defaultValue = defaultValue;
+        //noinspection unchecked
         this.type = (Class<T>) defaultValue.getClass();
     }
 

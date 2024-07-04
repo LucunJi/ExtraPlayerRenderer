@@ -13,6 +13,7 @@ public class SimpleNumericOption<T extends Number & Comparable<T>> extends Simpl
     @NotNull
     private final T max;
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static <T extends Number & Comparable<T>> boolean withinRangeInclusive(T value, T minValue, T maxValue) {
         return minValue.compareTo(value) <= 0 && maxValue.compareTo(value) >= 0;
     }

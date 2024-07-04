@@ -5,6 +5,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "UnusedReturnValue"})
 public interface ConfigOption<T> {
     T getDefaultValue();
 

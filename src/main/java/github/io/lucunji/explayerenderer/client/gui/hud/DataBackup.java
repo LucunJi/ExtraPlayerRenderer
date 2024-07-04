@@ -1,4 +1,4 @@
-package github.io.lucunji.explayerenderer.client.render;
+package github.io.lucunji.explayerenderer.client.gui.hud;
 
 
 import it.unimi.dsi.fastutil.objects.*;

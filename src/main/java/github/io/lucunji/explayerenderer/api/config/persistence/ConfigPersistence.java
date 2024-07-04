@@ -1,10 +1,11 @@
-package github.io.lucunji.explayerenderer.api.config;
+package github.io.lucunji.explayerenderer.api.config.persistence;
 
 import github.io.lucunji.explayerenderer.api.config.model.ConfigOption;
 
 import java.nio.file.Path;
 import java.util.List;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface ConfigPersistence {
     Path getPath();
 

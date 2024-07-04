@@ -1,10 +1,9 @@
-package github.io.lucunji.explayerenderer.config;
+package github.io.lucunji.explayerenderer.api.config.persistence;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonToken;
 import github.io.lucunji.explayerenderer.Main;
-import github.io.lucunji.explayerenderer.api.config.ConfigPersistence;
 import github.io.lucunji.explayerenderer.api.config.model.ConfigOption;
 import net.minecraft.util.Identifier;
 
@@ -54,6 +53,7 @@ public class GsonConfigPersistence implements ConfigPersistence {
             }
             writer.endObject();
         } catch (Exception e) {
+            //noinspection StringConcatenationArgumentToLogCall
             Main.LOGGER.error("Failed to save config at " + this.path, e);
             return false;
         }
@@ -115,6 +115,7 @@ public class GsonConfigPersistence implements ConfigPersistence {
 
             reader.endObject();
         } catch (Exception e) {
+            //noinspection StringConcatenationArgumentToLogCall
             Main.LOGGER.error("Failed to load config at " + this.path, e);
             return false;
         }

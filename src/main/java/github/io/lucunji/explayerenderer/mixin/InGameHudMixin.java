@@ -1,6 +1,6 @@
 package github.io.lucunji.explayerenderer.mixin;
 
-import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
+import github.io.lucunji.explayerenderer.client.gui.hud.ExtraPlayerHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -58,14 +58,14 @@ public class InGameHudMixin {
     @Shadow
     private MinecraftClient client;
     @Unique
-    private PlayerHUDRenderer playerHUDRenderer;
+    private ExtraPlayerHud extraPlayerHud;
 
     /**
      * Initialization should go after initialization to prevent using uninitialized fields.
      */
     @Inject(method = "<init>", at = @At("RETURN"))
     public void onInit(MinecraftClient client, CallbackInfo ci) {
-        this.playerHUDRenderer = new PlayerHUDRenderer(this.client);
+        this.extraPlayerHud = new ExtraPlayerHud(this.client);
     }
 
     /**
@@ -86,7 +86,7 @@ public class InGameHudMixin {
         if (!this.client.options.hudHidden
                 && !(CONFIGS.hideUnderDebug.getValue() && this.client.getDebugHud().shouldShowDebugHud())
                 && this.client.currentScreen == null) {
-            this.playerHUDRenderer.render(tickCounter.getTickDelta(true));
+            this.extraPlayerHud.render(tickCounter.getTickDelta(true));
         }
         // follow convention in LayeredDrawer#renderInternal
         context.getMatrices().translate(0, 0, 200);

@@ -72,6 +72,6 @@ public class Configs {
     public final SimpleOption<Boolean> hideUnderDebug = new SimpleOption<>(DETAILS_CATEGORY, id("hide_under_debug"), true);
 
     public enum PoseOffsetMethod {
-        AUTO, MANUAL, FORCE_STANDING, DISABLED;
+        AUTO, MANUAL, FORCE_STANDING, DISABLED
     }
 }

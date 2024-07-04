@@ -5,7 +5,7 @@ import github.io.lucunji.explayerenderer.api.config.model.ConfigOption;
 import github.io.lucunji.explayerenderer.api.config.ConfigWidgetRegistry;
 import github.io.lucunji.explayerenderer.api.config.view.ListWidget;
 import github.io.lucunji.explayerenderer.api.config.view.Tab;
-import github.io.lucunji.explayerenderer.client.render.PlayerHUDRenderer;
+import github.io.lucunji.explayerenderer.client.gui.hud.ExtraPlayerHud;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -29,7 +29,7 @@ public class ConfigScreen extends Screen {
 
     private final Screen parent;
 
-    private final PlayerHUDRenderer previewHud;
+    private final ExtraPlayerHud previewHud;
     private final TabManager tabManager;
     private TabNavigationWidget tabNav;
     private final List<ListWidget> listWidgets;
@@ -39,7 +39,7 @@ public class ConfigScreen extends Screen {
     public ConfigScreen(Screen parent, List<? extends ConfigOption<?>> options) {
         super(Text.of("Config Screen"));
         this.parent = parent;
-        this.previewHud = new PlayerHUDRenderer(MinecraftClient.getInstance());
+        this.previewHud = new ExtraPlayerHud(MinecraftClient.getInstance());
         this.tabManager = new TabManager(this::addDrawableChild, this::remove);
         this.options = options;
         this.listWidgets = new ArrayList<>();
@@ -65,6 +65,7 @@ public class ConfigScreen extends Screen {
                 Main.LOGGER.error("Could not find widget for option {}", option.getId());
                 continue;
             }
+            //noinspection DataFlowIssue
             var label = new TextWidget(option.getName(), this.client.textRenderer);
             label.setTooltip(Tooltip.of(option.getDescription()));
 
@@ -98,6 +99,7 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void close() {
+        //noinspection DataFlowIssue
         this.client.setScreen(this.parent);
         Main.CONFIG_PERSISTENCE.save(Main.CONFIGS.getOptions());
     }
@@ -107,6 +109,8 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // only render when the screen is opened in game
+        //noinspection DataFlowIssue
         if (this.client.world != null) {
             this.previewHud.render(this.client.getRenderTickCounter().getTickDelta(true));
             // put behind GUI
