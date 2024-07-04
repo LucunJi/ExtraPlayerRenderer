@@ -56,13 +56,12 @@ public class Configs {
     public final SimpleNumericOption<Double> swimCrawlOffsetY = new SimpleNumericOption<>(POSTURES_CATEGORY, id("swim_crawl_offset_y"), -1.22, -3D, 3D);
     public final SimpleNumericOption<Double> elytraOffsetY = new SimpleNumericOption<>(POSTURES_CATEGORY, id("elytra_offset_y"), -1.22, -3D, 3D);
 
-    public final SimpleNumericOption<Double> pitchMin = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("pitch_min"), -20D, -180D, 180D);
-    public final SimpleNumericOption<Double> pitchMax = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("pitch_max"), 20D, -180D, 180D);
-    public final SimpleNumericOption<Double> pitchOffset = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("pitch_offset"), 0D, -90D, 90D);
-    public final SimpleNumericOption<Double> headYawMin = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("head_yaw_min"), -15D, -180D, 180D);
-    public final SimpleNumericOption<Double> headYawMax = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("head_yaw_max"), -15D, -180D, 180D);
-    public final SimpleNumericOption<Double> bodyYawMin = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("body_yaw_min"), 0D, -180D, 180D);
-    public final SimpleNumericOption<Double> bodyYawMax = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("body_yaw_max"), 0D, -180D, 180D);
+    public final SimpleNumericOption<Double> pitch = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("pitch"), 0D, -90D, 90D);
+    public final SimpleNumericOption<Double> pitchRange = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("pitch_range"), 20D, 0D, 90D);
+    public final SimpleNumericOption<Double> headYaw = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("head_yaw"), -15D, -180D, 180D);
+    public final SimpleNumericOption<Double> headYawRange = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("head_yaw_range"), 0D, 0D, 180D);
+    public final SimpleNumericOption<Double> bodyYaw = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("body_yaw"), 0D, -180D, 180D);
+    public final SimpleNumericOption<Double> bodyYawRange = new SimpleNumericOption<>(ROTATIONS_CATEGORY, id("body_yaw_range"), 0D, 0D, 180D);
 
     public final SimpleOption<Boolean> hurtFlash = new SimpleOption<>(DETAILS_CATEGORY, id("hurt_flash"), true);
     public final SimpleOption<Boolean> swingHands = new SimpleOption<>(DETAILS_CATEGORY, id("swing_hands"), true);

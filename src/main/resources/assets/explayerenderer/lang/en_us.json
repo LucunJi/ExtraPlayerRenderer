@@ -49,21 +49,19 @@
 
   "config.explayerenderer.category.rotations": "Rotations",
 
-  "config.explayerenderer.option.pitch_min": "Min Pitch",
-  "config.explayerenderer.option.pitch_max": "Max Pitch",
-  "config.explayerenderer.option.pitch_offset": "Pitch Offset",
-  "config.explayerenderer.option.head_yaw_min": "Min Head Yaw",
-  "config.explayerenderer.option.head_yaw_max": "Max Head Yaw",
-  "config.explayerenderer.option.body_yaw_min": "Min Body Yaw",
-  "config.explayerenderer.option.body_yaw_max": "Max Body Yaw",
+  "config.explayerenderer.option.pitch": "Head Pitch",
+  "config.explayerenderer.option.pitch_range": "Head Pitch Range",
+  "config.explayerenderer.option.head_yaw": "Head Yaw",
+  "config.explayerenderer.option.head_yaw_range": "Head Yaw Range",
+  "config.explayerenderer.option.body_yaw": "Body Yaw",
+  "config.explayerenderer.option.body_yaw_range": "Body Yaw Range",
 
-  "config.explayerenderer.option.pitch_min.desc": "Lower bound of pitch.",
-  "config.explayerenderer.option.pitch_max.desc": "Upper bound of pitch.",
-  "config.explayerenderer.option.pitch_offset.desc": "Offset of pitch.",
-  "config.explayerenderer.option.head_yaw_min.desc": "Lower bound of head yaw.",
-  "config.explayerenderer.option.head_yaw_max.desc": "Upper bound of head yaw.",
-  "config.explayerenderer.option.body_yaw_min.desc": "Lower bound of body yaw.",
-  "config.explayerenderer.option.body_yaw_max.desc": "Upper bound of body yaw.",
+  "config.explayerenderer.option.pitch.desc": "Determines the vertical offset of head rotation in degrees.",
+  "config.explayerenderer.option.pitch_range.desc": "Determines the number of degrees the head can rotate up or down.",
+  "config.explayerenderer.option.head_yaw.desc": "Determines the horizontal offset of head rotation in degrees.",
+  "config.explayerenderer.option.head_yaw_range.desc": "Determines the number of degrees the head can rotate left or right.",
+  "config.explayerenderer.option.body_yaw.desc": "Determines the horizontal offset of body rotation in degrees.",
+  "config.explayerenderer.option.body_yaw_range.desc": "Determines the number of degrees the body can rotate left or right.",
 
   "config.explayerenderer.category.details": "Details",
 

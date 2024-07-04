@@ -49,6 +49,20 @@
 
   "config.explayerenderer.category.rotations": "旋转",
 
+  "config.explayerenderer.option.pitch": "头部俯角",
+  "config.explayerenderer.option.pitch_range": "头部俯角范围",
+  "config.explayerenderer.option.head_yaw": "头部偏航角",
+  "config.explayerenderer.option.head_yaw_range": "头部偏航角范围",
+  "config.explayerenderer.option.body_yaw": "身体偏航角",
+  "config.explayerenderer.option.body_yaw_range": "身体偏航角范围",
+
+  "config.explayerenderer.option.pitch.desc": "头部垂直旋转的修正角度",
+  "config.explayerenderer.option.pitch_range.desc": "头部向上或向下能够旋转的角度",
+  "config.explayerenderer.option.head_yaw.desc": "头部水平旋转的修正角度",
+  "config.explayerenderer.option.head_yaw_range.desc": "头部向左或向右能够旋转的角度",
+  "config.explayerenderer.option.body_yaw.desc": "身体水平旋转的修正角度",
+  "config.explayerenderer.option.body_yaw_range.desc": "身体向左或向右能够旋转的角度",
+
   "config.explayerenderer.option.pitch_min": "最小俯角",
   "config.explayerenderer.option.pitch_max": "最大俯角",
   "config.explayerenderer.option.pitch_offset": "俯角修正",

@@ -181,17 +181,20 @@ public class ExtraPlayerHud {
 
         // FIXME: NEVERFIX - glitch when the mouse moves too fast, caused by lerping a warped value, it is possibly wrapped in LivingEntity#tick or LivingEntity#turnHead
         float headLerp = MathHelper.lerp(partialTicks, targetEntity.prevHeadYaw, targetEntity.headYaw);
-        float headClamp = (float) MathHelper.clamp(headLerp, CONFIGS.headYawMin.getValue(), CONFIGS.headYawMax.getValue());
+        double headYaw = CONFIGS.headYaw.getValue(), headYawRange = CONFIGS.headYawRange.getValue();
+        float headClamp = (float) MathHelper.clamp(headLerp, headYaw - headYawRange, headYaw + headYawRange);
         float bodyLerp = MathHelper.lerp(partialTicks, targetEntity.prevBodyYaw, targetEntity.bodyYaw);
         float diff = headLerp - bodyLerp;
 
         targetEntity.prevHeadYaw = targetEntity.headYaw = 180 - headClamp;
+        double bodyYaw = CONFIGS.bodyYaw.getValue(), bodyYawRange = CONFIGS.bodyYawRange.getValue();
         targetEntity.prevBodyYaw = targetEntity.bodyYaw = 180 - (float) MathHelper.clamp(
-                MathHelper.wrapDegrees(headClamp - diff), CONFIGS.bodyYawMin.getValue(), CONFIGS.bodyYawMax.getValue());
+                MathHelper.wrapDegrees(headClamp - diff), bodyYaw - bodyYawRange, bodyYaw + bodyYawRange);
+        double pitch = CONFIGS.pitch.getValue(), pitchRange = CONFIGS.pitchRange.getValue();
         targetEntity.setPitch(targetEntity.prevPitch = (float) (MathHelper.clamp(
                 MathHelper.lerp(partialTicks, targetEntity.prevPitch, targetEntity.getPitch()),
-                CONFIGS.pitchMin.getValue(), CONFIGS.pitchMax.getValue())
-                + CONFIGS.pitchOffset.getValue())
+                -pitchRange, pitchRange)
+                + pitch)
         );
 
         if (!CONFIGS.swingHands.getValue()) {
