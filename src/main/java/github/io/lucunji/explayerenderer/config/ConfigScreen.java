@@ -16,10 +16,13 @@ import net.minecraft.client.gui.widget.TabNavigationWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static github.io.lucunji.explayerenderer.Main.CONFIGS;
 
 
 public class ConfigScreen extends Screen {
@@ -31,6 +34,7 @@ public class ConfigScreen extends Screen {
 
     private final ExtraPlayerHud previewHud;
     private final TabManager tabManager;
+    private Tab[] tabs;
     private TabNavigationWidget tabNav;
     private final List<ListWidget> listWidgets;
 
@@ -47,12 +51,15 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        var tabs = generateTabs();
+        this.tabs = generateTabs();
         this.addDrawableChild(this.tabNav = TabNavigationWidget
                 .builder(this.tabManager, this.width)
                 .tabs(tabs).build());
 
-        this.tabNav.selectTab(0, false);
+        int tabIdx = CONFIGS.lastConfigTabIdx.getValue();
+        if (tabIdx < 0 || tabIdx >= tabs.length)
+            CONFIGS.lastConfigTabIdx.setValue(tabIdx = 0); // will be saved when screen closes
+        this.tabNav.selectTab(tabIdx, false);
         this.initTabNavigation();
     }
 
@@ -60,6 +67,7 @@ public class ConfigScreen extends Screen {
         var tabs = new ArrayList<Tab>();
         var categoryLists = new HashMap<Identifier, ListWidget>();
         for (var option : options) {
+            if (option.getCategory().equals(Configs.HIDDEN_CATEGORY)) continue;
             var configEntryOptioal = ConfigWidgetRegistry.DEFAULT.getConfigEntry(option);
             if (configEntryOptioal.isEmpty()) {
                 Main.LOGGER.error("Could not find widget for option {}", option.getId());
@@ -99,9 +107,11 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void close() {
+        // -1 will become 0 after validation
+        CONFIGS.lastConfigTabIdx.setValue(ArrayUtils.indexOf(tabs, tabManager.getCurrentTab()));
         //noinspection DataFlowIssue
         this.client.setScreen(this.parent);
-        Main.CONFIG_PERSISTENCE.save(Main.CONFIGS.getOptions());
+        Main.CONFIG_PERSISTENCE.save(CONFIGS.getOptions());
     }
 
     @Override

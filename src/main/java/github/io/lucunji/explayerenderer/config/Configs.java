@@ -16,6 +16,7 @@ public class Configs {
     public static final Identifier POSTURES_CATEGORY = id("postures");
     public static final Identifier ROTATIONS_CATEGORY = id("rotations");
     public static final Identifier DETAILS_CATEGORY = id("details");
+    public static final Identifier HIDDEN_CATEGORY = id("hidden");
 
     private final List<? extends ConfigOption<?>> options;
 
@@ -70,6 +71,8 @@ public class Configs {
     public final SimpleNumericOption<Integer> worldLightMin = new SimpleNumericOption<>(DETAILS_CATEGORY, id("world_light_min"), 2, 0, 15);
     public final SimpleOption<Boolean> renderVehicle = new SimpleOption<>(DETAILS_CATEGORY, id("render_vehicle"), true);
     public final SimpleOption<Boolean> hideUnderDebug = new SimpleOption<>(DETAILS_CATEGORY, id("hide_under_debug"), true);
+
+    public final SimpleOption<Integer> lastConfigTabIdx = new SimpleOption<>(HIDDEN_CATEGORY, id("last_config_tab_idx"), 0);
 
     public enum PoseOffsetMethod {
         AUTO, MANUAL, FORCE_STANDING, DISABLED
