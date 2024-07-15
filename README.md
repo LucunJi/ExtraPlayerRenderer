@@ -1,40 +1,44 @@
 # Extra Player Renderer
 
-![](logo.png)
+![](logo/800x256.svg)
 
 [![Quick Fabric Release](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml/badge.svg)](https://github.com/LucunJi/ExtraPlayerRenderer/actions/workflows/quick-fabric-release.yml)
-[![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&prefix=downloads%20&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)](https://modrinth.com/mod/7q8r8AtY)
-[![](https://cf.way2muchnoise.eu/extraplayerrenderer.svg)](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer)
+[![](https://img.shields.io/badge/dynamic/json?color=5da545&label=modrinth&suffix=%20downloads&query=hits.0.downloads&url=https://api.modrinth.com/v2/search?query=extraplayerrenderer&limit=1&index=relevance)](https://modrinth.com/mod/7q8r8AtY)
+[![](https://cf.way2muchnoise.eu/full_extraplayerrenderer_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer)
+
 [![](https://cf.way2muchnoise.eu/versions/extraplayerrenderer.svg)](https://www.curseforge.com/minecraft/mc-mods/extraplayerrenderer)
 
-**For Minecraft 1.21+, malilib should be downloaded from [sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)**
+
+**In short, this mod:**
+
+1. Displays a player model on the screen
+2. Does not depend on other mods (since version 3.0.0)
+3. Is highly configurable
+
+That's it! 
 
 *If you are looking for the same mod but for Forge, [click here](https://www.curseforge.com/minecraft/mc-mods/extra-player-render). It's not developed by me but still good to use.*
 
 
-In short, this mod renders a player model in the bottom left corner (by default, configurable) of the screen. Adaptable & configurable. That's it.
-
-![](images/img1.jpg)
-
 ## Features
-
-In spectator mode, the rendered model gets automatically changed into the entity that your view is attached to.
-
-![](images/spectator.jpg)
 
 When the player's posture changes, the position of the rendered model changes smoothly.
 
 ![](images/transition.webp)
 
-The riding entity can also be rendered, so you can show your favourite horse.
+The riding entity can also be rendered, so you can show your favorite horse.
 
 ![](images/vehicle.jpg)
 
+In spectator mode, the rendered model gets automatically changed into the entity that your view is attached to.
+
+![](images/spectator.jpg)
+
 ## Fully Configurable
 
-By pressing F8 in game (by default, configurable as well), the configuration screen will pop up.
+When F8 is pressed in game, the configuration screen pops up.
 
-Explore the tabs and buttons, there are a lot for you to config: the scale, position and rotation of the figure, the head & body rotations, how to offset(transit) between postures and angle of light on the figure...
+Explore the tabs and buttons, there are a lot for you to config: the scale, position and rotation of the player model, the head & body's rotations, how to offset (transit) between postures, angle of light on the figure, and so on.
 
 ![](images/configs.jpg)
 
@@ -46,16 +50,16 @@ You can also download from [GitHub](https://github.com/LucunJi/ExtraPlayerRender
 
 This mod depends on:
 
-- v3.0.0-alpha and above (currently unstable):
-  - [Fabric API](https://modrinth.com/mod/fabric-api)
-  - [YACL](https://modrinth.com/mod/yacl)
+- v3.0.0 and above:
+  - Really NOTHING, just install fabric loader as usual
 - before v3.0.0:
   - For Minecraft 1.21+
     - [malilib from sakura-ryoko's fork](https://github.com/sakura-ryoko/malilib/releases)
   - For Minecraft earlier than 1.21
     - [malilib](https://modrinth.com/mod/malilib)
-- [Mod Menu](https://modrinth.com/mod/modmenu) (optional, recommended)
-- some very early versions (now obsolete) also requires [Fabric API](https://modrinth.com/mod/fabric-api)
+- Optionally, install [Mod Menu](https://modrinth.com/mod/modmenu)
+- Some very early versions (now obsolete) also requires [Fabric API](https://modrinth.com/mod/fabric-api)
+- Some alpha versions require both Fabric API and [YACL](https://modrinth.com/mod/yacl)
 
 ## Issues
 When facing any issue, please first try to update the dependencies (malilib and Fabric Loader),
