@@ -231,15 +231,14 @@ public class ExtraPlayerHud {
         Quaternionf quaternion2 = new Quaternionf()
                 .rotateXYZ((float) Math.toRadians(CONFIGS.rotationX.getValue()),
                         (float) Math.toRadians(CONFIGS.rotationY.getValue()),
-                        0);
-
-        if (targetEntity instanceof BoatEntity)
-            quaternion2.mul(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-
-        quaternion2.rotateZ((float) Math.toRadians(CONFIGS.rotationZ.getValue()));
+                        (float) Math.toRadians(CONFIGS.rotationZ.getValue()));
 
         quaternion.mul(quaternion2);
         matrixStack2.multiply(quaternion);
+
+        if (targetEntity instanceof BoatEntity) {
+            matrixStack2.multiply(new Quaternionf().rotateY((float) Math.toRadians(180)));
+        }
 
         DiffuseLighting.method_34742();
         quaternion2.conjugate();

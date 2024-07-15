@@ -9,9 +9,13 @@ import github.io.lucunji.explayerenderer.client.gui.hud.ExtraPlayerHud;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tab.TabManager;
 import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TabNavigationWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.text.Text;
@@ -23,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static github.io.lucunji.explayerenderer.Main.CONFIGS;
+import static github.io.lucunji.explayerenderer.Main.id;
 
 
 public class ConfigScreen extends Screen {
@@ -87,6 +92,10 @@ public class ConfigScreen extends Screen {
                 categoryLists.put(category, list);
             }
             categoryLists.get(category).addEntry(configEntryOptioal.get());
+
+            if (option.getId().equals(id("enabled"))) {
+                categoryLists.get(category).addEntry(this.getPresetsConfigEntry());
+            }
         }
 
         if (tabs.isEmpty()) tabs.add(new Tab(Text.of("")));
@@ -139,5 +148,49 @@ public class ConfigScreen extends Screen {
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    private ListWidget.ListEntry getPresetsConfigEntry() {
+        final int buttonWidth = 70, gap = 10, buttonHeight = 20, labelYOffset = 7;
+        @SuppressWarnings("DataFlowIssue")
+        var presetLabel = new TextWidget(Text.translatable("config.%s.option.presets".formatted(Main.MOD_ID)), this.client.textRenderer);
+        presetLabel.setTooltip(Tooltip.of(Text.translatable("config.%s.option.presets.desc".formatted(Main.MOD_ID))));
+        var topLeft = new ConfigWidgetRegistry.ConfigButton(buttonWidth, buttonHeight, getPresetText("top_left"), getPresetPressAction(CONFIGS.topLeft));
+        var topRight = new ConfigWidgetRegistry.ConfigButton(buttonWidth, buttonHeight, getPresetText("top_right"), getPresetPressAction(CONFIGS.topRight));
+        var bottomLeft = new ConfigWidgetRegistry.ConfigButton(buttonWidth, buttonHeight, getPresetText("bottom_left"), getPresetPressAction(CONFIGS.bottomLeft));
+        var bottomRight = new ConfigWidgetRegistry.ConfigButton(buttonWidth, buttonHeight, getPresetText("bottom_right"), getPresetPressAction(CONFIGS.bottomRight));
+        var children = List.of(presetLabel, topLeft, topRight, bottomLeft, bottomRight);
+        return new ListWidget.ListEntry() {
+            @Override
+            public List<? extends Selectable> selectableChildren() {return children;}
+
+            @Override
+            public List<? extends Element> children() {return children;}
+
+            @Override
+            public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+                presetLabel.setPosition(x, y + labelYOffset);
+                topLeft.setPosition(x + entryWidth - buttonWidth * 4 - gap * 3, y);
+                topRight.setPosition(x + entryWidth - buttonWidth * 3 - gap * 2, y);
+                bottomLeft.setPosition(x + entryWidth - buttonWidth * 2 - gap, y);
+                bottomRight.setPosition(x + entryWidth - buttonWidth, y);
+
+                for (ClickableWidget child : children) child.render(context, mouseX, mouseY, tickDelta);
+            }
+        };
+    }
+
+    private Text getPresetText(String id) {return Text.translatable("config.%s.presets.%s".formatted(Main.MOD_ID, id));}
+
+    private ButtonWidget.PressAction getPresetPressAction(Configs.Presets presets) {
+        return ignored -> {
+            presets.load();
+            // clear everything and re-init, AVOID MEMORY LEAK
+            int tabIdx = ArrayUtils.indexOf(tabs, tabManager.getCurrentTab());
+            this.clearChildren();
+            this.listWidgets.clear();
+            this.init();
+            this.tabNav.selectTab(tabIdx, false);
+        };
     }
 }
