@@ -62,7 +62,7 @@ This mod depends on:
 - Some alpha versions require both Fabric API and [YACL](https://modrinth.com/mod/yacl)
 
 ## Issues
-When facing any issue, please first try to update the dependencies (malilib and Fabric Loader),
+When facing any issue, please first try to update the mod and Fabric Loader,
 and then report the bug in [GitHub Issues](https://github.com/LucunJi/ExtraPlayerRenderer/issues) if the issue persists (I rarely look into other places other than GitHub).
 
 This mod is compatible *in theory* with other mods that modifies player's model.
