@@ -4,9 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import github.io.lucunji.explayerenderer.client.gui.hud.DataBackup.DataBackupEntry;
 import github.io.lucunji.explayerenderer.config.Configs;
-import github.io.lucunji.explayerenderer.mixin.ClientPlayerEntityAccessor;
-import github.io.lucunji.explayerenderer.mixin.EntityMixin;
-import github.io.lucunji.explayerenderer.mixin.LivingEntityAccessor;
+import github.io.lucunji.explayerenderer.mixin.*;
+import github.io.lucunji.explayerenderer.mixininterface.ImmediateMixinInterface;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -253,9 +252,9 @@ public class ExtraPlayerHud {
                 entityRenderDispatcher.render(targetEntity, offset.x, offset.y, offset.z, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
         );
         // disable cull to fix item rendering glitches when mirror option is on
-        RenderSystem.disableCull();
+        ((ImmediateMixinInterface) immediate).extraPlayerRenderer$setForceDisableCulling(mirror);
         immediate.draw();
-        RenderSystem.enableCull();
+        ((ImmediateMixinInterface) immediate).extraPlayerRenderer$setForceDisableCulling(false);
 
         // do not need to restore this value in fact
         entityRenderDispatcher.setRenderShadows(true);
