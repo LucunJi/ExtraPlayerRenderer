@@ -20,6 +20,7 @@ public abstract class ImmediateMixin implements ImmediateMixinInterface {
     @Override
     public void extraPlayerRenderer$setForceDisableCulling(boolean disableCulling) { this.forceDisableCulling = disableCulling; }
 
+    // strangely, WrapMethod has no effect
     @WrapOperation(method = "draw(Lnet/minecraft/client/render/RenderLayer;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;draw(Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/render/BufferBuilder;)V"))
     void disableCulling(VertexConsumerProvider.Immediate instance, RenderLayer layer, BufferBuilder builder, Operation<Void> original) {
