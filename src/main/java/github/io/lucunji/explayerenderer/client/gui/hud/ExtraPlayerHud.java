@@ -252,9 +252,10 @@ public class ExtraPlayerHud {
                 entityRenderDispatcher.render(targetEntity, offset.x, offset.y, offset.z, 0, partialTicks, matrixStack2, immediate, getLight(targetEntity, partialTicks))
         );
         // disable cull to fix item rendering glitches when mirror option is on
-        ((ImmediateMixinInterface) immediate).extraPlayerRenderer$setForceDisableCulling(mirror);
+        ImmediateMixinInterface immediateMixined = (ImmediateMixinInterface) immediate;
+        immediateMixined.extraPlayerRenderer$setForceDisableCulling(mirror);
         immediate.draw();
-        ((ImmediateMixinInterface) immediate).extraPlayerRenderer$setForceDisableCulling(false);
+        immediateMixined.extraPlayerRenderer$setForceDisableCulling(false);
 
         // do not need to restore this value in fact
         entityRenderDispatcher.setRenderShadows(true);

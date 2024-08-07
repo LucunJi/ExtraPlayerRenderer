@@ -1,4 +1,4 @@
-package github.io.lucunji.explayerenderer.mixin;
+package github.io.lucunji.explayerenderer.mixin.hook;
 
 import github.io.lucunji.explayerenderer.Main;
 import github.io.lucunji.explayerenderer.config.ConfigScreen;

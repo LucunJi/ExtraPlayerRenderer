@@ -1,4 +1,4 @@
-package github.io.lucunji.explayerenderer.mixin;
+package github.io.lucunji.explayerenderer.mixin.hook;
 
 import github.io.lucunji.explayerenderer.client.gui.hud.ExtraPlayerHud;
 import net.minecraft.client.MinecraftClient;
