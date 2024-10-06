@@ -1,0 +1,6 @@
+accessWidener v2 named
+accessible field net/minecraft/world/entity/LivingEntity swimAmount F
+accessible field net/minecraft/world/entity/LivingEntity swimAmountO F
+accessible field net/minecraft/world/entity/Entity vehicle Lnet/minecraft/world/entity/Entity;
+accessible field net/minecraft/world/entity/LivingEntity fallFlyTicks I
+accessible field net/minecraft/client/player/LocalPlayer crouching Z

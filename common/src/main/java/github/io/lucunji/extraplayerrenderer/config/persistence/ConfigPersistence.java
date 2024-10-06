@@ -18,17 +18,32 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
-    }
+package github.io.lucunji.extraplayerrenderer.config.persistence;
+
+import github.io.lucunji.extraplayerrenderer.config.model.ConfigOption;
+
+import java.nio.file.Path;
+import java.util.List;
+
+@SuppressWarnings({"UnusedReturnValue", "unused"})
+public interface ConfigPersistence {
+    Path getPath();
+
+    /**
+     * Save config.
+     * <br/>
+     * To prevent crashing, it should log an error instead of throwing when it fails.
+     *
+     * @return save is successful
+     */
+    boolean save(List<? extends ConfigOption<?>> options);
+
+    /**
+     * Load config.
+     * <br/>
+     * To prevent crashing, it should log an error instead of throwing when it fails.
+     *
+     * @return load is successful
+     */
+    boolean load(List<? extends ConfigOption<?>> options);
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'
