@@ -25,7 +25,7 @@ import github.io.lucunji.extraplayerrenderer.ExtraPlayerRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 
-public class FabricExtraPlayerRendererClientInit implements ClientModInitializer {
+public class ExtraPlayerRendererFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CommonInterfaceInstances.keyHelper = KeyBindingHelper::getBoundKeyOf;
