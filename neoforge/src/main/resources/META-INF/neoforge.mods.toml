@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/LucunJi/ExtraPlayerRenderer/issues"
+license = "LGPL-3.0-or-later"
+
+[[mods]]
+modId = "extraplayerrenderer"
+version = "${version}"
+displayName = "Extra Player Renderer"
+displayURL = "https://github.com/LucunJi/ExtraPlayerRenderer"
+authors = '''
+LucunJi
+'''
+credits = '''
+Fallen_Breath
+X-Green
+altrisi
+plusls
+HappyRespawnanchor(Port to Architectury)
+pertaz(Port to Architectury)
+'''
+description = '''
+Render an extra player figure on your screen. Made for game streaming and recordings.
+'''
+logoFile = "extraplayerrenderer_logo.png"
+[[dependencies.extraplayerrenderer]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.extraplayerrenderer]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "extraplayerrenderer.mixins.json"

@@ -1,81 +1,131 @@
-import groovy.json.JsonSlurper
+/*
+ *     Highly configurable paper doll mod.
+ *     Copyright (C) 2024  LucunJi, And all  Contributors
+ *
+ *     This file is part of Extra Player Renderer.
+ *
+ *     Extra Player Renderer is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Extra Player Renderer is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU Lesser General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Lesser General Public License
+ *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
 plugins {
-    id('fabric-loom').version('1.6-SNAPSHOT')
+    id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
 
-ext.configFile = file "build.properties"
+architectury {
+    minecraft = project.minecraft_version
+}
 
-// follow semantic versioning! https://semver.org/
-def modJson = file(sourceSets.main.resources.srcDirs.first().path + '/fabric.mod.json')
-def modSpec = new JsonSlurper().parseText(modJson.text)
-archivesBaseName = modSpec.name
-version = project.minecraft_version + "-" + modSpec.version
-group = project.maven_group + "." + modSpec.id
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+}
 
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
+
+    base {
+        // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+        archivesName = "$rootProject.archives_name-$project.name"
+    }
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
+
+        // ParchmentMC Mapping
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+        // Fabric Mod Menu
+        maven {
+            name = "Terraformers"
+            url = "https://maven.terraformersmc.com/"
+        }
+
+//         Modrinth Maven
+//         exclusiveContent {
+//            forRepository {
+//                maven {
+//                    name = "Modrinth"
+//                    url = "https://api.modrinth.com/maven"
+//                }
+//            }
+//            filter {
+//                includeGroup "maven.modrinth"
+//            }
+//         }
+    }
+
+    loom {
+        silentMojangMappingsLicense()
+        accessWidenerPath = file("src/main/resources/extraplayerrenderer.accesswidener")
+    }
+
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        // mappings loom.officialMojangMappings()
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+        }
+    }
+
+    java {
+        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+        // if it is present.
+        // If you remove this line, sources will not be generated.
+        withSourcesJar()
+
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 21
+    }
+
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
+
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            // Add repositories to publish to here.
+            // Notice: This block does NOT have the same function as the block in the top level.
+            // The repositories here will be used for publishing your artifact, not for
+            // retrieving dependencies.
+        }
+    }
+}
 repositories {
-    maven { url 'https://masa.dy.fi/maven' }
-    maven { url 'https://api.modrinth.com/maven' }
+    mavenCentral()
 }
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // Fabric API is the dependency of modmenu
-    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "maven.modrinth:modmenu:${project.mod_menu_version}"
-
-    // jar-in-jar
-    include(modApi(fabricApi.module("fabric-key-binding-api-v1", project.fabric_version)))
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-
-    // Minecraft 1.18 upwards uses Java 17. 1.20.5 upwards uses Java 21
-    it.options.release = 21
-}
-
-java {
-    withSourcesJar()
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
-}
-
-gradle.projectsEvaluated {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:deprecation"
-    }
-}
-
-tasks.register('printToGitHubActions') {
-    onlyIf { System.getenv().GITHUB_OUTPUT }
-    doLast {
-//        same as those in mc-publish
-        FileWriter fw = new FileWriter(System.getenv().GITHUB_OUTPUT)
-        fw.write("version=${project.version}\n")
-        fw.write("game_versions=${project.minecraft_version}\n")
-        fw.write("files=${remapJar.archiveFile.get().getAsFile().absolutePath}\n")
-        fw.write("release_name=${modSpec.name} v${modSpec.version} for mc ${project.minecraft_version}\n")
-        fw.close()
-    }
-}
-
-tasks.build.finalizedBy(printToGitHubActions)

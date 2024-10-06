@@ -18,17 +18,42 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
+package github.io.lucunji.extraplayerrenderer.config.model;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Objects;
+
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "UnusedReturnValue"})
+public interface ConfigOption<T> {
+    T getDefaultValue();
+
+    /**
+     * Invalid {@code value} must be logged as an {@link org.slf4j.event.Level#WARN}
+     *
+     * @return a valid new value
+     */
+    T validate(T oldValue, T newValue);
+
+    /**
+     * @return if the value is changed
+     */
+    boolean setValue(T newValue);
+
+    default boolean isValueDefault() {
+        return Objects.equals(this.getValue(), this.getDefaultValue());
     }
+
+    T getValue();
+
+    ResourceLocation getCategory();
+
+    ResourceLocation getId();
+
+    Component getName();
+
+    Component getDescription();
+
+    Class<T> getType();
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'

@@ -18,17 +18,16 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
+package github.io.lucunji.extraplayerrenderer.fabric.modmenu;
+
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import github.io.lucunji.extraplayerrenderer.ExtraPlayerRenderer;
+import github.io.lucunji.extraplayerrenderer.config.ConfigScreen;
+
+public class ModMenuApiImpl implements ModMenuApi {
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return parent -> new ConfigScreen(parent, ExtraPlayerRenderer.CONFIGS.getOptions());
     }
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'

@@ -1,0 +1,19 @@
+{
+  "required": false,
+  "package": "github.io.lucunji.extraplayerrenderer.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "hook.InGameHudMixin",
+    "hook.MinecraftClientMixin",
+    "patch.ImmediateMixin",
+    "retexture.EntryListWidgetMixin",
+    "retexture.PressableWidgetMixin",
+    "retexture.SliderWidgetMixin",
+    "retexture.TextFieldWidgetMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
