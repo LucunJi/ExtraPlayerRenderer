@@ -28,7 +28,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
 
 @EventBusSubscriber(modid = ExtraPlayerRenderer.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ForgePaperDollClientInit {
+public class RegisterKeyMappingEventHandler {
 
     @SubscribeEvent
     public static void registerKeyMapping(RegisterKeyMappingsEvent event) {

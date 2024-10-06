@@ -28,6 +28,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -73,17 +74,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Gui.class)
 public class InGameHudMixin {
     //@Shadow
-    @Final
-    private Minecraft client = Minecraft.getInstance();
     @Unique
-    private ExtraPlayerHud extraPlayerHud;
+    @Mutable
+    @Final
+    private Minecraft extraplayerrenderer$client = Minecraft.getInstance();
+    @Unique
+    private ExtraPlayerHud extraplayerrenderer$extraPlayerHud;
 
     /**
      * Initialization should go after initialization to prevent using uninitialized fields.
      */
     @Inject(method = "<init>", at = @At("RETURN"))
     public void onInit(Minecraft client, CallbackInfo ci) {
-        this.extraPlayerHud = new ExtraPlayerHud(this.client);
+        this.extraplayerrenderer$extraPlayerHud = new ExtraPlayerHud(this.extraplayerrenderer$client);
     }
 
     /**
@@ -101,16 +104,17 @@ public class InGameHudMixin {
      */
     @Inject(method = "renderCameraOverlays", at = @At("RETURN"))
     void onRenderMiscOverlayFinish(GuiGraphics context, DeltaTracker tickCounter, CallbackInfo ci) {
-        if (!this.client.options.hideGui
-                && !(ExtraPlayerRenderer.CONFIGS.hideUnderDebug.getValue() && this.client.getDebugOverlay().showDebugScreen())
-                && this.client.screen == null) {
-            this.extraPlayerHud.render(tickCounter.getGameTimeDeltaPartialTick(true));
+        if (!this.extraplayerrenderer$client.options.hideGui
+                && !(ExtraPlayerRenderer.CONFIGS.hideUnderDebug.getValue() && this.extraplayerrenderer$client.getDebugOverlay().showDebugScreen())
+                && this.extraplayerrenderer$client.screen == null) {
+            this.extraplayerrenderer$extraPlayerHud.render(tickCounter.getGameTimeDeltaPartialTick(true));
         }
         // follow convention in LayeredDrawer#renderInternal
         context.pose().translate(0, 0, 200);
     }
 
-    public void setClient(Minecraft client) {
-        this.client = client;
+    @Unique
+    public void extraplayerrenderer$setClient(Minecraft client) {
+        this.extraplayerrenderer$client = client;
     }
 }
