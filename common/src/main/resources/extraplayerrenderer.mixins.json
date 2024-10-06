@@ -1,7 +1,7 @@
 {
   "required": false,
   "package": "github.io.lucunji.extraplayerrenderer.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
   ],
   "client": [

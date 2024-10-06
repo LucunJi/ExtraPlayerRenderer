@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "extraplayerrenderer",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "name": "Extra Player Renderer",
   "description": "Render an extra player figure on your screen. Made for game streaming and recordings.",
   "authors": [
