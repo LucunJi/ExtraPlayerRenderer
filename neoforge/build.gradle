@@ -27,6 +27,10 @@ architectury {
     neoForge()
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/extraplayerrenderer.accesswidener")
+}
+
 configurations {
     common {
         canBeResolved = true
@@ -72,9 +76,6 @@ shadowJar {
 }
 
 remapJar {
+    atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
     input.set shadowJar.archiveFile
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/extraplayerrenderer.accesswidener")
 }
