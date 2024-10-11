@@ -22,6 +22,10 @@ architectury {
     common rootProject.enabled_platforms.split(',')
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/extraplayerrenderer.accesswidener")
+}
+
 dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.

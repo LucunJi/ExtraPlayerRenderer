@@ -22,7 +22,7 @@ pertaz(Port to Architectury)
 description = '''
 Render an extra player figure on your screen. Made for game streaming and recordings.
 '''
-logoFile = "extraplayerrenderer_logo.png"
+logoFile = "icon.png"
 [[dependencies.extraplayerrenderer]]
 modId = "neoforge"
 type = "required"
