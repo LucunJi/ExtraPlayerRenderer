@@ -18,17 +18,21 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
+package github.io.lucunji.extraplayerrenderer.neoforge;
+
+import github.io.lucunji.extraplayerrenderer.ExtraPlayerRenderer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+
+
+@EventBusSubscriber(modid = ExtraPlayerRenderer.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+public class RegisterKeyMappingEventHandler {
+
+    @SubscribeEvent
+    public static void registerKeyMapping(RegisterKeyMappingsEvent event) {
+        event.register(ExtraPlayerRenderer.CONFIG_KEY);
     }
+
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'

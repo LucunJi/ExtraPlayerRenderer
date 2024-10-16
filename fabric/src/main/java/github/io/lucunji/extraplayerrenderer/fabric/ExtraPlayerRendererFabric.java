@@ -18,17 +18,23 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
+package github.io.lucunji.extraplayerrenderer.fabric;
+
+import github.io.lucunji.extraplayerrenderer.CommonInterfaceInstances;
+import github.io.lucunji.extraplayerrenderer.ExtraPlayerRenderer;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+
+public class ExtraPlayerRendererFabric implements ClientModInitializer {
+    @Override
+    public void onInitializeClient() {
+        CommonInterfaceInstances.keyHelper = KeyBindingHelper::getBoundKeyOf;
+
+
+        KeyBindingHelper.registerKeyBinding(ExtraPlayerRenderer.CONFIG_KEY);
+
+        ExtraPlayerRenderer.init();
+
+
     }
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'

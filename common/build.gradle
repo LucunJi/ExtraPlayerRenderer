@@ -18,17 +18,17 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
-    }
+architectury {
+    common rootProject.enabled_platforms.split(',')
 }
 
-rootProject.name = 'extraplayerrenderer'
+loom {
+    accessWidenerPath = file("src/main/resources/extraplayerrenderer.accesswidener")
+}
 
-include 'common'
-include 'fabric'
-include 'neoforge'
+dependencies {
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+}

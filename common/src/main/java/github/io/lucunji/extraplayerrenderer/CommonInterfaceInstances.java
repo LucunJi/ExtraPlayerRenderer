@@ -18,17 +18,8 @@
  *     along with Extra Player Renderer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        maven { url "https://maven.fabricmc.net/" }
-        maven { url "https://maven.architectury.dev/" }
-        maven { url "https://files.minecraftforge.net/maven/" }
-        gradlePluginPortal()
-    }
+package github.io.lucunji.extraplayerrenderer;
+
+public class CommonInterfaceInstances {
+    public static CommonKeyHelper keyHelper;
 }
-
-rootProject.name = 'extraplayerrenderer'
-
-include 'common'
-include 'fabric'
-include 'neoforge'
