@@ -40,6 +40,5 @@
   },
   "suggests": {
     "modmenu": "*"
-  },
-  "accessWidener": "extraplayerrenderer.accesswidener"
+  }
 }
