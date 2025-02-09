@@ -3,7 +3,7 @@
 
 ## This mod is no longer maintained by me
 
-Please navigate to the branch
+Please navigate to the forked mod
 [AyameMC/Ayame-PaperDoll](https://github.com/AyameMC/Ayame-PaperDoll) to get updates for minecraft 1.21.x on both Fabric and NeoForge.
 ([Modrinth](https://modrinth.com/mod/ayame-paperdoll) |
 [CurseForge](https://www.curseforge.com/minecraft/mc-mods/ayame-paperdoll) |
